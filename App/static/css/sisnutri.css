@@ -1,0 +1,40 @@
+.bgpadrao{
+    background-color: #343a40;
+}
+.bodybase{
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: #E6E6FA;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here
+  height: 60px;
+  line-height: 60px;
+  Vertically center the text there */
+
+}
+
+.txt-align-vert-center{
+ color : white;
+}
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+body > .container {
+  padding: 60px 15px 0;
+}
+
+.footer > .container {
+    align:center;
+}
+
+
+
+

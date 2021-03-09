@@ -1,0 +1,18 @@
+{% extends "layouts/base.html" %}
+
+{% block idlogado %} {{ idlogado }} {% endblock %}
+{% block usernamelogado %} {{ usernamelogado }} {% endblock %}
+{% block nameuser %} {{ nameuser }} {% endblock %}
+{% block token %} {{ token }} {% endblock %}
+{% block current_user %} {{ current_user }} {% endblock %}
+
+
+{% block content %}
+<div align="center">
+  <h1 class="title">
+    SIS NUTRI - {{ session['current_user']['name'] }}
+  </h1>
+
+</div>
+{% endblock %}
+
