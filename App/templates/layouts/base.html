@@ -15,7 +15,7 @@
     <main>
         <div class="">
         <nav class="navbar navbar-expand-lg bgpadrao  mx-0">
-            <a class="navbar-brand colortxt" href="{{ url_for('main.index') }}">
+            <a class="navbar-brand colorlink" href="{{ url_for('main.index') }}">
                 <img class="img-fluid" src="{{ url_for('static', filename='img/topmixmenu.png') }}" alt="">
             </a>
             <button class="navbar-toggler ml-auto custom-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,19 +27,19 @@
                 <ul class="navbar-nav  ml-auto">
                     {% if not token  %}
                         <li class="nav-item">
-                            <a class="nav-link colortxt" href="{{ url_for('main.login') }}">Login</a>
+                            <a class="nav-link colorlink" href="{{ url_for('main.login') }}">Login</a>
                         </li>
                     {% endif %}
                     {% if token  %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle colortxt" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle colorlink" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{current_user.name}}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                              <a class="dropdown-item colortxt" href="#">Dados</a>
-                              <a class="dropdown-item colortxt" href="#">Pedidos</a>
+                              <a class="dropdown-item colorlink" href="#">Dados</a>
+                              <a class="dropdown-item colorlink" href="#">Pedidos</a>
                               <div class="dropdown-divider"></div>
-                              <a class="dropdown-item colortxt" href="{{ url_for('main.index') }}">Sair</a>
+                              <a class="dropdown-item colorlink" href="{{ url_for('main.index') }}">Sair</a>
                             </div>
                           </li>
                         <!--<li class="nav-item">
@@ -49,12 +49,12 @@
                     {% endif %}
                      {% if not current_user %}
                         <li class="nav-item">
-                            <a class="nav-link colortxt" href="#">Inscreva-se</a>
+                            <a class="nav-link colorlink" href="#">Inscreva-se</a>
                         </li>
                     {% endif %}
                     {% if current_user %}
                        <li class="nav-item">
-                            <a class="nav-link colortxt" href="#">Sair</a>
+                            <a class="nav-link colorlink" href="#">Sair</a>
                         </li>
                     {% endif %}
 
