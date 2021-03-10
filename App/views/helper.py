@@ -48,27 +48,23 @@ def auth_form():
     if not user:
         return render_template('layouts/login.html',
                                sucess=False,
-                               mensage='Usuário '+username+' não encontrado na base de dados!'
+                               mensage='Usuário '+username+' não encontrado na base de dadosss!'
                                )
 
         #return jsonify({'mensage':'Nenhum Usuário foi encontrado!','data':{}}), 401
 
     valida = check_password_hash(user.password, password)
     if user and valida:
-        dtexp = datetime.datetime.now() + datetime.timedelta(hours=12)
-        token = jwt.encode({'username': user.username, 'id': user.id, 'exp': dtexp},
-                           app.config['SECRET_KEY'],
-                           algorithm='HS256')
         try:
+            dtexp = datetime.datetime.now() + datetime.timedelta(hours=12)
+            token = jwt.encode({'username': user.username, 'id': user.id, 'exp': dtexp},
+                               app.config['SECRET_KEY'],
+                               algorithm='HS256')
+        
             token_decode = token.decode('utf-8')
-        except ValueError as err:
-            return jsonify({'message': 'Erro ao decodificar:'+err, 'WWW-Authenticate': 'Basic auth="Login required"'}), 401
+        except:
+            return jsonify({'message': 'Erro ao decodificar:', 'WWW-Authenticate': 'Basic auth="Login required"'}), 401
 
-        print(token_decode)
-
-        #retorno = jsonify({'message': 'Validated successfully', 'token': token_decode,
-        #                'exp': datetime.datetime.now() + datetime.timedelta(hours=12)})
-        #return retorno
 
         userschema = user_schema.dump(current_user)
         session['current_user'] = userschema
@@ -83,7 +79,7 @@ def auth_form():
         try:
             return redirect(url_for('main.indexmain',token=token))
             #return jsonify({'message': 'Login Efetuado com sucesso:', 'WWW-Authenticate': 'Sucesso',
-            #               'token': token}), 202
+            #                'token': token}), 202
         except:
             return jsonify({'message': 'Erro ao Carregar Pagina:', 'WWW-Authenticate': 'Basic auth="Login required"','token':token}), 401
     else:
