@@ -11,18 +11,18 @@
         </div>
     {% endif %}
     <form class="form-signin" method="post" action="{{ url_for('auth.auth_form') }}">
-          <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-          <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+          <img class="img-fluid" src="{{ url_for('static', filename='img/topmix.png') }}" alt="">
+          <h1 class="h3 mb-3 font-weight-normal">Fazer login</h1>
           <label for="inputEmail" class="sr-only">Email address</label>
-          <input type="text" name="username" id="inputEmail" class="form-control my-1" placeholder="Email address" required="" autofocus="">
+          <input type="text" name="username" id="inputEmail" class="form-control my-1" placeholder="Email/Username" required="" autofocus="">
           <label for="inputPassword"  class="sr-only">Password</label>
-          <input type="password" name="password" id="inputPassword" class="form-control my-1" placeholder="Password" required="">
+          <input type="password" name="password" id="inputPassword" class="form-control my-1" placeholder="Senha" required="">
           <div class="checkbox mb-3">
             <label>
-              <input type="checkbox" value="remember-me"> Remember me
+              <input type="checkbox" value="lembrar-me"> Lembrar-me
             </label>
           </div>
-          <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+          <button class="btn btn-lg btnpadrao" type="submit">Entrar</button>
     </form>
 </div>
 {% endblock %}

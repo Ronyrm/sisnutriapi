@@ -48,10 +48,11 @@ def auth_form():
     if not user:
         return render_template('layouts/login.html',
                                sucess=False,
-                               mensage='Usuário '+username+' não encontrado na base de dados!',
+                               mensage='Usuário '+username+' não encontrado na base de dados!'
                                )
 
         #return jsonify({'mensage':'Nenhum Usuário foi encontrado!','data':{}}), 401
+
     valida = check_password_hash(user.password, password)
     if user and valida:
         dtexp = datetime.datetime.now() + datetime.timedelta(hours=12)
@@ -79,10 +80,18 @@ def auth_form():
         #                       usernamelogado=username,
         #                       nameuser=user.name,
         #                       current_user=userschema)
-        return redirect(url_for('main.indexmain',token=token))
+        try:
+            return redirect(url_for('main.indexmain',token=token))
+            #return jsonify({'message': 'Login Efetuado com sucesso:', 'WWW-Authenticate': 'Sucesso',
+            #               'token': token}), 202
+        except:
+            return jsonify({'message': 'Erro ao Carregar Pagina:', 'WWW-Authenticate': 'Basic auth="Login required"','token':token}), 401
+    else:
+        return render_template('layouts/login.html',
+                               sucess=False,
+                               mensage='Senha do Usuário ' + username +', inválida!')
 
-
-    #return jsonify({'message':'Não pode verificar!','WWW-Authenticate':'Basic auth="Login required"'}), 401
+        #return jsonify({'message':'Não pode verificar!','WWW-Authenticate':'Basic auth="Login required"'}), 401
 
 
 def token_required(func):

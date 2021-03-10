@@ -14,29 +14,32 @@
 <body>
     <main>
         <div class="">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary  text-dark mx-0">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+        <nav class="navbar navbar-expand-lg bgpadrao  mx-0">
+            <a class="navbar-brand colortxt" href="{{ url_for('main.index') }}">
+                <img class="img-fluid" src="{{ url_for('static', filename='img/topmixmenu.png') }}" alt="">
+            </a>
+            <button class="navbar-toggler ml-auto custom-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon text-white"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarToggler">
-                <a class="navbar-brand" href="{{ url_for('main.index') }}">SisNutri</a>
+
                 <ul class="navbar-nav  ml-auto">
                     {% if not token  %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('main.login') }}">Login</a>
+                            <a class="nav-link colortxt" href="{{ url_for('main.login') }}">Login</a>
                         </li>
                     {% endif %}
                     {% if token  %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle colortxt" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{current_user.name}}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                              <a class="dropdown-item" href="#">Dados</a>
-                              <a class="dropdown-item" href="#">Pedidos</a>
+                              <a class="dropdown-item colortxt" href="#">Dados</a>
+                              <a class="dropdown-item colortxt" href="#">Pedidos</a>
                               <div class="dropdown-divider"></div>
-                              <a class="dropdown-item" href="{{ url_for('main.index') }}">Sair</a>
+                              <a class="dropdown-item colortxt" href="{{ url_for('main.index') }}">Sair</a>
                             </div>
                           </li>
                         <!--<li class="nav-item">
@@ -46,12 +49,12 @@
                     {% endif %}
                      {% if not current_user %}
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Inscreva-se</a>
+                            <a class="nav-link colortxt" href="#">Inscreva-se</a>
                         </li>
                     {% endif %}
                     {% if current_user %}
                        <li class="nav-item">
-                            <a class="nav-link" href="#">Sair</a>
+                            <a class="nav-link colortxt" href="#">Sair</a>
                         </li>
                     {% endif %}
 
@@ -68,17 +71,17 @@
         <!--<div id="footer" class="container text-center">
 
         </div>!-->
-        <footer class="footer bg-primary">
+        <footer class="footer bgpadrao">
             <div class="row" style="position: relative;" >
                 <div class="col-sm-6 col-lg-4">
                     {% if sucess %}
-                        <p class="my-2 ml-2 text-left text-white"  >
+                        <p class="my-2 ml-2 text-left colortxt"  >
                             Usuário Logado: {% block idlogado %} {% endblock %} - {% block nameuser %} {% endblock %}
                         </p>
                     {% endif %}
                 </div>
                 <div class="col-sm-6 col-lg-8">
-                    <p class="my-2 mx-2 text-left text-sm-right text-white">
+                    <p class="my-2 mx-2 text-left text-sm-right colortxt">
                           {% block footer %}
                                 &copy; copyright 2021 by rony gustavo rodrigues de magalhaes.
                           {% endblock %}
