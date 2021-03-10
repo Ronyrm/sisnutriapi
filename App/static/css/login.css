@@ -10,6 +10,9 @@
   max-width: 500px;
   padding: 15px;
   margin: 0 auto;
+  background-color: #343a40;
+  border: 2px solid orange;
+  border-radius: 10px;
 }
 .form-signin .checkbox {
   font-weight: 400;

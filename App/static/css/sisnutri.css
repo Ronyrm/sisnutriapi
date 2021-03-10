@@ -13,18 +13,23 @@
 .colortxt {
     color: orange;
 }
-.colortxt:hover {
+
+.colorlink {
+    color: orange;
+}
+.colorlink:hover {
     color: white;
 }
 
 .btnpadrao {
-    background-color:#343a40;
-    border: 2px solid orange;
+    background-color:orange;
+    border: 2px solid #343a40;
     border-radius:25px;
 
 }
 
 .btnpadrao:hover {
+
     background-color:orange;
     border: 2px solid #343a40;
     border-radius:25px;
