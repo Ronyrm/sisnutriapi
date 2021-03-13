@@ -38,6 +38,10 @@ from App.routes.routesitemdieta import routesitemdieta
 app.register_blueprint(routesitemdieta)
 
 
+from App.routes.routesproduct import routesproduct
+app.register_blueprint(routesproduct)
+
+
 from App.routes.routespessoa import routespessoa
 app.register_blueprint(routespessoa)
 

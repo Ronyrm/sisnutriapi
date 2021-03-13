@@ -7,7 +7,7 @@ main = Blueprint('main', __name__)
 @main.route('/main/', methods=['GET'])
 @helper.token_required
 def indexmain(current_user, token):
-    if current_user:
+    if token:
         from App.model import users
         user = users.user_schema.dump(current_user)
         session['current_user'] = user

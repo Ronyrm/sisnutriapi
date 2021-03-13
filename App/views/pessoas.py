@@ -1,4 +1,3 @@
-from App import db
 from App.model.pessoa import  Pessoa
 from App.schema.schema import PessoaClienteRefeicoesSchema
 from flask import jsonify, request

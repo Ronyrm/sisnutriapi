@@ -6,6 +6,12 @@ from App.model.refeicao import Refeicao
 from App.model.dieta import Dieta
 from App.model.itemdieta import ItemDieta
 from App.model.alimentos import Alimentos
+from App.model.products import Product
+
+
+class ProductSchema(ModelSchema):
+    class Meta:
+        model = Product
 
 
 class PessoaSchema(ModelSchema):

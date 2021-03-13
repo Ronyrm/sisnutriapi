@@ -1,0 +1,37 @@
+{% extends "layouts/products/baseproducts.html" %}
+
+{% block idlogado %} {{ idlogado }} {% endblock %}
+{% block usernamelogado %} {{ usernamelogado }} {% endblock %}
+{% block token %} {{ token }} {% endblock %}
+{% block tabproducts %} {{ tabproducts }} {% endblock %}
+{% block caminhoimg %} {{ caminhoimg }} {% endblock %}
+
+
+{% block content %}
+<div align="center">
+  <h1 class="title"> Cadastro de Produtos</h1>
+  <table class="table bgpadrao text-white">
+      <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Id</th>
+              <th scope="col">Descrição</th>
+            </tr>
+      </thead>
+    <tbody>
+        {% for product in tabproducts %}
+
+            <tr>
+              <th scope="row">
+                <img class="img-fluid" width="72" height="72" title="filename='{{ camimg }}'" src="{{ url_for('static', filename='/img/uploads/' + product.caminhoimg) }}" alt="" />
+              </th>
+              <td>{{product.id}}</td>
+              <td>{{product.descricao}}</td>
+
+            </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
