@@ -1,3 +1,4 @@
+
 from App import app,db
 from App.model.products import Product
 from flask import flash, jsonify, request,redirect,render_template
@@ -13,27 +14,27 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 ## Adiciona Produto
-def add_product_form():
+def add_product_form(current_user, token,page,totporpag):
 
     random_str = string.ascii_letters + string.digits + string.ascii_uppercase
     key_img = ''.join(random.choice(random_str) for i in range(6))
 
     if request.method == 'POST':
         data = request.form
-        descricao = data['descricao']
-        subdescricao = data['subdescricao']
-        estoquemin = data['estoquemin']
-        estoqueatual = data['estoqueatual']
-        precocusto = data['precocusto']
-        margemlucro = data['margemlucro']
-        precovenda = data['precovenda']
+        descricao = data['edtdescricao']
+        subdescricao = data['edtsubdescricao']
+        estoquemin = data['edtestoqminimo']
+        estoqueatual = data['edtestoqatual']
+        precocusto = data['edtprecocusto']
+        margemlucro = data['edtmargemlucro']
+        precovenda = data['edtprecovenda']
 
-        if 'photoprod' not in request.files:
+        if 'fileimg' not in request.files:
             flash('Nenhum produto informado')
-            return redirect(request.url)
+            #return redirect(request.url)
             caminhoimg = ''
 
-        filephotoprod = request.files['photoprod']
+        filephotoprod = request.files['fileimg']
         if filephotoprod.filename == '':
             caminhoimg = ''
             #flash('Arquivo não selecionado')
@@ -52,44 +53,64 @@ def add_product_form():
         db.session.commit()
         productschema = ProductSchema()
         result = productschema.dump(product)
-        return jsonify({'message': 'successfully fetched', 'data': result}), 201
+        #return jsonify({'message': 'successfully fetched', 'data': result}), 201
+        return get_allproducts(current_user,token,page,totporpag)
     except:
         return jsonify({'message': 'unable to create', 'data': {}}), 500
 
 #Atualiza Product
-def update_product_form(id):
+def update_product_form(current_user, token,page,totporpag):
     random_str = string.ascii_letters + string.digits + string.ascii_uppercase
     key_img = ''.join(random.choice(random_str) for i in range(6))
 
-    if request.method == 'PUT':
+    if request.method == 'POST':
         data = request.form
-        descricao = data['descricao']
-        subdescricao = data['subdescricao']
-        estoquemin = data['estoquemin']
-        estoqueatual = data['estoqueatual']
-        precocusto = data['precocusto']
-        margemlucro = data['margemlucro']
-        precovenda = data['precovenda']
+        id = data['edtid']
 
-        if 'photoprod' not in request.files:
-            flash('Nenhum produto informado')
-            #return redirect(request.url)
-            caminhoimg = ''
+        if id != '-1':
+            product = Product.query.get(id)
+            if not product:
+                msg = 'O produto não existe na nossa base de dados'
+                return get_allproducts(current_user, token, page, totporpag,msg)
+                #return jsonify({'mensagem': 'Produto não Existe', 'data': {}}), 404
 
-        filephotoprod = request.files['photoprod']
-        if filephotoprod.filename == '':
-            flash('Arquivo não selecionado')
-            caminhoimg = ''
-        if filephotoprod and allowed_file(filephotoprod.filename):
-            filename = secure_filename(filephotoprod.filename)
-            localesave = app.config['DIRECTORY_APP']+app.config['UPLOAD_FOLDER']
-            caminhoimg = key_img + filename
+        else:
+            product = Product()
+
+        descricao = data['edtdescricao']
+        subdescricao = data['edtsubdescricao']
+        estoquemin = data['edtestoqminimo']
+        estoqueatual = data['edtestoqatual']
+        precocusto = data['edtprecocusto']
+        margemlucro = data['edtmargemlucro']
+        precovenda = data['edtprecovenda']
+
+        caminhoimgBD = Product.caminhoimg
+        caminhoimg = ''
 
 
+        if caminhoimg == '':
 
-    product = Product.query.get(id)
-    if not product:
-        return jsonify({'mensagem': 'Produto não Existe', 'data': {}}), 404
+            if 'fileimg' not in request.files:
+                flash('Nenhum produto informado')
+                # return redirect(request.url)
+                caminhoimg = ''
+
+            try:
+                filephotoprod = request.files['fileimg']
+                tamanhoarq =len(filephotoprod.filename)
+                if tamanhoarq == 0:
+                    caminhoimg = ''
+                else:
+                    try:
+                        if filephotoprod and allowed_file(filephotoprod.filename):
+                            filename = secure_filename(filephotoprod.filename)
+                            localesave = app.config['DIRECTORY_APP'] + app.config['UPLOAD_FOLDER']
+                            caminhoimg = key_img + filename
+                    except:
+                        caminhoimg = ''
+            except:
+                caminhoimg = ''
 
 
 
@@ -101,17 +122,29 @@ def update_product_form(id):
         product.precocusto = precocusto
         product.margemlucro = margemlucro
         product.precovenda = precovenda
-        if caminhoimg != "" and caminhoimg != None:
-            filephotoprod.save(os.path.join(localesave, key_img + filename))
-            filedelete = os.path.join(localesave, product.caminhoimg)
-            os.remove(filedelete)
-            product.caminhoimg = caminhoimg
+        try:
+            if caminhoimg != "" and caminhoimg != None:
+                filephotoprod.save(os.path.join(localesave, key_img + filename))
+                if product.caminhoimg != '':
+                    filedelete = os.path.join(localesave, product.caminhoimg)
+                    os.remove(filedelete)
+        except:
+            caminhoimg = ''
+
+
+
+        product.caminhoimg = caminhoimg
+        msg = 'Produto: '+ str(product.id) + ' - ' + product.descricao+' alterado com sucesso!'
+        if id == '-1':
+            msg = 'Produto: '+ product.descricao+' inserindo com sucesso'
+            db.session.add(product)
 
 
         db.session.commit()
-        productschema = ProductSchema()
-        result = productschema.dump(product)
-        return jsonify({'message': 'successfully fetched', 'data': result}), 201
+        #productschema = ProductSchema()
+        #result = productschema.dump(product)
+
+        return get_allproducts(current_user,token,page,totporpag,msg)
     except:
         return jsonify({'message': 'unable to create', 'data': {}}), 500
 
@@ -128,25 +161,57 @@ def get_byid(idproduct):
 
 
 ## Filtra todos os produtos
-def get_allproducts(current_user,token):
+def get_allproducts(current_user,token,page,totporpag,msg = ''):
 
-    products = Product.query.all()
+    pagination = Product.query.paginate(page=int(page),max_per_page=int(totporpag), error_out=False)
+    products = pagination.items
     totalprod = len(products)
+
     if products:
         productsschema = ProductSchema(many=True)
+
         result = productsschema.dump(products)
 
         data = jwt.decode(token, app.config['SECRET_KEY'])
 
         #return jsonify({'mensagem': 'Todos os Produtos:. '+str(totalprod),'token': token,'data': result}), 201
+        import  json
+        datapag = '{"nextpag":"'+str(pagination.has_next)+'","prevpag":"'+str(pagination.has_prev)+'",'
+        datapag +='"nextnum": "'+str(pagination.next_num if pagination.next_num!=None else 0) +'",'
+        datapag +='"pageatual": "'+str(pagination.page if pagination.page!=None else 0)+'",'
+        datapag += '"totpage": "'+str(pagination.pages if pagination.pages!=None else 0)+'",'
+
+        if pagination.per_page != None:
+            datapag +='"per_page": "'+ str(pagination.per_page)+'",'
+        else:
+            datapag += '"per_page": "' + str(0) + '",'
+
+        if pagination.prev_num != None:
+            datapag +='"prev_num": "'+ str(pagination.prev_num)+'"}'
+        else:
+            datapag += '"prev_num": "' + str(0) + '"}'
+
+        url = request.url_root
+
+        datapag = json.loads(datapag)
 
         caminhoimg = app.config['DIRECTORY_APP']+app.config['UPLOAD_FOLDER']
         return render_template('layouts/products/products.html',
-                               tabproducts=products,
-                               caminhoimg=caminhoimg,
-                               token=token,
-                               idlogado=data['id'] if data==None else '',
-                               usernamelogado=data['username'] if data==None else '')
+                                divmsg = msg,
+                                urlroot=url,
+                                datapag = datapag,
+                                tabproducts=result,
+                                nextpag=pagination.has_next,
+                                prevpag = pagination.has_prev,
+                                nextnum = pagination.next_num,
+                                pageatual = pagination.page,
+                                totpage = pagination.pages,
+                                perpage = pagination.per_page,
+                                prev_num = pagination.prev_num,
+                                caminhoimg=caminhoimg,
+                                token=token,
+                                idlogado=data['id'] if data==None else '',
+                                usernamelogado=data['username'] if data==None else '')
 
     return jsonify({'mensagem': 'Falha ao Carregar', 'data': {}}), 500
 

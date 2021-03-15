@@ -3,37 +3,64 @@
 }
 
 .custom-toggler.navbar-toggler {
-  border-color: orange;
+  border-color: #ff4800;
 }
 
 .bgpadrao{
     background-color: #343a40;
+}
+.bgpadraosec{
+    background-color: #ff4800;
 
 }
 .colortxt {
-    color: orange;
+    color: #ff4800;
 }
 
 .colorlink {
-    color: orange;
+    color: #ff4800;
+    background-color:#343a40;
 }
 .colorlink:hover {
-    color: white;
+    color: #343a40;
+    background-color:#ff4800;
 }
 
 .btnpadrao {
-    background-color:orange;
+    background-color:#ff4800;
     border: 2px solid #343a40;
     border-radius:25px;
-
+    color: #343a40
 }
 
 .btnpadrao:hover {
+    background-color: #343a40;
+    border: 2px solid #ff4800;
+    border-radius:25px;
+    color:#ff4800;
+}
 
-    background-color:orange;
+.btnpadrao-outline {
+
+    background-color: #343a40;
+    border: 2px solid #ff4800;
+    border-radius:25px;
+    color:#ff4800;
+
+}
+
+.btnpadrao-outline:hover {
+    background-color:#ff4800;
     border: 2px solid #343a40;
     border-radius:25px;
+    color: #343a40;
+
 }
+
+
+
+
+
 
 .bodybase{
   margin: 0;
