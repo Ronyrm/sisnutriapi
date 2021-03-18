@@ -21,9 +21,17 @@ def update_product(current_user, token,page,totporpag):
 
 @routesproduct.route('/allprodutos/<page>/<totporpag>',methods=['GET'])
 @helper.token_required
-def get_allproducts(current_user, token,page,totporpag):
+def get_allproducts(current_user,token,page,totporpag):
     return product.get_allproducts(current_user,token,page,totporpag)
+
+@routesproduct.route('/del/produto/<page>/<totporpag>',methods=['GET'])
+@helper.token_required
+def del_product_by_id(current_user,token,page,totporpag):
+    return product.delete_product_by_id(current_user,token,page,totporpag)
+
 
 @routesproduct.route('/produtos/',methods=['GET'])
 def get_product_by_desc():
     return product.get_product_by_desc()
+
+

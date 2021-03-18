@@ -1,5 +1,7 @@
 {% extends "layouts/products/baseproducts.html" %}
 {% block jsproduct %}<script src="{{ url_for('static', filename='js/products.js') }}"></script>{% endblock %}
+{% block jsjquery %}<script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>{% endblock %}
+
 {% block idlogado %} {{ idlogado }} {% endblock %}
 {% block usernamelogado %} {{ usernamelogado }} {% endblock %}
 {% block token %} {{ token }} {% endblock %}
@@ -17,6 +19,7 @@
 {% block divmsg %} {{ divmsg }} {% endblock %}
 {% block content %}
 <div  id="contentproducts">
+    <!-- Central !-->
     <div class="container  my-2" align="center">
 
         {% if divmsg|length >0 %}
@@ -27,17 +30,20 @@
             </button>
         </div>
         {% endif %}
+        <div id='msgdel' class="alert-dismissible fade d-none" role="alert">
+
+        </div>
 
         <div class="row d-flex justify-content-between">
-            <button class="btn btnpadrao my-2 mx-2" data-toggle="modal" data-target=".edit-modal"
+            <button class="btn btn-success my-2 mx-2" data-toggle="modal" data-target=".edit-modal"
                      onclick='editprod("None","-1","I")'>
-                <img class="img-fluid" width="24" height="24" src="{{ url_for('static', filename='/img/btnadd.png') }}"/>
-                Inserir
+                <span class="glyphicon glyphicon-plus"></span>  Inserir
             </button>
         </div>
     </div>
-    <table class="table table-striped table-dark colortxt">
-        <thead class="">
+    <!-- Tabelas de Produtos !-->
+    <table class="table table-striped table-light ">
+        <thead class="bgpadrao">
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Id</th>
@@ -45,14 +51,21 @@
                 <th scope="col">Ações</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="border border-success border-2">
         {% for product in tabproducts %}
 
             {% set camimg = 'nophoto.png' %}
             {% if product.caminhoimg|length > 0   %}
                 {% set camimg = product.caminhoimg %}
             {% endif %}
-            <tr>
+            {% if product.caminhoimg != ''   %}
+                {% set camimg = product.caminhoimg %}
+            {% endif %}
+
+            {% if camimg == '' %}
+                {% set camimg = 'nophoto.png' %}
+            {% endif %}
+            <tr id="tr-prod{{ product.id }}" title="tr-prod{{ product.id }}">
               <th scope="row">
                 <img  width="100" id="imgprod_{{product.id}}" height="100" title="imgprod_{{product.id}}" src="{{ url_for('static', filename='/img/uploads/' + camimg) }}" alt="" />
               </th>
@@ -62,13 +75,15 @@
 
                   <div>
                       {% set list = caminhoimg.split('/') %}
-                      <button class="btn btn-sm btnpadrao" data-toggle="modal" data-target=".edit-modal" onclick='editprod({{ product|tojson|safe }},{{ list }},"A")'>
-                          <img class="img-fluid" width="24" height="32" src="{{ url_for('static', filename='/img/btnedit.png') }}"/>
-                          Editar
+                      <button class="btn btn-sm btn-success mx-2 my-2"
+                              data-toggle="modal" data-target=".edit-modal"
+                              onclick='editprod({{ product|tojson|safe }},{{ list }},"A")'>
+                          <span class="glyphicon glyphicon-pencil"></span> Editar
                       </button>
-                      <button class="btn btn-sm btnpadrao">
-                          <img class="img-fluid" width="24" height="32" src="{{ url_for('static', filename='/img/btndelet.png') }}"/>
-                          Excluir
+                      <button class="btn btn-sm btn-danger mx-2 my-2"
+                              data-toggle="modal" data-target=".modal-delete"
+                              onclick="deleteprod({{ product.id }},'{{ product.descricao }}','{{ token }}');">
+                          <span class="glyphicon glyphicon-trash"></span> Excluir
                       </button>
                   </div>
               </td>
@@ -77,6 +92,7 @@
         {% endfor %}
         </tbody>
     </table>
+    <!-- Paginação !-->
     <nav class="" aria-label="Page navigation example">
         <div class="row justify-content-center my-2">
             <ul class="pagination mx-2 my-2">
@@ -86,8 +102,8 @@
                 {% else %}
                     {% set disable = '' %}
                 {% endif %}
-                <li class="page-item bgpadrao {{ disable }}">
-                    <a class="page-link bgpadrao colorlink" href="{{url_for('routesproduct.get_allproducts',current_user={},token=token,page=pageatual-1,totporpag=perpage) }}">
+                <li class="page-item   {{ disable }}">
+                    <a class="page-link" href="{{url_for('routesproduct.get_allproducts',current_user={},token=token,page=pageatual-1,totporpag=perpage) }}">
                         Anterior
                     </a>
                 </li>
@@ -98,8 +114,8 @@
                         {% set disableli = 'disabled' %}
                     {% endif %}
 
-                    <li class="page-item bgpadrao {{ disableli }}">
-                        <a class="page-link bgpadrao colorlink" href="{{url_for('routesproduct.get_allproducts',current_user={},token=token,page=number+1,totporpag=perpage) }}">
+                    <li class="page-item  {{ disableli }}">
+                        <a class="page-link" href="{{url_for('routesproduct.get_allproducts',current_user={},token=token,page=number+1,totporpag=perpage) }}">
                             {{ number + 1 }}
                         </a>
                     </li>
@@ -110,41 +126,41 @@
                 {% else %}
                     {% set disable = '' %}
                 {% endif %}
-                <li class="page-item bgpadrao {{ disable }}">
-                    <a class="page-link bgpadrao colorlink" href="{{url_for('routesproduct.get_allproducts',current_user={},token=token,page=pageatual+1,totporpag=perpage) }}">
+                <li class="page-item {{ disable }}">
+                    <a class="page-link" href="{{url_for('routesproduct.get_allproducts',current_user={},token=token,page=pageatual+1,totporpag=perpage) }}">
                         Próximo
                     </a>
                 </li>
             </ul>
 
             <div class="dropdown my-2">
-                <button type="button" class="btn btn-md bgpadrao dropdown-toggle colortxt" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button type="button" class="btn btn-md btn-success text-white dropdown-toggle " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Total de Itens por Página
                 </button>
 
-                <ul class="dropdown-menu bgpadrao">
+                <ul class="dropdown-menu bg-success text-white">
                     <li>
-                        <a class="dropdown-item colorlink" href="{{url_for('routesproduct.get_allproducts',current_user={},token=token,page=pageatual,totporpag=1) }}">
+                        <a class="dropdown-item " href="{{url_for('routesproduct.get_allproducts',current_user={},token=token,page=pageatual,totporpag=1) }}">
                             1 item por página
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item colorlink" href="{{url_for('routesproduct.get_allproducts',current_user={},token=token,page=1,totporpag=15) }}">
+                        <a class="dropdown-item" href="{{url_for('routesproduct.get_allproducts',current_user={},token=token,page=1,totporpag=15) }}">
                             15 itens por página
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item colorlink" href="{{url_for('routesproduct.get_allproducts',current_user={},token=token,page=1,totporpag=30) }}">
+                        <a class="dropdown-item" href="{{url_for('routesproduct.get_allproducts',current_user={},token=token,page=1,totporpag=30) }}">
                             30 itens por página
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item colorlink" href="{{url_for('routesproduct.get_allproducts',current_user={},token=token,page=1,totporpag=60) }}">
+                        <a class="dropdown-item" href="{{url_for('routesproduct.get_allproducts',current_user={},token=token,page=1,totporpag=60) }}">
                             60 itens por página
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item colorlink" href="#" onclick="btnqtdpag('{{ token}}','1','5','{{ urlroot }}')">
+                        <a class="dropdown-item" href="#" onclick="btnqtdpag('{{ token}}','1','5','{{ urlroot }}')">
                             60 itens por página
                         </a>
                     </li>
@@ -153,32 +169,30 @@
         </div>
 
     </nav>
-
     <!-- Editar e inserir !-->
-
-    <div class="modal fade edit-modal" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg colortxt" role="document">
-        <div class="modal-content bgpadrao ">
-          <div class="modal-header">
-            <h5 class="modal-title" id="lblidprod"></h5>
+    <div class="modal fade edit-modal" id="edit-modal" tabindex="1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header bgpadrao">
+            <h5 class="modal-title text-white" id="lblidprod"></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <form name="formproduct" id="formproduct" enctype="multipart/form-data" method="POST" action="{{ url_for('routesproduct.update_product',currente_user={},token=token,page=pageatual-1,totporpag=perpage) }}">
-              <div class="modal-body bgpadrao">
+              <div class="modal-body">
                 <div id="accordion">
                   <p>
-                      <a class="btn btnpadrao-outline" data-toggle="collapse" data-target="#collapse-dadosgerais"  aria-expanded="false" aria-controls="collapse-dadosgerais">
+                      <a class="btn btn-outline-success" data-toggle="collapse" data-target="#collapse-dadosgerais"  aria-expanded="false" aria-controls="collapse-dadosgerais">
                         Dados Gerais
                       </a>
-                      <a class="btn btnpadrao-outline"  data-toggle="collapse" data-target="#collapse-image" aria-expanded="false" aria-controls="collapse-image">
+                      <a class="btn btn-outline-success"  data-toggle="collapse" data-target="#collapse-image" aria-expanded="false" aria-controls="collapse-image">
                         Imagem
                       </a>
                   </p>
 
                       <div class="collapse show " id="collapse-dadosgerais" data-parent="#accordion">
-                          <div class="card card-body bgpadrao">
+                          <div class="card card-body">
                                 <div class="form-group">
                                     <label for="edtdescricao">Descrição</label>
                                     <input type="text" class="form-control" required name="edtdescricao" id="edtdescricao" placeholder="Descrição">
@@ -220,23 +234,31 @@
                       </div>
                       <div class="collapse" id="collapse-image" data-parent="#accordion">
                           <div class="card card-body bgpadrao">
-                              <div class="form-group">
+                              <div class="form-group text-center">
+
                                     <label for="fileimg">
                                         <input type="file" name="fileimg" id="fileimg"  onchange="readURL(this);" accept="image/png, image/jpeg"
                                                class="d-none form-control-file" >
                                         <img class="icone-img  d-block" src="#" id="imgprod"/>
                                     </label>
+                                    <br>
+                                    <label  for="fileimg">Clique aqui pra alterar ou inserir uma imagem</label>
 
                             </div>
                           </div>
+                          <img  class=" d-none" width="100" id="imgprod_semfoto" height="100" title="sem imagem" src="{{ url_for('static', filename='/img/uploads/nophoto.png') }}" alt="" />
                       </div>
 
                 </div>
               </div>
 
-              <div class="modal-footer">
-                <button type="submit" class="btn btnpadrao" >Salvar</button>
-                <button type="button" class="btn btnpadrao" data-dismiss="modal">Cancelar</button>
+              <div class="modal-footer bgpadrao">
+                <button type="submit" class="btn btn-primary" >
+                    <span class="glyphicon glyphicon-ok"></span> Salvar
+                </button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-remove"></span> Cancelar
+                </button>
 
               </div>
           </form>
@@ -244,12 +266,38 @@
       </div>
     </div>
 
+    <div class="modal fade modal-delete" id="modal-delete" tabindex="2" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered " role="document">
+            <div class="modal-content">
+              <div class="modal-header bgpadrao">
+                  <input type="hidden" name="edtiddelete" id="edtiddelete" >
+                  <h5 class="modal-title">Exclusão</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+
+              <div class="modal-body" id="modal-msg-delete">
+
+              </div>
+              <div class="modal-footer bgpadrao">
+                  <button type="button" id="btnconfirmaexclusao" data-dismiss="modal" onclick="exclusaoclick('{{ token }}','{{ pageatual }}', '{{ totpage }}');" class="btn btn-primary" >
+                      <span class="glyphicon glyphicon-ok"></span> Confirmar
+                  </button>
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">
+                       <span class="glyphicon glyphicon-remove"></span> Cancelar
+                  </button>
+              </div>
+            </div>
+          </div>
+        </div>-
 
 </div>
 <script>
 $().ready(function() {
 	setTimeout(function () {
 		$('#cxmsg').hide();
+
 	}, 3000);
 });
 </script>

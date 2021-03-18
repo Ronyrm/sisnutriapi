@@ -7,35 +7,42 @@
 }
 
 .bgpadrao{
-    background-color: #343a40;
-}
-.bgpadraosec{
-    background-color: #ff4800;
+    background-color:#03ad0b!important
+ }
 
-}
+ a.bgpadrao,a.bgpadrao,button.bgpadrao,button.bgpadrao{
+    background-color:#0062cc!important
+ }
+
+
+
+ a.bgpadrao:focus,a.bgpadrao:hover,button.bgpadrao:focus,button.bgpadrao:hover{
+    background-color:#057cfc!important
+ }
+
 .colortxt {
-    color: #ff4800;
+    color: #28a745;
 }
 
 .colorlink {
-    color: #ff4800;
-    background-color:#343a40;
+    color: White;
+    background-color:#03ad0b!important
 }
 .colorlink:hover {
-    color: #343a40;
-    background-color:#ff4800;
+    color: #ffc107;
+
 }
 
 .btnpadrao {
-    background-color:#ff4800;
-    border: 2px solid #343a40;
+    background-color:#28a745;
+    border: 2px solid White;
     border-radius:25px;
-    color: #343a40
+    color: White;
 }
 
 .btnpadrao:hover {
-    background-color: #343a40;
-    border: 2px solid #ff4800;
+    background-color: White;
+    border: 2px solid #28a745;
     border-radius:25px;
     color:#ff4800;
 }
@@ -87,6 +94,10 @@
 /* Custom page CSS
 -------------------------------------------------- */
 /* Not required for template or sticky footer method. */
+
+body{
+  /*background-color:#c6c6c6;*/
+}
 
 body > .container {
   padding: 60px 15px 0;

@@ -1,7 +1,7 @@
 
 from App import app,db
 from App.model.products import Product
-from flask import flash, jsonify, request,redirect,render_template
+from flask import flash, jsonify, request,redirect,render_template,url_for
 from App.schema.schema import ProductSchema
 from werkzeug.utils import secure_filename
 import jwt
@@ -54,7 +54,7 @@ def add_product_form(current_user, token,page,totporpag):
         productschema = ProductSchema()
         result = productschema.dump(product)
         #return jsonify({'message': 'successfully fetched', 'data': result}), 201
-        return get_allproducts(current_user,token,page,totporpag)
+        return redirect(url_for('outesproduct.get_allproducts',token=token,page=page,totporpag=totporpag,msg=''))
     except:
         return jsonify({'message': 'unable to create', 'data': {}}), 500
 
@@ -67,7 +67,7 @@ def update_product_form(current_user, token,page,totporpag):
         data = request.form
         id = data['edtid']
 
-        if id != '-1':
+        if id != '-1' and id != '':
             product = Product.query.get(id)
             if not product:
                 msg = 'O produto não existe na nossa base de dados'
@@ -78,7 +78,7 @@ def update_product_form(current_user, token,page,totporpag):
             product = Product()
 
         descricao = data['edtdescricao']
-        subdescricao = data['edtsubdescricao']
+        subdescricao = data['edtsubdescricao'] + app.config['DIRECTORY_APP']
         estoquemin = data['edtestoqminimo']
         estoqueatual = data['edtestoqatual']
         precocusto = data['edtprecocusto']
@@ -105,7 +105,7 @@ def update_product_form(current_user, token,page,totporpag):
                     try:
                         if filephotoprod and allowed_file(filephotoprod.filename):
                             filename = secure_filename(filephotoprod.filename)
-                            localesave = app.config['DIRECTORY_APP'] + app.config['UPLOAD_FOLDER']
+                            localesave = app.config['UPLOAD_FOLDER']
                             caminhoimg = key_img + filename
                     except:
                         caminhoimg = ''
@@ -124,10 +124,13 @@ def update_product_form(current_user, token,page,totporpag):
         product.precovenda = precovenda
         try:
             if caminhoimg != "" and caminhoimg != None:
-                filephotoprod.save(os.path.join(localesave, key_img + filename))
+
+                filephotoprod.save(localesave+caminhoimg)
                 if product.caminhoimg != '':
                     filedelete = os.path.join(localesave, product.caminhoimg)
                     os.remove(filedelete)
+            else:
+                caminhoimg = product.caminhoimg
         except:
             caminhoimg = ''
 
@@ -136,6 +139,7 @@ def update_product_form(current_user, token,page,totporpag):
         product.caminhoimg = caminhoimg
         msg = 'Produto: '+ str(product.id) + ' - ' + product.descricao+' alterado com sucesso!'
         if id == '-1':
+            product.caminhoimg = ''
             msg = 'Produto: '+ product.descricao+' inserindo com sucesso'
             db.session.add(product)
 
@@ -144,7 +148,8 @@ def update_product_form(current_user, token,page,totporpag):
         #productschema = ProductSchema()
         #result = productschema.dump(product)
 
-        return get_allproducts(current_user,token,page,totporpag,msg)
+        #return get_allproducts(current_user,token,page,totporpag,msg)
+        return redirect(url_for('routesproduct.get_allproducts', token=token, page=page, totporpag=totporpag,msg=msg))
     except:
         return jsonify({'message': 'unable to create', 'data': {}}), 500
 
@@ -161,7 +166,14 @@ def get_byid(idproduct):
 
 
 ## Filtra todos os produtos
-def get_allproducts(current_user,token,page,totporpag,msg = ''):
+def get_allproducts(current_user,token,page,totporpag):
+    try:
+        msg = request.args.get('msg')
+    except:
+        msg = ''
+
+    if not msg:
+        msg = ''
 
     pagination = Product.query.paginate(page=int(page),max_per_page=int(totporpag), error_out=False)
     products = pagination.items
@@ -229,3 +241,29 @@ def get_product_by_desc():
 
     except:
         return jsonify({'data':{}})
+
+
+def delete_product_by_id(current_user,token,page,totporpag):
+    try:
+        id = request.args.get('id')
+    except:
+        id='-1'
+
+    product = Product.query.get(id)
+    if not product:
+        return jsonify({'mensagem': 'Produto não encontrado', 'data': {},
+                        'delete':False,'token':token,'page':page,'totporpag':totporpag}), 404
+
+    if product:
+
+        try:
+            prod = product.descricao
+            db.session.delete(product)
+            db.session.commit()
+            product_schema = ProductSchema()
+            result = product_schema.dump(product)
+            return jsonify({'mensagem': 'O produto '+prod+' foi excluido com Sucesso', 'data': result,'delete':True,
+                            'token':token,'page':page,'totporpag':totporpag}), 201
+        except:
+            return jsonify({'mensagem': 'Não foi possível excluir o Produto', 'data': {},'delete':False,
+                            'token':token,'page':page,'totporpag':totporpag}), 500

@@ -3,10 +3,25 @@
 <head>
     <meta charset="UTF-8">
     {% block head %}
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link href="{{ url_for('static', filename='css/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/bootstrap/css/bootstrap.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/bootstrap/css/bootstrap-grid.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/bootstrap/css/bootstrap-reboot.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/bootstrap/css/bootstrap-reboot.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/bootstrap/css/font-awesome.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/bootstrap/css/bootstrap-grid.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/glyphicons/css/bootstrap-theme.min.css') }}" rel="stylesheet">
+        <link href="/glyphicons/css/bootstrap-theme.min.css) }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/glyphicons/css/bootstrap.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/glyphicons/css/bootstrap.min.css') }}" rel="stylesheet">
+
+        <script src="{{ url_for('static', filename='css/bootstrap/js/popper.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='css/bootstrap/js/tooltip.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='css/bootstrap/js/bootstrap.min.js') }}"></script>
+
         <link rel="stylesheet" href="{{ url_for('static', filename='css/sisnutri.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/products.css') }}">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         {% block cssproduct %} {% endblock %}
 
         <title> Produtos </title>
@@ -20,13 +35,13 @@
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item mx-auto p2">
                         <a class="nav-link colorlink text-center px-2" href="{{ url_for('main.indexmain',token=token) }}">
-                           Voltar
+                            <span class="glyphicon glyphicon-chevron-left"/>Voltar
                         </a>
                     </li>
                 </ul>
             </div>
             <div class="mx-auto order-0">
-                <h1 class="navbar-brand mx-2 colortxt " >Cadastro de Produtos</h1>
+                <h1 class="navbar-brand mx-2 text-white " >Cadastro de Produtos</h1>
                 <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
                     <span class="navbar-toggler-icon text-white"></span>
                 </button>
@@ -50,6 +65,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    {% block jsjquery %} {% endblock%}
     {% block jsproduct %} {% endblock %}
 
 </body>
