@@ -84,6 +84,9 @@ def update_product_form(current_user, token,page,totporpag):
         precocusto = data['edtprecocusto']
         margemlucro = data['edtmargemlucro']
         precovenda = data['edtprecovenda']
+        idgrupoproduto = data['edtidgrupoproduto']
+        if idgrupoproduto == '0':
+            idgrupoproduto = None
 
         caminhoimgBD = Product.caminhoimg
         caminhoimg = ''
@@ -122,6 +125,7 @@ def update_product_form(current_user, token,page,totporpag):
         product.precocusto = precocusto
         product.margemlucro = margemlucro
         product.precovenda = precovenda
+        product.idgrupoproduto = idgrupoproduto
         try:
             if caminhoimg != "" and caminhoimg != None:
 
@@ -175,16 +179,33 @@ def get_allproducts(current_user,token,page,totporpag):
     if not msg:
         msg = ''
 
-    pagination = Product.query.paginate(page=int(page),max_per_page=int(totporpag), error_out=False)
+    try:
+        desc = request.args.get('desc')
+        desc = "%" + desc + "%"
+    except:
+        desc = ''
+
+    if not desc:
+        desc = ''
+
+    if desc != '':
+        pagination = Product.query. \
+            filter(Product.descricao.like(desc)). \
+            paginate(page=int(page),max_per_page=int(totporpag), error_out=False)
+    else:
+        pagination = Product.query.paginate(page=int(page), max_per_page=int(totporpag), error_out=False)
+
     products = pagination.items
     totalprod = len(products)
+
+    data = jwt.decode(token, app.config['SECRET_KEY'])
 
     if products:
         productsschema = ProductSchema(many=True)
 
         result = productsschema.dump(products)
 
-        data = jwt.decode(token, app.config['SECRET_KEY'])
+
 
         #return jsonify({'mensagem': 'Todos os Produtos:. '+str(totalprod),'token': token,'data': result}), 201
         import  json
@@ -225,7 +246,22 @@ def get_allproducts(current_user,token,page,totporpag):
                                 idlogado=data['id'] if data==None else '',
                                 usernamelogado=data['username'] if data==None else '')
 
-    return jsonify({'mensagem': 'Falha ao Carregar', 'data': {}}), 500
+    return render_template('layouts/products/products.html',
+                                divmsg = '',
+                                urlroot='',
+                                datapag = 1,
+                                tabproducts={},
+                                nextpag=pagination.has_next,
+                                prevpag = pagination.has_prev,
+                                nextnum = pagination.next_num,
+                                pageatual = pagination.page,
+                                totpage = pagination.pages,
+                                perpage = pagination.per_page,
+                                prev_num = pagination.prev_num,
+                                caminhoimg='',
+                                token=token,
+                                idlogado=data['id'] if data==None else '',
+                                usernamelogado=data['username'] if data==None else '')
 
 
 ## Filtra por descrição

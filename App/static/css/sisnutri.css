@@ -1,3 +1,36 @@
+.btn-outline-padrao {
+  color: white!important;
+  border-color: white!important;
+}
+
+.btn-outline-padrao:hover {
+  color: #28a745;
+  background-color: #ffc107!important;
+  border-color: #ffc107!important;
+}
+
+.btn-outline-padrao:focus, .btn-outline-padrao.focus {
+  box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
+}
+
+.btn-outline-padrao.disabled, .btn-outline-padrao:disabled {
+  color: #ffc107!important;
+  background-color: transparent;
+}
+
+.btn-outline-padrao:not(:disabled):not(.disabled):active, .btn-outline-padrao:not(:disabled):not(.disabled).active,
+.show > .btn-outline-dark.dropdown-toggle {
+  color: #fff;
+  background-color: #ffc107!important;
+  border-color: #ffc107!important;
+}
+
+.btn-outline-padrao:not(:disabled):not(.disabled):active:focus, .btn-outline-padrao:not(:disabled):not(.disabled).active:focus,
+.show > .btn-outline-padrao.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
+}
+
+
 .custom-toggler .navbar-toggler-icon {
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(232,109,3, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
 }
@@ -7,7 +40,7 @@
 }
 
 .bgpadrao{
-    background-color:#03ad0b!important
+    background-color:#28a745!important
  }
 
  a.bgpadrao,a.bgpadrao,button.bgpadrao,button.bgpadrao{
@@ -26,7 +59,7 @@
 
 .colorlink {
     color: White;
-    background-color:#03ad0b!important
+    background-color:#28a745!important
 }
 .colorlink:hover {
     color: #ffc107;

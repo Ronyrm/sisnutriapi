@@ -1,10 +1,15 @@
 from flask import Flask
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate,MigrateCommand
+from flask_script import Manager
 
 app = Flask(__name__)
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
+migrate = Migrate(app,db)
+manager = Manager(app)
+manager.add_command('db',MigrateCommand)
 
 app.config.from_object('config')
 print('Banco de dados:'+app.config['SQLALCHEMY_DATABASE_URI'])
@@ -34,6 +39,8 @@ from App.routes.routescliente import routesclientes
 app.register_blueprint(routesclientes)
 
 
+
+
 from App.routes.routesitemdieta import routesitemdieta
 app.register_blueprint(routesitemdieta)
 
@@ -41,14 +48,16 @@ app.register_blueprint(routesitemdieta)
 from App.routes.routesproduct import routesproduct
 app.register_blueprint(routesproduct)
 
+from App.routes.routesgroupproducts import routesgroupproducts
+app.register_blueprint(routesgroupproducts)
+
 
 from App.routes.routespessoa import routespessoa
 app.register_blueprint(routespessoa)
 
 
-
-
 from App.routes.routesusers import routes
 app.register_blueprint(routes)
+
 
 db.create_all()

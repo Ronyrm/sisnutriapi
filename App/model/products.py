@@ -14,3 +14,5 @@ class Product(db.Model):
     margemlucro = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
     precovenda = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
     caminhoimg = db.Column(db.String(50), nullable=False, unique=False)
+    idgrupoproduto = db.Column(db.Integer, db.ForeignKey('grupoprodutos.id'))
+    produto_grupo = db.relationship('GroupProducts')

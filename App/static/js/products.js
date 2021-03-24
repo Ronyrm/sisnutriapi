@@ -1,5 +1,3 @@
-
-
 function readURL(input) {
     console.log('entrou');
   if (input.files && input.files[0]) {
@@ -13,10 +11,19 @@ function readURL(input) {
     reader.readAsDataURL(input.files[0]);
   }
 }
-
 function editprod(product,caminhoimg,acao){
+
     cam = "";
     if (acao == 'A'){
+        console.log(product['produto_grupo']);
+        if (product['produto_grupo'] != null){
+            document.getElementById('edtdescgrupoproduto').value = product['produto_grupo']['descricao'];
+        }
+        else {
+            document.getElementById('edtdescgrupoproduto').value = 'Nenhum'
+        }
+        searchdalist_grupoprodutos(document.getElementById('edtdescgrupoproduto').value);
+
         document.getElementById('edtid').value = product['id'];
         document.getElementById('edtdescricao').value = product['descricao'];
         document.getElementById('edtsubdescricao').value = product['subdescricao'];
@@ -29,6 +36,8 @@ function editprod(product,caminhoimg,acao){
         cam = caminhoimg + "\\"+product['caminhoimg'];
     }
     if (acao == 'I'){
+        document.getElementById('edtdescgrupoproduto').value = 'Nenhum';
+        searchdalist_grupoprodutos('Nenhum');
         document.getElementById('edtid').value = '-1';
         document.getElementById('edtdescricao').value = '';
         document.getElementById('edtsubdescricao').value = '';
@@ -120,3 +129,45 @@ function btnqtdpag(token,page,qtdporpag,urlroot){
 
 
 }
+
+function datalist_grupoprod(){
+    $.ajax({
+        url: '/all/grupoprodutos/',
+        type: 'GET',
+        dataType: 'json'
+    }).always(function(data) {
+        console.log(data);
+        option_brownser = '<option data-value="0" value="Nenhum">';
+        $.each(data['data'], function(chave,valor){
+            option_brownser += '<option data-value="'+valor["id"]+'" value="'+valor["descricao"]+'">';
+        });
+
+        document.getElementById('browsers').innerHTML = option_brownser;
+
+    })
+    .fail(function() {
+        console.log('Erro')
+        // Caso falhe solicite outro id
+    });
+}
+function searchdalist_grupoprodutos(descgrupo){
+
+    value  = (descgrupo == '') ? document.getElementById("edtdescgrupoproduto").value : descgrupo;
+    console.log(value);
+
+
+    var idgrupoproduto = "0";
+    try {
+        idgrupoproduto = $('#browsers [value="' + value + '"]').data('value');
+        idgrupoproduto = (typeof(idgrupoproduto) == "undefined") ? "0" : idgrupoproduto;
+    }
+    catch(err) {
+        idgrupoproduto = "0";
+    }
+    document.getElementById("edtidgrupoproduto").value = idgrupoproduto;
+
+    console.log("Valor " + idgrupoproduto);
+
+
+}
+

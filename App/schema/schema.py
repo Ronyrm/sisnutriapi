@@ -7,11 +7,18 @@ from App.model.dieta import Dieta
 from App.model.itemdieta import ItemDieta
 from App.model.alimentos import Alimentos
 from App.model.products import Product
+from App.model.groupproducts import GroupProducts
+
+
+class GroupProductsSchema(ModelSchema):
+    class Meta:
+        model = GroupProducts
 
 
 class ProductSchema(ModelSchema):
     class Meta:
         model = Product
+    produto_grupo = fields.Nested(GroupProductsSchema)
 
 
 class PessoaSchema(ModelSchema):
