@@ -3,6 +3,7 @@ from App.model.groupproducts import GroupProducts
 from flask import jsonify, request
 from App.schema.schema import GroupProductsSchema
 
+
 def get_groupproduct_byid():
     try:
         id = request.args.get['id']
@@ -16,6 +17,7 @@ def get_groupproduct_byid():
         return jsonify({'data':result,'achou':True})
     else:
         return jsonify({'data': {}, 'achou': False})
+
 
 def get_groupproduct_bydesc(page,totporpag):
     groupproductschema = GroupProductsSchema()
@@ -65,6 +67,7 @@ def get_groupproduct_bydesc(page,totporpag):
     except:
         return jsonify({'achou': False, 'mensagem': ' Nenhum gupo encontrado com a descrição: ' + desc})
 
+
 def get_all_groupproduct():
     groupproductschema = GroupProductsSchema()
     groupproduct = GroupProducts.query.all()
@@ -74,6 +77,7 @@ def get_all_groupproduct():
         return jsonify({'data': result, 'achou': True,'mensagem': ''})
     else:
         return jsonify({'data': {}, 'achou': False, 'mensagem': 'Nenhum produto cadastrado no banco de dados'})
+
 
 def addedit_groupproduct():
     try:
@@ -101,6 +105,7 @@ def addedit_groupproduct():
             {'data': result, 'resultado': True, 'mensagem': 'Grupo de Produtos cadastrado com sucesso'})
     except:
         return jsonify({'data': {}, 'resultado': False, 'mensagem': 'Erro. Ao cadastrar no banco. Tente novamente mais tarde '})
+
 
 def delete_groupproduct():
     try:

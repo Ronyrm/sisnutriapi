@@ -24,5 +24,3 @@ class UsersSchema(ma.Schema):
         fields = ('id', 'username', 'password', 'name', 'email', 'create_on')
 
 
-user_schema = UsersSchema()
-users_schema = UsersSchema(many=True)

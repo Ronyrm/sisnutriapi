@@ -4,7 +4,7 @@
     {% import 'layouts/head.html' as head %}
     {{ head.head_content('RGMSolutions') }}
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/products.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/vendedores.css') }}">
 </head>
 <body>
     <main>
@@ -19,24 +19,15 @@
                 </ul>
             </div>
             <div class="mx-auto order-0">
-                <h1 class="navbar-brand mx-2 text-white " >Cadastro de Produtos</h1>
+                <h1 class="navbar-brand mx-2 text-white " >Cadastro de Vendedores</h1>
                 <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
                     <span class="navbar-toggler-icon text-white"></span>
                 </button>
 
             </div>
 
-            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item mx-auto p2">
-                        <a class="nav-link colorlink text-center px-2" onclick="btngrupoprod(1,15);" data-toggle="modal" data-target=".modal-groupprod" href="#">
-                            Grupo de Produtos
-                        </a>
-                    </li>
 
 
-                </ul>
-            </div>
         </nav>
 
         <div id="content" class="container main-container my-2">
@@ -46,7 +37,7 @@
 
 
     {% block jsjquery %} {% endblock%}
-    {% block jsproduct %} {% endblock %}
+    {% block jsvendedores %} {% endblock %}
 
 </body>
 </html>

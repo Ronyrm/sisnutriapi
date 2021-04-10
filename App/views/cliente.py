@@ -2,7 +2,7 @@ from App import db
 from App.model.pessoa import  Pessoa, pessoa_schema, pessoas_schema
 from App.model.cliente import Cliente
 from App.model.users import Users
-from App.views.pessoas import get_byusernameoremailpessoa
+from App.views.pessoas import get_byemailpessoa,get_byusernamepessoa
 from flask import jsonify, request
 from werkzeug.security import generate_password_hash
 from App.schema.schema import ClienteSchema
@@ -42,13 +42,20 @@ def add_cliente_json():
     except:
         password = ''
 
-    pessoa = get_byusernameoremailpessoa(username,email)
+    pessoa = get_byusernamepessoa(username)
     if pessoa:
         result = pessoa_schema.dump(pessoa)
-        return jsonify({'message': 'Cliente já encontra-se cadastrado na base de dados com email e username!','data':result}), 500
+        return jsonify({'message': 'Cliente já encontra-se cadastrado na base de dados com o username fornecido!','data':result}), 500
+
+    pessoa = get_byemailpessoa(email)
+    if pessoa:
+        result = pessoa_schema.dump(pessoa)
+        return jsonify({'message': 'Cliente já encontra-se cadastrado na base de dados com o email fornecido!',
+                        'data': result}), 500
 
     verificacliente = get_bycpf(cpf)
     if verificacliente:
+        cliente_schema = ClienteSchema()
         result = cliente_schema.dump(verificacliente)
         return jsonify({'message': 'Cliente já encontra-se cadastrado na base de dados com o cpf informado!',
                         'data': result}), 500

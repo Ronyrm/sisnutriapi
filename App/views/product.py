@@ -75,6 +75,10 @@ def update_product_form(current_user, token,page,totporpag):
                 #return jsonify({'mensagem': 'Produto não Existe', 'data': {}}), 404
 
         else:
+            product = Product.query.filter(Product.descricao == data['edtdescricao']).one()
+            if product:
+                msgerro = 'A Descrição do Produto:'+ product.descricao + ' já foi cadastrada com o id: ' + str(product.id) + ', verifique!'
+                return redirect(url_for('routesproduct.get_allproducts', token=token, page=page, totporpag=totporpag,msgerro=msgerro))
             product = Product()
 
         descricao = data['edtdescricao']
@@ -130,7 +134,7 @@ def update_product_form(current_user, token,page,totporpag):
             if caminhoimg != "" and caminhoimg != None:
 
                 filephotoprod.save(localesave+caminhoimg)
-                if product.caminhoimg != '':
+                if product.caminhoimg != '' and product.caminhoimg != None :
                     filedelete = os.path.join(localesave, product.caminhoimg)
                     os.remove(filedelete)
             else:
@@ -143,7 +147,7 @@ def update_product_form(current_user, token,page,totporpag):
         product.caminhoimg = caminhoimg
         msg = 'Produto: '+ str(product.id) + ' - ' + product.descricao+' alterado com sucesso!'
         if id == '-1':
-            product.caminhoimg = ''
+            #product.caminhoimg = ''
             msg = 'Produto: '+ product.descricao+' inserindo com sucesso'
             db.session.add(product)
 
@@ -155,7 +159,9 @@ def update_product_form(current_user, token,page,totporpag):
         #return get_allproducts(current_user,token,page,totporpag,msg)
         return redirect(url_for('routesproduct.get_allproducts', token=token, page=page, totporpag=totporpag,msg=msg))
     except:
-        return jsonify({'message': 'unable to create', 'data': {}}), 500
+        msgerro = 'Houve uma falha ao Salvar o produto na base de dados, Tente novamente!'
+        return redirect(url_for('routesproduct.get_allproducts', token=token, page=page, totporpag=totporpag, msgerro=msgerro))
+        #return jsonify({'message': 'unable to create', 'data': {}}), 500
 
 
 ## Pesquisa por ID do Produto
@@ -178,6 +184,15 @@ def get_allproducts(current_user,token,page,totporpag):
 
     if not msg:
         msg = ''
+
+    try:
+        msgerro = request.args.get('msgerro')
+    except:
+        msgerro = ''
+
+    if not msgerro:
+        msgerro = ''
+
 
     try:
         desc = request.args.get('desc')
@@ -231,6 +246,7 @@ def get_allproducts(current_user,token,page,totporpag):
         caminhoimg = app.config['DIRECTORY_APP']+app.config['UPLOAD_FOLDER']
         return render_template('layouts/products/products.html',
                                 divmsg = msg,
+                                divmsgerro=msgerro,
                                 urlroot=url,
                                 datapag = datapag,
                                 tabproducts=result,

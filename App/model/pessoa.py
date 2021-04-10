@@ -5,15 +5,15 @@ import datetime
 class Pessoa(db.Model):
     __tablename__ = 'pessoa'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(30), unique=True, nullable=False)
+    username = db.Column(db.String(30))
     nome = db.Column(db.String(70))
     razaosocial = db.Column(db.String(70))
     tipopessoa = db.Column(db.String(2), nullable=False)
     password = db.Column(db.String(200))
-    email = db.Column(db.String(60), nullable=False, unique=True)
+    email = db.Column(db.String(60))
 
-    refeicao = db.relationship('Refeicao')
-    cliente  = db.relationship('Cliente')
+    #refeicao = db.relationship('Refeicao')
+    #cliente  = db.relationship('Cliente')
     create_on = db.Column(db.DateTime, default=datetime.datetime.now())
 
 

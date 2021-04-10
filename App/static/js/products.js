@@ -20,7 +20,7 @@ function editprod(product,caminhoimg,acao){
             document.getElementById('edtdescgrupoproduto').value = product['produto_grupo']['descricao'];
         }
         else {
-            document.getElementById('edtdescgrupoproduto').value = 'Nenhum'
+            document.getElementById('edtdescgrupoproduto').value = ''
         }
         searchdalist_grupoprodutos(document.getElementById('edtdescgrupoproduto').value);
 
@@ -36,8 +36,7 @@ function editprod(product,caminhoimg,acao){
         cam = caminhoimg + "\\"+product['caminhoimg'];
     }
     if (acao == 'I'){
-        document.getElementById('edtdescgrupoproduto').value = 'Nenhum';
-        searchdalist_grupoprodutos('Nenhum');
+
         document.getElementById('edtid').value = '-1';
         document.getElementById('edtdescricao').value = '';
         document.getElementById('edtsubdescricao').value = '';
@@ -137,7 +136,7 @@ function datalist_grupoprod(){
         dataType: 'json'
     }).always(function(data) {
         console.log(data);
-        option_brownser = '<option data-value="0" value="Nenhum">';
+        option_brownser = "";
         $.each(data['data'], function(chave,valor){
             option_brownser += '<option data-value="'+valor["id"]+'" value="'+valor["descricao"]+'">';
         });

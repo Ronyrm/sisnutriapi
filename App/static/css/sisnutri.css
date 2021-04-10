@@ -1,3 +1,41 @@
+.menuprincipal{
+    list-style:none;
+    float:left;
+}
+.menuprincipal li{
+    position:relative;
+    float:left;
+    list-style-type: none;
+
+
+}
+.menuprincipal li a{
+ margin: 2px 0 0 2px;
+ padding: 10px;
+}
+.menuprincipal li a{
+    text-decoration:none;
+    padding:5px 10px;
+    display:block;
+}
+
+.menuprincipal li a:hover{
+-moz-box-shadow:0 3px 10px 0 #ffc107;
+-webkit-box-shadow:0 3px 10px 0 #ffc107;
+text-shadow:0px 0px 5px #ffc107;
+}
+
+.menuprincipal li  ul{
+    position:absolute;
+    top:25px;
+    left:0;
+    display:none;
+}
+
+
+.menuprincipal li:hover ul, .menu li.over ul{
+    display:block;
+}
 .btn-outline-padrao {
   color: white!important;
   border-color: white!important;

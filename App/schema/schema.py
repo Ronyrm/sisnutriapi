@@ -8,6 +8,8 @@ from App.model.itemdieta import ItemDieta
 from App.model.alimentos import Alimentos
 from App.model.products import Product
 from App.model.groupproducts import GroupProducts
+from App.model.vendedor import Vendedor
+from App.model.users import Users
 
 
 class GroupProductsSchema(ModelSchema):
@@ -21,6 +23,7 @@ class ProductSchema(ModelSchema):
     produto_grupo = fields.Nested(GroupProductsSchema)
 
 
+
 class PessoaSchema(ModelSchema):
     class Meta:
         model = Pessoa
@@ -28,8 +31,17 @@ class PessoaSchema(ModelSchema):
 class ClienteSchema(ModelSchema):
     class Meta:
         model = Cliente
-    pessoa = fields.Nested("PessoaSchema",exclude=('refeicao',))
+    pessoa = fields.Nested("PessoaSchema")
 
+
+class VendedorSchema(ModelSchema):
+    class Meta:
+        model = Vendedor
+    pessoa = fields.Nested("PessoaSchema")
+
+class UsersSchema(ModelSchema):
+    class Meta:
+        model = Users
 
 
 class RefeicaoSchema(ModelSchema):

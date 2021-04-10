@@ -80,7 +80,6 @@ function btnconfirmargrupo(){
 }
 function btnconfirmarexclusaogrupo(){
     edtid = document.getElementById("edtidgrupo").value;
-    console.log('IDPROD '+edtid);
     if (edtid != ''){
 
         $.ajax({

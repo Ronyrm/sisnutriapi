@@ -5,7 +5,7 @@ import datetime
 import jwt
 from werkzeug.security import check_password_hash
 from .users import get_user_by_username
-from App.model.users import user_schema
+from App.schema.schema import UsersSchema
 def auth():
 
     aut = request.authorization
@@ -69,7 +69,7 @@ def auth_form():
         #retorno = jsonify({'message': 'Validated successfully', 'token': token_decode,
         #                'exp': datetime.datetime.now() + datetime.timedelta(hours=12)})
         #return retorno
-
+        user_schema = UsersSchema()
         userschema = user_schema.dump(current_user)
         session['current_user'] = userschema
 

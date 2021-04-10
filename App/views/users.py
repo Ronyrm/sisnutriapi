@@ -1,5 +1,6 @@
 from App import db,app
-from App.model.users import Users, user_schema, users_schema
+from App.model.users import Users
+from App.schema.schema import UsersSchema
 from werkzeug.security import generate_password_hash
 from flask import jsonify, request, redirect, url_for, render_template
 import jwt

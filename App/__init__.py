@@ -56,6 +56,10 @@ from App.routes.routespessoa import routespessoa
 app.register_blueprint(routespessoa)
 
 
+from App.routes.routesvendedor import routesvendedores
+app.register_blueprint(routesvendedores)
+
+
 from App.routes.routesusers import routes
 app.register_blueprint(routes)
 

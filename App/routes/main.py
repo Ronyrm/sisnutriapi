@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, session
 from App.views import main,helper
+from App.schema.schema import UsersSchema
 
 main = Blueprint('main', __name__)
 
@@ -9,7 +10,8 @@ main = Blueprint('main', __name__)
 def indexmain(current_user, token):
     if token:
         from App.model import users
-        user = users.user_schema.dump(current_user)
+        user_schema = UsersSchema()
+        user = user_schema.dump(current_user)
         session['current_user'] = user
         return render_template('layouts/index.html',current_user=current_user,token=token)
 

@@ -4,7 +4,7 @@
 <script src="{{ url_for('static', filename='js/groupproducts.js') }}"></script>
 
 {% endblock %}
-{% block jsjquery %}<script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>{% endblock %}
+{% block jsjquery %}{% endblock %}
 
 {% block idlogado %} {{ idlogado }} {% endblock %}
 {% block usernamelogado %} {{ usernamelogado }} {% endblock %}
@@ -21,8 +21,9 @@
 {% block datapag %} {{ datapag }} {% endblock %}
 {% block urlroot %} {{ urlroot }} {% endblock %}
 {% block divmsg %} {{ divmsg }} {% endblock %}
+{% block divmsgerro %} {{ divmsgerro }} {% endblock %}
 {% block content %}
-<nav  id="contentproducts">
+<div  id="contentproducts">
     <!-- Central !-->
     <nav class="container  my-2" align="center">
 
@@ -34,11 +35,17 @@
             </button>
         </div>
         {% endif %}
+        {% if divmsgerro|length >0 %}
+        <div id='cxmsgerro' class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Mensagem</strong> {{ divmsgerro }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endif %}
         <div id='msgdel' class="alert-dismissible fade d-none" role="alert">
 
         </div>
-
-
     </nav>
     <nav class="navbar navbar-expand-lg justify-content-between">
         <form  method="GET" action="{{ url_for('routesproduct.get_allproducts',page=1,totporpag=15) }}">
@@ -91,24 +98,23 @@
                     <td>{{product.id}}</td>
                     <td>{{product.descricao}} </td>
                     <td>{{product.produto_grupo.descricao}} </td>
-                  <td>
-
-                      <div>
-                          {% set list = caminhoimg.split('/') %}
-                          <button class="btn btn-sm btn-success mx-1 my-1"
-                                  title="Editar {{product.descricao}}"
-                                  data-toggle="modal" data-target=".edit-modal"
-                                  onclick='editprod({{ product|tojson|safe }},{{ list }},"A")'>
-                              <span class="glyphicon glyphicon-pencil"></span>
-                          </button>
-                          <button class="btn btn-sm btn-danger mx-1 my-1"
-                                  data-toggle="modal" data-target=".modal-delete"
-                                  title="Excluir {{product.descricao}}"
-                                  onclick="deleteprod({{ product.id }},'{{ product.descricao }}','{{ token }}');">
-                              <span class="glyphicon glyphicon-trash"></span>
-                          </button>
-                      </div>
-                  </td>
+                    <td>
+                        <div>
+                            {% set list = caminhoimg.split('/') %}
+                            <button class="btn btn-sm btn-success mx-1 my-1"
+                                title="Editar {{product.descricao}}"
+                                data-toggle="modal" data-target=".edit-modal"
+                                onclick='editprod({{ product|tojson|safe }},{{ list }},"A")'>
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                            <button class="btn btn-sm btn-danger mx-1 my-1"
+                                data-toggle="modal" data-target=".modal-delete"
+                                title="Excluir {{product.descricao}}"
+                                onclick="deleteprod({{ product.id }},'{{ product.descricao }}','{{ token }}');">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        </div>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -346,7 +352,7 @@
               </div>
             </div>
           </div>
-        </div>
+    </div>
 
     <!-- Modal Grupo de Produtos!-->
     <div class="modal fade bd-example-modal-lg modal-groupprod" id="modal-groupprod" tabindex="3" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -428,6 +434,8 @@ $().ready(function() {
 
 	setTimeout(function () {
 		$('#cxmsg').hide();
+		$('#cxmsgerro').hide();
+
 
 	}, 3000);
 	datalist_grupoprod();

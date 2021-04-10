@@ -9,10 +9,10 @@
  {% import 'layouts/pesqalimentos.html' as dival %}
 {% block content %}
 <div align="center">
-  <img class="img-fluid" src="{{ url_for('static', filename='img/topmix.png') }}" alt="">
+  <img class="img-fluid border border-success rounded" width="800" height="500" src="{{ url_for('static', filename='/img/imglogo.jpg') }}" alt="">
   <h1 class="title">
-    SIS NUTRI - {{ session['current_user']['name'] }}
-    {{ current_user['username'] }}
+    <!--- {{ session['current_user']['name'] }} {{ current_user['username'] }} !-->
+
     {{ dival.banner(current_user) }}
   </h1>
 </div>
