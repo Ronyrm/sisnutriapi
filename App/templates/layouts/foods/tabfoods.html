@@ -1,0 +1,93 @@
+{% macro table_foods(tabfoods,totalfoods) %}
+{% if totalfoods >= 1  %}
+    <table class="table table-striped" id="table-foods">
+        <thead class="bg-primary">
+            <tr>
+                <th scope="col" class="text-white">Descricão</th>
+                <th scope="col" class="text-white">Porção de</th>
+                <th scope="col" class="text-white">Valor Energético</th>
+                <th scope="col" class="text-white"></th>
+            </tr>
+        </thead>
+        <tbody class="border border-primary border-2">
+
+            {% for foods in tabfoods %}
+
+                <tr class="text-primary" id="tr-prod{{ foods.id }}" title="tr-prod{{ foods.id }}">
+                    <td>
+                        {{foods.descricao}}
+                    </td>
+                    <td>
+                        {{"{:.2f}".format(foods.qtdgramasemcima|float) }}
+                    </td>
+                    <td>
+                        {{"{:.2f}".format(foods.calorias|float) }} kcal = {{"{:.2f}".format(foods.joule|float) }} Kj
+                    </td>
+                    <td>
+                        <button class="btn btn-primary mx-2"
+                            onclick='mostradadosfoods({{ foods|tojson|safe }});'
+                            data-toggle="collapse" data-target="#collapse{{ foods.id }}"
+                            aria-expanded="true" aria-controls="collapse{{foods.id}}">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </button>
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+        </tbody>
+    </table>
+    <div class="container d-none border border-primary" id="div-dadosfood">
+        <div class="row bg-primary p-2 ">
+            <div>
+                <button class="btn btn-primary mx-2" onclick="btnvoltarmain();">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </button>
+            </div>
+            <div class="mx-auto text-white" id="div-descfood">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6 my-2">
+                <div class="row">
+                    <p class="text-primary text-rigth mx-2">Porção de:</p>
+                    <p class="text-primary text-left" id="th-porcao"></p>
+                </div>
+                <div class="row">
+                    <p class="text-primary text-rigth  mx-2">Calorias:</p>
+                    <p class="text-primary text-left" id="th-calorias"></p>
+                </div>
+                <div class="row d-flex justify-content-center mx-2">
+                    <table class="table table-striped border border-primary border-2">
+                        <thead class=" bg-primary">
+                            <tr>
+                                <th  class="text-white"><small>Carboidratos</small></th>
+                                <th  class="text-white"><small>Proteinas</small></th>
+                                <th scope="col" class="text-white"><small>Gorduras</small></th>
+                                <th scope="col" class="text-white"><small>Fibras</small></th>
+                                <th scope="col" class="text-white"><small>Sódio</small></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="text-dark" id="tr-food">
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row col-6 col-md-6">
+                <div class=" d-flex justify-content-center" id="piechart">
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div id='alertsemfoods' class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+        <strong>Mensagem</strong>  <br>Nenhum vendedor ainda cadastrado
+    </div>
+{% endif %}
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+{% endmacro %}

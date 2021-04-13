@@ -1,8 +1,10 @@
 from App import db,app
 from App.model.alimentos import Alimentos, tabalimento_schema, tabalimentos_schema
-from App.schema.schema import AlimentoSchema
-from flask import jsonify, request
-
+from App.schema.schema import FoodsSchema
+from flask import jsonify, request,render_template
+from App.model.pessoa import Pessoa
+from App.model.cliente import Cliente
+from flask_paginate import get_page_args
 def post_tabalimentos_json():
     descricao = request.json['descricao']
     try:
@@ -141,7 +143,7 @@ def post_tabalimentos_json():
 
     alimento = Alimentos(descricao, umidades, calorias, joule, proteina, lipidios, colesterol, carboidrato, fibras,
                  cinzas, calcio, magnesio, manganes, fosforo, ferro, sodio, potasio, cobre, zinco, retinol,re,
-                 rae, tiamina, riboflavina, piridoxina, niacina, vitaminac, qtdgramasemcima)
+                 rae, tiamina, riboflavina, piridoxina, niacina, vitaminac, qtdgramasemcima,'')
     try:
         db.session.add(alimento)
         db.session.commit()
@@ -157,19 +159,97 @@ def get_alimento_byid(idalimento):
     except:
         return None
 
-def get_alimento_bydesc():
-    desc = request.args.get('descricao')
-    desc = "%"+desc+"%"
-    alimento = Alimentos.query.filter(Alimentos.descricao.like(desc))
-    alimentopag = Alimentos.query.order_by(Alimentos.id.asc()).\
-        filter(Alimentos.descricao.like(desc)). \
-        paginate(page=1,max_per_page=10, error_out=False)
-    alimentochema = AlimentoSchema(only=('id','descricao','carboidrato','proteina','lipidios','sodio','calorias'))
+def get_alimento_bydesc(totpage,orderby):
+    try:
+        desc = request.args.get('descricao')
+    except:
+        desc = ''
 
-    result = jsonify({'data': alimentochema.dump(alimento,many=True)})
 
     try:
-        return result
+        page = request.args.get('page')
     except:
-        return None
+        page = ''
+    if page == None:
+        page = '1'
+
+
+
+    if desc == None:
+        desc = ''
+
+    if totpage == '':
+        totpage = '15'
+
+
+    desc = "%"+desc+"%"
+    if desc != '':
+        from sqlalchemy import and_
+        if orderby == '0':
+            alimentopag = Alimentos.query.order_by(Alimentos.id.asc()). \
+                filter(and_(Alimentos.descricao.like(desc),Alimentos.idpessoa.is_(None))). \
+                paginate(page=int(page),per_page=int(totpage), error_out=False)
+
+
+
+
+        if orderby == '1':
+            alimentopag = Alimentos.query.order_by(Alimentos.descricao.asc()). \
+                filter(Alimentos.descricao.like(desc)). \
+                join(Alimentos.idpessoa == Pessoa.id, isouter=True). \
+                join(Pessoa.id == Cliente.idpessoa, isouter=True). \
+                paginate(page=int(page), max_per_page=int(totpage), error_out=False)
+
+        total = 0
+        if alimentopag:
+            total = alimentopag.total
+
+
+            page, per_page, offset = get_page_args()
+
+            per_page = totpage
+            from App.funcs.getpagination import get_pagination
+            pagination = get_pagination(
+                page=page,
+                per_page=per_page,
+                total=total,
+
+                record_name="alimentos",
+
+            )
+
+
+
+        #foodsschema = FoodsSchema(only=('id','descricao','carboidrato','proteina','lipidios','sodio','calorias','fibras','pessoa'))
+
+    from App.funcs.funcs import  returnPagination
+    if alimentopag:
+        foodsschema = FoodsSchema()
+        tabfods = foodsschema.dump(alimentopag.items,many=True)
+        #tabfoods = foodsschema.dump(alimentopag, many=True)
+        return render_template('layouts/foods/mainfoods.html',
+                               pagul=pagination,
+                               result=True,
+                               orderby=orderby,
+                               tabfoods=tabfods,
+                               mensagem='Pesquisa Efetuada com Sucesso.')
+
+        #return  jsonify({'result': True, 'mensagem':'Pesquisa Efetuada com Sucesso.','data':tabfoods, 'datapagination':returnPagination(alimentopag)})
+
+    return jsonify({'result': False,  'data': {},'datapagination':{},'mensagem':'Nenhum item encontrado com a pesquisa fornecida'})
     #https://www.tutorialspoint.com/json/json_ajax_example.htm
+
+
+def get_tabalimentos(totpage,orderby):
+    return get_alimento_bydesc(totpage,orderby)
+    #res_json = result.json
+    #dataalimentos = res_json['data']
+    #datapagination = res_json['datapagination']
+    #mensagem = res_json['mensagem']
+    #orderby = orderby;
+    #return render_template('layouts/foods/mainfoods.html',
+    #                       datapagination=datapagination,
+    #                       result=result,
+    #                       orderby=orderby,
+    #                       tabfoods=dataalimentos,
+    #                       mensagem=mensagem)

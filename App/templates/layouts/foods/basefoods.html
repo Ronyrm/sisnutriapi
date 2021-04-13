@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    {% import 'layouts/head.html' as head %}
+    {{ head.head_content('RGMSolutions') }}
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/foods.css') }}">
+</head>
+<body>
+    <main>
+        <nav class="navbar navbar-expand-md  bg-primary">
+            <div class="mx-auto order-0">
+                <h1 class="navbar-brand mx-2 text-white " >Sis Nutri - RMSolutions</h1>
+            </div>
+
+
+
+        </nav>
+
+        <div id="content" class="container main-container my-2">
+            {% block content %} {% endblock %}
+        </div>
+    </main>
+
+
+    {% block jsjquery %} {% endblock%}
+    {% block jsfoods %} {% endblock %}
+
+</body>
+</html>

@@ -13,7 +13,7 @@ class Pessoa(db.Model):
     email = db.Column(db.String(60))
 
     #refeicao = db.relationship('Refeicao')
-    #cliente  = db.relationship('Cliente')
+    cliente = db.relationship("Cliente", back_populates="pessoa")
     create_on = db.Column(db.DateTime, default=datetime.datetime.now())
 
 

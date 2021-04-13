@@ -1,0 +1,53 @@
+{% extends "layouts/foods/basefoods.html" %}
+{% block result %} {{ result }} {% endblock %}
+{% block datapagination %} {{ datapagination }} {% endblock %}
+{% block mensagem %} {{ mensagem }} {% endblock %}
+{% block orderby %} {{ orderby }} {% endblock %}
+{% block tabfoods %} {{ tabfoods }} {% endblock %}
+{% block pagul %} {{ pagul }} {% endblock %}
+
+{% block jsfoods %}
+<script src="{{ url_for('static', filename='js/foods.js') }}"></script>
+{% endblock %}
+{% block jsjquery %}{% endblock %}
+
+{% block content %}
+<div  id="contentalimento">
+
+    {% import 'layouts/foods/divcabecalhofoods.html' as cabfoods %}
+    {{ cabfoods.div_cab_foods(pagul.page,pagul.total,pagul.per_page,orderby) }}
+
+    {% import 'layouts/foods/tabfoods.html' as tbfoods %}
+    {{ tbfoods.table_foods(tabfoods,pagul.total) }}
+
+    <nav class="row" id="navpagination-foods"aria-label="Page navigation example">
+        <div class="col-md-4 d-flex justify-content-md-start justify-content-center">
+
+            {% if pagul.page != 1 %}
+                {% set lblde = pagul.per_page * (pagul.page-1)+1 %}
+                {% set lblate = pagul.per_page*pagul.page %}
+            {% else %}
+                {% set lblde = pagul.page %}
+                {% set lblate = pagul.per_page %}
+            {% endif %}
+            <p class="text-primary">
+                    <small>
+                        De: {{ lblde }} até {{ lblate }} alimentos no total {{pagul.total}}
+                    </small>
+            </p>
+        </div>
+
+        <div class="col-12 col-md-8 d-flex justify-content-md-end justify-content-center " id="div-pagination-vendedores">
+            {{pagul.links}}
+        </div>
+    </nav>
+
+
+</div>
+
+<script>
+    $().ready(function() {
+    });
+
+</script>
+{% endblock %}

@@ -31,10 +31,13 @@ class Alimentos(db.Model):
     niacina = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
     vitaminac = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
     qtdgramasemcima = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
+    idpessoa = db.Column(db.Integer, db.ForeignKey('pessoa.id'))
+    pessoa = db.relationship("Pessoa")
+
 
     def __init__(self, descricao, umidades, calorias, joule, proteina, lipidios, colesterol, carboidrato, fibras,
                  cinzas, calcio, magnesio, manganes, fosforo, ferro, sodio, potasio, cobre, zinco, retinol,re,
-                 rae, tiamina, riboflavina, piridoxina, niacina, vitaminac, qtdgramasemcima):
+                 rae, tiamina, riboflavina, piridoxina, niacina, vitaminac, qtdgramasemcima,idpessoa):
 
         self.descricao = descricao
         self.umidades = umidades
@@ -64,13 +67,14 @@ class Alimentos(db.Model):
         self.niacina = niacina
         self.vitaminac = vitaminac
         self.qtdgramasemcima = qtdgramasemcima
+        self.idpessoa = idpessoa
 
 class TabAlimentosSchema(ma.Schema):
     class Meta:
         fields = ('id', 'descricao', 'umidades', 'calorias', 'joule', 'proteina', 'lipidios', 'colesterol',
                   'carboidrato', 'fibras', 'cinzas', 'calcio', 'magnesio', 'manganes', 'fosforo', 'ferro',
                   'sodio', 'potasio', 'cobre', 'zinco', 'retinol', 're', 'rae', 'tiamina', 'riboflavina',
-                  'piridoxina', 'niacina', 'vitaminac', 'qtdgramasemcima')
+                  'piridoxina', 'niacina', 'vitaminac', 'qtdgramasemcima','idpessoa')
 
 tabalimentos_schema = TabAlimentosSchema()
 tabalimento_schema = TabAlimentosSchema(many=True)

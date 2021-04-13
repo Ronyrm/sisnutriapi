@@ -7,6 +7,10 @@ routestabalimentos = Blueprint('routestabalimentos',__name__)
 def post_alimento():
     return alimentos.post_tabalimentos_json()
 
-@routestabalimentos.route('/alimentos.json',methods=['GET'])
-def get_alimentobydesc():
-    return alimentos.get_alimento_bydesc()
+@routestabalimentos.route('/tabalimentos.json/<pageatual>/<totpage>/<orderby>',methods=['GET'])
+def get_alimentobydesc(pageatual,totpage,orderby):
+    return alimentos.get_alimento_bydesc(totpage,orderby)
+
+@routestabalimentos.route('/tabalimentos/<totpage>/<orderby>',methods=['GET'])
+def get_tabalimentos(totpage,orderby):
+    return alimentos.get_tabalimentos(totpage,orderby)

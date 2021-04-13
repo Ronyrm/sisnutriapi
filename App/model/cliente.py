@@ -11,5 +11,5 @@ class Cliente(db.Model):
     cpf = db.Column(db.String(20))
     datacadastro = db.Column(db.DateTime, default=datetime.datetime.now())
     idpessoa = db.Column(db.Integer, db.ForeignKey('pessoa.id'))
-    pessoa = db.relationship("Pessoa")
+    pessoa = db.relationship("Pessoa", back_populates="cliente")
 
