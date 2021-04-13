@@ -1,7 +1,7 @@
 {% macro div_cab_foods(pageatual,total,perpage,orderby) %}
 
     <div class="row p-2" id="divcab-foods">
-        <div class="col-12 col-md-8 my-1">
+        <div class="col-12 col-md-12 my-1">
             <form  method="GET" action="{{ url_for('routestabalimentos.get_tabalimentos',totpage=perpage,orderby=orderby,page=pageatual) }}">
 
                 <div class="input-group">
@@ -14,7 +14,7 @@
             </form>
 
         </div>
-        {% if total >= 1  %}
+        {% if total >= 19999999  %}
             <div class="col-md-4 d-flex order-2 justify-content-end my-1">
                 <label class="text-primary mr-2" for="orberby-foods">Ordenar por:</label>
                 <select class="bg-primary text-white" id="orberby-foods" onchange="changeorderby('{{page}}','{{per_page}}');" name="orberby-foods">

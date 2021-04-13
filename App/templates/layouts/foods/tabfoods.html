@@ -1,19 +1,19 @@
 {% macro table_foods(tabfoods,totalfoods) %}
 {% if totalfoods >= 1  %}
-    <table class="table table-striped" id="table-foods">
-        <thead class="bg-primary">
+    <table class="table table-striped table-dark" id="table-foods">
+        <thead >
             <tr>
-                <th scope="col" class="text-white">Descricão</th>
-                <th scope="col" class="text-white">Porção de</th>
-                <th scope="col" class="text-white">Valor Energético</th>
-                <th scope="col" class="text-white"></th>
+                <th scope="col" class="text-padrao"><strong>Descricão</strong></th>
+                <th scope="col" class="text-padrao"><strong>Porção de</strong></th>
+                <th scope="col" class="text-padrao"><strong>Valor Energético</strong></th>
+                <th scope="col" class="text-padrao"></th>
             </tr>
         </thead>
         <tbody class="border border-primary border-2">
 
             {% for foods in tabfoods %}
 
-                <tr class="text-primary" id="tr-prod{{ foods.id }}" title="tr-prod{{ foods.id }}">
+                <tr class="text-white" id="tr-prod{{ foods.id }}" title="tr-prod{{ foods.id }}">
                     <td>
                         {{foods.descricao}}
                     </td>
@@ -44,7 +44,7 @@
                     <span class="glyphicon glyphicon-chevron-left"></span>
                 </button>
             </div>
-            <div class="mx-auto text-white" id="div-descfood">
+            <div class="mx-auto text-padrao" id="div-descfood">
             </div>
         </div>
 
@@ -62,11 +62,11 @@
                     <table class="table table-striped border border-primary border-2">
                         <thead class=" bg-primary">
                             <tr>
-                                <th  class="text-white"><small>Carboidratos</small></th>
-                                <th  class="text-white"><small>Proteinas</small></th>
-                                <th scope="col" class="text-white"><small>Gorduras</small></th>
-                                <th scope="col" class="text-white"><small>Fibras</small></th>
-                                <th scope="col" class="text-white"><small>Sódio</small></th>
+                                <th  class="text-padrao"><small>Carboidratos</small></th>
+                                <th  class="text-padrao"><small>Proteinas</small></th>
+                                <th scope="col" class="text-padrao"><small>Gorduras</small></th>
+                                <th scope="col" class="text-padrao"><small>Fibras</small></th>
+                                <th scope="col" class="text-padrao"><small>Sódio</small></th>
                             </tr>
                         </thead>
                         <tbody>

@@ -6,12 +6,14 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/foods.css') }}">
 </head>
-<body>
+<body class="bodyfoods">
     <main>
         <nav class="navbar navbar-expand-md  bg-primary">
-            <div class="mx-auto order-0">
-                <h1 class="navbar-brand mx-2 text-white " >Sis Nutri - RMSolutions</h1>
-            </div>
+            <a class="navbar-brand" href="{{ url_for('routestabalimentos.get_tabalimentos',totpage=10,orderby=0)}}">
+                <img class="img-fluid" src="{{ url_for('static', filename='img/logorgm.png') }}" alt="">
+            </a>
+            <h1 class="navbar-brand mx-2 text-white " >Sis Nutri</h1>
+
 
 
 
