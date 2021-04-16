@@ -28,16 +28,9 @@
 
 
 </head>
-<body class="bodymagazine">
-    <main>
-        <nav class="navbar navbar-expand-md  bg-primary">
-            <a class="navbar-brand" href="{{ url_for('routestabalimentos.get_tabalimentos')}}">
-                <img class="img-fluid" src="{{ url_for('static', filename='img/logorgm.png') }}" alt="">
-            </a>
-            <h1 class="navbar-brand mx-2 text-white " >Revista</h1>
-        </nav>
+<body>
 
-        <div class="zoom-icon zoom-icon-in"></div>
+<div class="zoom-icon zoom-icon-in"></div>
 
 <div class="magazine-viewport">
 	<div class="container">
@@ -54,7 +47,6 @@
 		</div>
 	</div>
 </div>
-
 <script type="text/javascript">
 
 function loadApp() {
@@ -423,9 +415,6 @@ yepnope({
 });
 
 </script>
-
-
-    </main>
 
     {% block jsjquery %} {% endblock%}
     {% block jsmagazine %} {% endblock %}
