@@ -11,6 +11,8 @@ from App.model.groupproducts import GroupProducts
 from App.model.vendedor import Vendedor
 from App.model.users import Users
 from App.model.alimentos import Alimentos
+from App.model.unalimento import Unalimento
+
 
 
 class GroupProductsSchema(ModelSchema):
@@ -88,8 +90,15 @@ class ClientePessoaschema(ModelSchema):
         model = Pessoa
     cliente = fields.Nested(ClienteFoodsschema,many=True,only=('id','cpf'))
 
+
+class UnFoodsSchema(ModelSchema):
+    class Meta:
+        model = Unalimento
+
+
 class FoodsSchema(ModelSchema):
     class Meta:
         model = Alimentos
 
     pessoa = fields.Nested(ClientePessoaschema)
+    unalimento = fields.Nested(UnFoodsSchema)

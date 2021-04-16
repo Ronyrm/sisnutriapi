@@ -28,8 +28,8 @@ def get_pagination(**kwargs):
         link_size=get_link_size(),
         alignment=get_alignment(),
         show_single_page=show_single_page_or_not(),
-        prev_label='Anterior',
-        next_label='Próximo',
+        prev_label='<span class="glyphicon glyphicon-chevron-left">',
+        next_label='<span class="glyphicon glyphicon-chevron-right">',
 
         **kwargs
     )

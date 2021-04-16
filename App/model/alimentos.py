@@ -33,11 +33,14 @@ class Alimentos(db.Model):
     qtdgramasemcima = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
     idpessoa = db.Column(db.Integer, db.ForeignKey('pessoa.id'))
     pessoa = db.relationship("Pessoa")
+    idunalimento = db.Column(db.Integer, db.ForeignKey('unidademedidaalimento.id'))
+    unalimento = db.relationship("Unalimento")
+
 
 
     def __init__(self, descricao, umidades, calorias, joule, proteina, lipidios, colesterol, carboidrato, fibras,
                  cinzas, calcio, magnesio, manganes, fosforo, ferro, sodio, potasio, cobre, zinco, retinol,re,
-                 rae, tiamina, riboflavina, piridoxina, niacina, vitaminac, qtdgramasemcima,idpessoa):
+                 rae, tiamina, riboflavina, piridoxina, niacina, vitaminac, qtdgramasemcima,idpessoa,idunalimento):
 
         self.descricao = descricao
         self.umidades = umidades
@@ -68,6 +71,7 @@ class Alimentos(db.Model):
         self.vitaminac = vitaminac
         self.qtdgramasemcima = qtdgramasemcima
         self.idpessoa = idpessoa
+        self.idunalimento=idunalimento
 
 class TabAlimentosSchema(ma.Schema):
     class Meta:

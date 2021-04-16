@@ -1,6 +1,27 @@
-function mostradadosfoods(tbfood){
-    google.charts.load('current', {'packages':['corechart']}).then( function(){
+var tbfoods = [];
 
+var thporcao = document.getElementById('th-porcao');
+
+function calcinfonutri(){
+    qtdgramasemcima = tbfoods.qtdgramasemcima;
+    tbfood = [];
+    tbfood.proteina = (tbfoods.proteina*thporcao.value)/qtdgramasemcima;
+    tbfood.carboidrato = (tbfoods.carboidrato*thporcao.value)/qtdgramasemcima;
+    tbfood.lipidios = (tbfoods.lipidios*thporcao.value)/qtdgramasemcima;
+    tbfood.fibras = (tbfoods.fibras*thporcao.value)/qtdgramasemcima;
+    tbfood.calorias = (tbfoods.calorias*thporcao.value)/qtdgramasemcima;
+    tbfood.descricao = tbfoods.descricao;
+    console.log(tbfoods);
+    calculardadosnutri(tbfood,thporcao.value);
+
+}
+
+function mostradadosfoods(tbfood,qtdgramas){
+    tbfoods = tbfood;
+    calculardadosnutri(tbfoods,qtdgramas);
+}
+function calculardadosnutri(tbfood,qtdgramas){
+    google.charts.load('current', {'packages':['corechart']}).then( function(){
 
         var data = google.visualization.arrayToDataTable([
         ['Task', 'Hours per Day'],
@@ -26,7 +47,6 @@ function mostradadosfoods(tbfood){
         tablefoods = document.getElementById('table-foods');
         divdadosfood = document.getElementById('div-dadosfood');
         divdescfood = document.getElementById('div-descfood');
-        thporcao = document.getElementById('th-porcao');
         thcalorias = document.getElementById('th-calorias');
         trfood = document.getElementById('tr-food');
         navpaginationfoods = document.getElementById('navpagination-foods');
@@ -42,7 +62,7 @@ function mostradadosfoods(tbfood){
         sodio = tbfood['sodio'] == null ? 0 : tbfood['sodio'];
 
 
-        thporcao.innerHTML = tbfood['qtdgramasemcima'];
+        thporcao.value = qtdgramas;
         tdtemp  = '<td class="text-primary"><small><strong>'+carbo.toFixed(2)+' gr</small></strong></td>';
         tdtemp += '<td class="text-primary"><small><strong>'+proteina.toFixed(2)+' gr</small></strong></td>';
         tdtemp += '<td class="text-primary"><small><strong>'+lipidios.toFixed(2)+' gr</small></strong></td>';
@@ -55,10 +75,6 @@ function mostradadosfoods(tbfood){
         divcabfoods.classList.add('d-none');
         navpaginationfoods.classList.add('d-none');
         divdadosfood.classList.remove('d-none');
-
-
-
-
 
     });
 }

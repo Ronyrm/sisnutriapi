@@ -16,7 +16,15 @@
 
     {% import 'layouts/foods/divcabecalhofoods.html' as cabfoods %}
     {{ cabfoods.div_cab_foods(pagul.page,pagul.total,pagul.per_page,orderby) }}
+    <div class="row">
+        <div class="col-12 col-lg-3 d-flex justify-content-start div-pagination-foods" id="div-pagination-foods2">
+            qqqq
+        </div>
+        <div class="col-12 col-lg-9 bg-dark d-flex justify-content-lg-center div-pagination-foods" id="div-pagination-foods2">
+            {{pagul.links}}
+        </div>
 
+    </div>
     {% import 'layouts/foods/tabfoods.html' as tbfoods %}
     {{ tbfoods.table_foods(tabfoods,pagul.total) }}
 

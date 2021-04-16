@@ -13,6 +13,9 @@ a.bg-primary:focus,a.bg-primary:hover,button.bg-primary:focus,button.bg-primary:
     background-color:#0062cc!important
 }
 
+.bg-cardbody{
+    background-color:#3e444a!important
+}
 .bodyfoods{
     background-color:#c9c9c9!important
 }

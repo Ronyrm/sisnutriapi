@@ -159,11 +159,20 @@ def get_alimento_byid(idalimento):
     except:
         return None
 
-def get_alimento_bydesc(totpage,orderby):
+def get_alimento_bydesc():
     try:
         desc = request.args.get('descricao')
     except:
         desc = ''
+
+    totpage = request.args.get('totpage')
+    if totpage == None or totpage == '':
+        totpage = '10'
+
+    orderby = request.args.get('orderby')
+    if orderby == None or orderby == '':
+        orderby = '0'
+
 
 
     try:
@@ -190,9 +199,6 @@ def get_alimento_bydesc(totpage,orderby):
                 filter(and_(Alimentos.descricao.like(desc),Alimentos.idpessoa.is_(None))). \
                 paginate(page=int(page),per_page=int(totpage), error_out=False)
 
-
-
-
         if orderby == '1':
             alimentopag = Alimentos.query.order_by(Alimentos.descricao.asc()). \
                 filter(Alimentos.descricao.like(desc)). \
@@ -203,7 +209,6 @@ def get_alimento_bydesc(totpage,orderby):
         total = 0
         if alimentopag:
             total = alimentopag.total
-
 
             page, per_page, offset = get_page_args()
 
@@ -217,8 +222,6 @@ def get_alimento_bydesc(totpage,orderby):
                 record_name="alimentos",
 
             )
-
-
 
         #foodsschema = FoodsSchema(only=('id','descricao','carboidrato','proteina','lipidios','sodio','calorias','fibras','pessoa'))
 
@@ -240,8 +243,8 @@ def get_alimento_bydesc(totpage,orderby):
     #https://www.tutorialspoint.com/json/json_ajax_example.htm
 
 
-def get_tabalimentos(totpage,orderby):
-    return get_alimento_bydesc(totpage,orderby)
+def get_tabalimentos():
+    return get_alimento_bydesc()
     #res_json = result.json
     #dataalimentos = res_json['data']
     #datapagination = res_json['datapagination']
@@ -253,3 +256,4 @@ def get_tabalimentos(totpage,orderby):
     #                       orderby=orderby,
     #                       tabfoods=dataalimentos,
     #                       mensagem=mensagem)
+

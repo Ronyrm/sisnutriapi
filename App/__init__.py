@@ -64,4 +64,11 @@ from App.routes.routesusers import routes
 app.register_blueprint(routes)
 
 
+from App.routes.routesunalimento import routesunalimentos
+app.register_blueprint(routesunalimentos)
+
+
+from App.routes.routesmagazine import routesmagazine
+app.register_blueprint(routesmagazine)
+
 db.create_all()

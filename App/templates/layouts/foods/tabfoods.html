@@ -1,43 +1,80 @@
 {% macro table_foods(tabfoods,totalfoods) %}
 {% if totalfoods >= 1  %}
-    <table class="table table-striped table-dark" id="table-foods">
-        <thead >
-            <tr>
-                <th scope="col" class="text-padrao"><strong>Descricão</strong></th>
-                <th scope="col" class="text-padrao"><strong>Porção de</strong></th>
-                <th scope="col" class="text-padrao"><strong>Valor Energético</strong></th>
-                <th scope="col" class="text-padrao"></th>
-            </tr>
-        </thead>
-        <tbody class="border border-primary border-2">
+
+    <table class="table table-borderless" id="table-foods">
+        <tbody>
 
             {% for foods in tabfoods %}
 
-                <tr class="text-white" id="tr-prod{{ foods.id }}" title="tr-prod{{ foods.id }}">
+                <tr class="text-white">
                     <td>
-                        {{foods.descricao}}
-                    </td>
-                    <td>
-                        {{"{:.2f}".format(foods.qtdgramasemcima|float) }}
-                    </td>
-                    <td>
-                        {{"{:.2f}".format(foods.calorias|float) }} kcal = {{"{:.2f}".format(foods.joule|float) }} Kj
-                    </td>
-                    <td>
-                        <button class="btn btn-primary mx-2"
-                            onclick='mostradadosfoods({{ foods|tojson|safe }});'
-                            data-toggle="collapse" data-target="#collapse{{ foods.id }}"
-                            aria-expanded="true" aria-controls="collapse{{foods.id}}">
-                            <span class="glyphicon glyphicon-chevron-right"></span>
-                        </button>
+                        <div class="card border border-primary border-3">
+                            <div class="card-header bg-primary text-primary">
+                                <div class="row">
+                                    <div class="col">
+                                        <h5 class="text-white"><strong>{{foods.descricao}}</strong></h5>
+                                    </div>
+                                    <div class="col-3 d-flex justify-content-end">
+                                        <button class="btn btn-primary mx-2"
+                                            onclick='mostradadosfoods({{ foods|tojson|safe }},{{foods.qtdgramasemcima}});'
+                                            data-toggle="collapse" data-target="#collapse{{ foods.id }}"
+                                            aria-expanded="true" aria-controls="collapse{{foods.id}}">
+                                            <span class="glyphicon glyphicon-chevron-right"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body bg-cardbody">
+                                <div class="row">
+                                    <div class="col-12 d-flex justify-content-center">
+                                        <p class="card-text text-primary">
+                                            <strong>
+                                                Porção de: {{"{:.2f}".format(foods.qtdgramasemcima|float) }} {{foods.unalimento.sigla}}
+                                            </strong>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row" >
+                                    <div class="col-6 col-md-3 h-25 d-flex justify-content-center" >
+                                        <p class="text-primary"><small>
+                                            <strong>Carboidrato:</strong> {{"{:.2f}".format(foods.carboidrato|float)}} grs
+                                        </small></p>
+                                    </div>
+                                    <div class="col-6 col-md-3 h-25 d-flex justify-content-center" >
+                                        <p class="text-primary"><small>
+                                            <strong>Proteina:</strong> {{"{:.2f}".format(foods.proteina|float)}} grs
+                                        </small></p>
+                                    </div>
+                                    <div class="col-6 col-md-3  h-25 d-flex justify-content-center" >
+                                        <p class="text-primary"><small>
+                                            <strong>Gordura:</strong> {{"{:.2f}".format(foods.lipidios|float)}} grs
+                                        </small></p>
+                                    </div>
+                                    <div class="col-6 col-md-3 h-25 d-flex justify-content-center" >
+                                        <p class="text-primary"><small>
+                                            <strong>Fibras:</strong> {{"{:.2f}".format(foods.fibras|float)}} grs
+                                        </small></p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="col-12 d-flex justify-content-center">
+                                        <p class="card-text text-primary">
+                                            <strong>
+                                                Valor Energético: {{"{:.2f}".format(foods.calorias|float) }} Kcal
+                                            </strong>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </td>
                 </tr>
-
             {% endfor %}
-
         </tbody>
     </table>
-    <div class="container d-none border border-primary" id="div-dadosfood">
+
+    <div class=" d-none border border-primary" id="div-dadosfood">
         <div class="row bg-primary p-2 ">
             <div>
                 <button class="btn btn-primary mx-2" onclick="btnvoltarmain();">
@@ -52,7 +89,10 @@
             <div class="col-12 col-md-6 my-2">
                 <div class="row">
                     <p class="text-primary text-rigth mx-2">Porção de:</p>
-                    <p class="text-primary text-left" id="th-porcao"></p>
+                    <input class="w-25" type="text" id="th-porcao">
+                    <button class="btn btn-primary" onclick="calcinfonutri();">
+                        <span class="glyphicon glyphicon-ok"></span>
+                    </button>
                 </div>
                 <div class="row">
                     <p class="text-primary text-rigth  mx-2">Calorias:</p>

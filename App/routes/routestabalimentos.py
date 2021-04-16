@@ -11,6 +11,10 @@ def post_alimento():
 def get_alimentobydesc(pageatual,totpage,orderby):
     return alimentos.get_alimento_bydesc(totpage,orderby)
 
-@routestabalimentos.route('/tabalimentos/<totpage>/<orderby>',methods=['GET'])
-def get_tabalimentos(totpage,orderby):
-    return alimentos.get_tabalimentos(totpage,orderby)
+@routestabalimentos.route('/tabalimentos',methods=['GET'])
+def get_tabalimentos():
+    return alimentos.get_tabalimentos()
+
+@routestabalimentos.route('/flipbook/',methods=['GET'])
+def pagflipbook():
+    return alimentos.pagflipbook();

@@ -1,6 +1,6 @@
 {% macro div_cab_foods(pageatual,total,perpage,orderby) %}
 
-    <div class="row p-2" id="divcab-foods">
+    <div class="row p-2">
         <div class="col-12 col-md-12 my-1">
             <form  method="GET" action="{{ url_for('routestabalimentos.get_tabalimentos',totpage=perpage,orderby=orderby,page=pageatual) }}">
 
