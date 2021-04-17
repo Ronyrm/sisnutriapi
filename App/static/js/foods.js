@@ -92,3 +92,14 @@ function btnvoltarmain(){
 
 }
 
+
+$('#orberby-foods').on('change', function(e) {
+    e.preventDefault();
+    console.log(pageatual);
+    console.log(perpage);
+    console.log(this.value);
+    valinputdescricao = document.getElementById('input-descricao').value;
+    var valorderby = $( "#orberby-foods option:selected" ).val();
+    window.location.href = '/tabalimentos?page='+pageatual+'&totpage='+perpage+'&orderby='+valorderby+'&descricao='+valinputdescricao;
+
+});

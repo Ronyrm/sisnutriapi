@@ -30,6 +30,8 @@
 </head>
 <body>
 
+<div id="canvas">
+
 <div class="zoom-icon zoom-icon-in"></div>
 
 <div class="magazine-viewport">
@@ -67,7 +69,7 @@ function loadApp() {
 	flipbook.turn({
             // Magazine width
 
-			width: 922,
+			width: 900,
 
 			// Magazine height
 
@@ -87,7 +89,7 @@ function loadApp() {
 
 			// Elevation from the edge of the flipbook when turning a page
 
-			elevation: 50,
+			//elevation: 50,
 
 			// The number of pages
 
@@ -97,14 +99,12 @@ function loadApp() {
 
 			when: {
 				turning: function(event, page, view) {
-                    console.log("teste");
-
-					var book = $(this),
+                    var book = $(this),
 					currentPage = book.turn('page'),
 					pages = book.turn('pages');
 
 					console.log('Esse é o book: '+ book);
-					console.log(currentPage);
+					console.log(pages);
 
 					// Update the current URI
 

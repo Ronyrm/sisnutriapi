@@ -1,12 +1,14 @@
-{% macro div_cab_foods(pageatual,total,perpage,orderby) %}
+{% macro div_cab_foods(pageatual,total,perpage,orderby,inputdesc) %}
 
     <div class="row p-2">
         <div class="col-12 col-md-12 my-1">
             <form  method="GET" action="{{ url_for('routestabalimentos.get_tabalimentos',totpage=perpage,orderby=orderby,page=pageatual) }}">
-
+                {% if inputdesc=='%%' %}
+                    {% set inputdesc = '' %}
+                {% endif %}
                 <div class="input-group">
                     <input class="form-control border-primary border-2 rounded-2" type="text"
-                           name="descricao" placeholder="Pesquisa por descrição" aria-label="Search">
+                           name="descricao" id="input-descricao" value="{{ inputdesc }}" placeholder="Pesquisa por descrição" aria-label="Search">
                     <div class="input-group-append">
                         <button class="btn btn-outline-primary btn-primary" type="submit" id="btn_Pesq"><span class="glyphicon glyphicon-search"></span> </button>
                     </div>

@@ -103,6 +103,7 @@ function addRegion(region, pageElement) {
 		height: Math.round(region.height/pageHeight*100)+'%'
 	}).attr('region-data', $.param(region.data||''));
 
+    console.log('Widht:'+pageWidth);
 
 	reg.appendTo(pageElement);
 }

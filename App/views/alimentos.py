@@ -160,6 +160,7 @@ def get_alimento_byid(idalimento):
         return None
 
 def get_alimento_bydesc():
+
     try:
         desc = request.args.get('descricao')
     except:
@@ -190,21 +191,41 @@ def get_alimento_bydesc():
     if totpage == '':
         totpage = '15'
 
-
+    inputdesc = desc
     desc = "%"+desc+"%"
+
     if desc != '':
         from sqlalchemy import and_
         if orderby == '0':
-            alimentopag = Alimentos.query.order_by(Alimentos.id.asc()). \
+            alimentopag = Alimentos.query.order_by(Alimentos.descricao.asc()). \
                 filter(and_(Alimentos.descricao.like(desc),Alimentos.idpessoa.is_(None))). \
                 paginate(page=int(page),per_page=int(totpage), error_out=False)
 
         if orderby == '1':
-            alimentopag = Alimentos.query.order_by(Alimentos.descricao.asc()). \
-                filter(Alimentos.descricao.like(desc)). \
-                join(Alimentos.idpessoa == Pessoa.id, isouter=True). \
-                join(Pessoa.id == Cliente.idpessoa, isouter=True). \
+            alimentopag = Alimentos.query.order_by(Alimentos.calorias.desc()). \
+                filter(and_(Alimentos.descricao.like(desc), Alimentos.idpessoa.is_(None))). \
                 paginate(page=int(page), max_per_page=int(totpage), error_out=False)
+
+        if orderby == '2':
+            alimentopag = Alimentos.query.order_by(Alimentos.carboidrato.desc()). \
+                filter(and_(Alimentos.descricao.like(desc), Alimentos.idpessoa.is_(None))). \
+                paginate(page=int(page), max_per_page=int(totpage), error_out=False)
+
+        if orderby == '3':
+            alimentopag = Alimentos.query.order_by(Alimentos.proteina.desc()). \
+                filter(and_(Alimentos.descricao.like(desc), Alimentos.idpessoa.is_(None))). \
+                paginate(page=int(page), max_per_page=int(totpage), error_out=False)
+
+        if orderby == '4':
+            alimentopag = Alimentos.query.order_by(Alimentos.lipidios.desc()). \
+                filter(and_(Alimentos.descricao.like(desc), Alimentos.idpessoa.is_(None))). \
+                paginate(page=int(page), max_per_page=int(totpage), error_out=False)
+
+        if orderby == '5':
+            alimentopag = Alimentos.query.order_by(Alimentos.fibras.desc()). \
+                filter(and_(Alimentos.descricao.like(desc), Alimentos.idpessoa.is_(None))). \
+                paginate(page=int(page), max_per_page=int(totpage), error_out=False)
+
 
         total = 0
         if alimentopag:
@@ -235,6 +256,7 @@ def get_alimento_bydesc():
                                result=True,
                                orderby=orderby,
                                tabfoods=tabfods,
+                               inputdesc=inputdesc,
                                mensagem='Pesquisa Efetuada com Sucesso.')
 
         #return  jsonify({'result': True, 'mensagem':'Pesquisa Efetuada com Sucesso.','data':tabfoods, 'datapagination':returnPagination(alimentopag)})

@@ -1,3 +1,12 @@
+
+.combobox-primary{
+    background-color: #343a40;
+    color: #68c3e5;
+    border: 2px solid #68c3e5;
+}
+
+
+
 .menuprincipal{
     list-style:none;
     float:left;
