@@ -1,0 +1,61 @@
+{% macro formregistraratleta()%}
+
+<form class="text-white" id="form-registrar">
+    <div class="form-group d-flex justify-content-center p-1">
+    <h5 class="text-padrao"> Registrar Usuário</h5>
+    </div>
+
+    <div class="form-group">
+        <label for="edtname">Nome</label>
+        <input type="text" class="form-control" id="edtname" name="edtname" aria-describedby="nameHelp" placeholder="Nome">
+    </div>
+    <div class="form-group">
+        <label for="edtemail">Email</label>
+        <input type="email" class="form-control" id="edtemail" name="edtemail" aria-describedby="emailHelp" placeholder="Email">
+    </div>
+    <!--
+    <div class="form-row">
+
+        <div class="form-group col-6">
+            <label for="selectgenero">Gênero</label>
+            <select id="selectgenero" name="selectgenero" class="form-control">
+                <option value="M">Masculino</option>
+                <option value="F">Feminino</option>
+            </select>
+        </div>
+        <div class="form-group col-6">
+            <label for="edtdateniver">Data de Nascimento</label>
+            <input type="date" class="form-control" name="edtdateniver" id="edtdateniver">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-6">
+            <label for="edtaltura">Altura</label>
+            <input type="number" class="form-control" id="edtaltura" name="edtaltura" aria-describedby="alturaHelp" placeholder="Altura">
+        </div>
+        <div class="form-group col-6">
+            <label for="edtpeso">Peso</label>
+            <input type="number" class="form-control" id="edtpeso" name="edtpeso" aria-describedby="pesoHelp" placeholder="Peso">
+        </div>
+
+    </div>!-->
+
+    <div class="form-group">
+        <label for="edtusername">UserName</label>
+        <input type="text" class="form-control" id="edtusername" name="edtusername" aria-describedby="usernameHelp" placeholder="UserName">
+    </div>
+
+    <div class="form-group">
+        <label for="edtsenha">Senha</label>
+        <input type="password" class="form-control" id="edtsenha" name="edtsenha" placeholder="Senha">
+    </div>
+    <div class="form-group">
+        <label for="edtsenhaconf">Confirmar Senha</label>
+
+        <input type="password" class="form-control" id="edtsenhaconf" name="edtsenhaconf" placeholder="Confirmar Senha">
+    </div>
+    <div class="form-group d-flex justify-content-center">
+        <button type="submit" class="btn btn-warning">Registrar</button>
+    </div>
+</form>
+{% endmacro %}

@@ -71,4 +71,9 @@ app.register_blueprint(routesunalimentos)
 from App.routes.routesmagazine import routesmagazine
 app.register_blueprint(routesmagazine)
 
+
+from App.routes.routesatleta import routesatleta
+app.register_blueprint(routesatleta)
+
+
 db.create_all()

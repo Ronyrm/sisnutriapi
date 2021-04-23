@@ -1,0 +1,45 @@
+{% extends "layouts/atleta/baseatleta.html" %}
+{% block result %} {{ result }} {% endblock %}
+{% block mensagem %} {{ mensagem }} {% endblock %}
+
+{% block jsatleta %}
+<script src="{{ url_for('static', filename='js/atleta.js') }}"></script>
+{% endblock %}
+
+{% block jsjquery %}{% endblock %}
+
+{% block content %}
+
+<script>
+</script>
+
+<div id="contentlogin" class="container mx-auto ">
+    <div class="row d-flex justify-content-center">
+        <img class="img-fluid" id="img-portifolio" width="800" height="450" src="{{ url_for('static', filename='/img/portifoliorgm.jpg') }}" alt="">
+        <div class="col-lg-6 col-sm-12 bg-primary form-padrao">
+
+            <!--<div class="row my-4">
+                <div class="col-6">
+                    <a href="#" class="btn btn-outline-primary btn-block btn-sm active" id="login-form-link">Login</a>
+                </div>
+                <div class="col-6">
+                    <a href="#" class="btn btn-outline-primary btn-block btn-sm" id="register-form-link">Registrar</a>
+                </div>
+            </div>
+            !-->
+            {% import 'layouts/atleta/formlogin.html' as formlogin %}
+            {{ formlogin.formloginatleta() }}
+            {% import 'layouts/atleta/formregistrar.html' as formregistrar %}
+            {{ formregistrar.formregistraratleta() }}
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $().ready(function() {
+
+    });
+
+</script>
+{% endblock %}

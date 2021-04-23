@@ -63,11 +63,11 @@ function calculardadosnutri(tbfood,qtdgramas){
 
 
         thporcao.value = qtdgramas;
-        tdtemp  = '<td class="text-primary"><small><strong>'+carbo.toFixed(2)+' gr</small></strong></td>';
-        tdtemp += '<td class="text-primary"><small><strong>'+proteina.toFixed(2)+' gr</small></strong></td>';
-        tdtemp += '<td class="text-primary"><small><strong>'+lipidios.toFixed(2)+' gr</small></strong></td>';
-        tdtemp += '<td class="text-primary"><small><strong>'+fibras.toFixed(2)+' gr</small></strong></td>';
-        tdtemp += '<td class="text-primary"><small><strong>'+fibras.toFixed(2)+' gr</small></strong></td>';
+        tdtemp  = '<td class="text-padrao"><small><strong>'+carbo.toFixed(2)+' gr</small></strong></td>';
+        tdtemp += '<td class="text-padrao"><small><strong>'+proteina.toFixed(2)+' gr</small></strong></td>';
+        tdtemp += '<td class="text-padrao"><small><strong>'+lipidios.toFixed(2)+' gr</small></strong></td>';
+        tdtemp += '<td class="text-padrao"><small><strong>'+fibras.toFixed(2)+' gr</small></strong></td>';
+        tdtemp += '<td class="text-padrao"><small><strong>'+fibras.toFixed(2)+' gr</small></strong></td>';
 
         trfood.innerHTML = tdtemp;
         thcalorias.innerHTML = tbfood['calorias'];

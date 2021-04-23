@@ -6,16 +6,16 @@
 
             {% for foods in tabfoods %}
 
-                <tr class="text-white">
+                <tr class="text-padrao">
                     <td>
                         <div class="card border border-primary border-3">
-                            <div class="card-header bg-primary text-primary">
+                            <div class="card-header bg-primary text-padrao">
                                 <div class="row">
                                     <div class="col">
-                                        <h5 class="text-white"><strong>{{foods.descricao}}</strong></h5>
+                                        <h5 class="text-padrao"><strong>{{foods.descricao}}</strong></h5>
                                     </div>
                                     <div class="col-3 d-flex justify-content-end">
-                                        <button class="btn btn-primary mx-2"
+                                        <button class="btn btn-warning mx-2"
                                             onclick='mostradadosfoods({{ foods|tojson|safe }},{{foods.qtdgramasemcima}});'
                                             data-toggle="collapse" data-target="#collapse{{ foods.id }}"
                                             aria-expanded="true" aria-controls="collapse{{foods.id}}">
@@ -27,7 +27,7 @@
                             <div class="card-body bg-cardbody">
                                 <div class="row">
                                     <div class="col-12 d-flex justify-content-center">
-                                        <p class="card-text text-primary">
+                                        <p class="card-text text-padrao">
                                             <strong>
                                                 Porção de: {{"{:.2f}".format(foods.qtdgramasemcima|float) }} {{foods.unalimento.sigla}}
                                             </strong>
@@ -36,29 +36,29 @@
                                 </div>
                                 <div class="row" >
                                     <div class="col-6 col-md-3 h-25 d-flex justify-content-center" >
-                                        <p class="text-primary"><small>
+                                        <p class="text-padrao"><small>
                                             <strong>Carboidrato:</strong> {{"{:.2f}".format(foods.carboidrato|float)}} grs
                                         </small></p>
                                     </div>
                                     <div class="col-6 col-md-3 h-25 d-flex justify-content-center" >
-                                        <p class="text-primary"><small>
+                                        <p class="text-padrao"><small>
                                             <strong>Proteina:</strong> {{"{:.2f}".format(foods.proteina|float)}} grs
                                         </small></p>
                                     </div>
                                     <div class="col-6 col-md-3  h-25 d-flex justify-content-center" >
-                                        <p class="text-primary"><small>
+                                        <p class="text-padrao"><small>
                                             <strong>Gordura:</strong> {{"{:.2f}".format(foods.lipidios|float)}} grs
                                         </small></p>
                                     </div>
                                     <div class="col-6 col-md-3 h-25 d-flex justify-content-center" >
-                                        <p class="text-primary"><small>
+                                        <p class="text-padrao"><small>
                                             <strong>Fibras:</strong> {{"{:.2f}".format(foods.fibras|float)}} grs
                                         </small></p>
                                     </div>
                                 </div>
                                 <div>
                                     <div class="col-12 d-flex justify-content-center">
-                                        <p class="card-text text-primary">
+                                        <p class="card-text text-padrao">
                                             <strong>
                                                 Valor Energético: {{"{:.2f}".format(foods.calorias|float) }} Kcal
                                             </strong>
@@ -74,10 +74,10 @@
         </tbody>
     </table>
 
-    <div class=" d-none border border-primary" id="div-dadosfood">
+    <div class=" d-none " id="div-dadosfood">
         <div class="row bg-primary p-2 ">
             <div>
-                <button class="btn btn-primary mx-2" onclick="btnvoltarmain();">
+                <button class="btn btn-warning mx-2" onclick="btnvoltarmain();">
                     <span class="glyphicon glyphicon-chevron-left"></span>
                 </button>
             </div>
@@ -85,18 +85,18 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row border border-primary">
             <div class="col-12 col-md-6 my-2">
                 <div class="row">
-                    <p class="text-primary text-rigth mx-2">Porção de:</p>
+                    <p class="text-padrao text-rigth mx-2">Porção de:</p>
                     <input class="w-25" type="text" id="th-porcao">
-                    <button class="btn btn-primary" onclick="calcinfonutri();">
+                    <button class="btn btn-warning" onclick="calcinfonutri();">
                         <span class="glyphicon glyphicon-ok"></span>
                     </button>
                 </div>
                 <div class="row">
-                    <p class="text-primary text-rigth  mx-2">Calorias:</p>
-                    <p class="text-primary text-left" id="th-calorias"></p>
+                    <p class="text-padrao text-rigth  mx-2">Calorias:</p>
+                    <p class="text-padrao text-left" id="th-calorias"></p>
                 </div>
                 <div class="row d-flex justify-content-center mx-2">
                     <table class="table table-striped border border-primary border-2">

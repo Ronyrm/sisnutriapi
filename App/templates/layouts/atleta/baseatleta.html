@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    {% import 'layouts/head.html' as head %}
+    {{ head.head_content('RGMSolutions') }}
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/foods.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/atleta.css') }}">
+</head>
+<body class="bodyfoods">
+    <main>
+        <nav class="navbar navbar-expand-md  bg-primary">
+            <button class="navbar-toggler btn btn-warning" type="button" data-toggle="collapse" data-target="#navbarNav">
+             <span class="glyphicon glyphicon-menu-hamburger"></span>
+            </button>
+
+            <a class="navbar-brand" href="{{ url_for('routesatleta.get_mainatleta')}}">
+                <img class="img-fluid" src="{{ url_for('static', filename='img/logorgm.png') }}" alt="">
+            </a>
+
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active p-1">
+                        <a class="btn btn-outline-warning btn-block btn-sm" href="{{ url_for('routestabalimentos.get_tabalimentos')}}"> Tabela Nutricional <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item p-1">
+                        <a class="btn btn-outline-warning btn-block btn-sm" href="#">Simulador</a>
+                    </li>
+
+                </ul>
+
+            </div>
+            <ul class="navbar-nav ">
+                    <li class="nav-item p-1">
+                        <a href="#" class="btn btn-outline-warning btn-block btn-sm" id="login-form-link">Login</a>
+                    </li>
+                    <li class="nav-item p-1">
+                        <a href="#" class="btn btn-outline-warning btn-block btn-sm" id="register-form-link">Registrar</a>
+                    </li>
+                </ul>
+
+        </nav>
+
+        <div id="content" class="container main-container my-2">
+            {% block content %} {% endblock %}
+        </div>
+    </main>
+
+
+    {% block jsjquery %} {% endblock%}
+    {% block jsatleta %} {% endblock %}
+
+</body>
+</html>

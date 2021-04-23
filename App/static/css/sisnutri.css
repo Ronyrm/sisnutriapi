@@ -1,11 +1,23 @@
-
-.combobox-primary{
-    background-color: #343a40;
-    color: #68c3e5;
-    border: 2px solid #68c3e5;
+:root{
+    --preto: #343a40;
+    --azulclaro: #68c3e5;
+    --verde: #28a745;
+    --branco:#fff;
+    --cinzafundo:#3e444a;
+    --verdeescuro:#287045;
+    --azulescuro:#0062cc;
+    --amarelo:#ffc107;
+    --amareloescuro: #d39e00;
+    --fundopagina:#6d6d6d;
 }
 
 
+
+.combobox-primary{
+    background-color: var(--amarelo);
+    color: var(--branco);
+    border: 2px solid var(--amareloescuro);
+}
 
 .menuprincipal{
     list-style:none;
