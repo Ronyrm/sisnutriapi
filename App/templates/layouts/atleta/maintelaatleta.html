@@ -6,6 +6,12 @@
 <script src="{{ url_for('static', filename='js/atleta.js') }}"></script>
 {% endblock %}
 
+{% block jsfuncs %}
+<script src="{{ url_for('static', filename='js/funcs-sisnutri.js') }}"></script>
+{% endblock %}
+
+
+
 {% block jsjquery %}{% endblock %}
 
 {% block content %}
@@ -13,7 +19,7 @@
 <script>
 </script>
 
-<div id="contentlogin" class="container mx-auto ">
+<div id="contentlogin" class="container-fluid ">
     <div class="row d-flex justify-content-center">
         <img class="img-fluid" id="img-portifolio" width="800" height="450" src="{{ url_for('static', filename='/img/portifoliorgm.jpg') }}" alt="">
         <div class="col-lg-6 col-sm-12 bg-primary form-padrao">
@@ -27,6 +33,9 @@
                 </div>
             </div>
             !-->
+            {% import 'layouts/atleta/simulator.html' as divsimulator %}
+            {{ divsimulator.simulator() }}
+
             {% import 'layouts/atleta/formlogin.html' as formlogin %}
             {{ formlogin.formloginatleta() }}
             {% import 'layouts/atleta/formregistrar.html' as formregistrar %}
