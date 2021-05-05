@@ -3,7 +3,9 @@
 {% block mensagem %} {{ mensagem }} {% endblock %}
 
 {% block jsatleta %}
+<script src="{{ url_for('static', filename='js/msginfomodal.js') }}"></script>
 <script src="{{ url_for('static', filename='js/atleta.js') }}"></script>
+
 {% endblock %}
 
 {% block jsfuncs %}
@@ -19,7 +21,7 @@
 <script>
 </script>
 
-<div id="contentlogin" class="container-fluid ">
+<div id="contentlogin" class="container my-2">
     <div class="row d-flex justify-content-center">
         <img class="img-fluid" id="img-portifolio" width="800" height="450" src="{{ url_for('static', filename='/img/portifoliorgm.jpg') }}" alt="">
         <div class="col-lg-6 col-sm-12 bg-primary form-padrao">
@@ -44,7 +46,6 @@
 
     </div>
 </div>
-
 <script>
     $().ready(function() {
 

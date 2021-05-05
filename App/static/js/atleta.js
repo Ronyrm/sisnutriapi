@@ -179,11 +179,12 @@ function btnnivelatv(valna){
     valharris_original = harris_original(valgenero,valpeso,valaltura,idade);
     valtdde = valharris_original*valna;
     trbody = '<tr>';
-    trbody += '<th scope="row">Harris-Benedict (original) </th>';
-    trbody += '<td><a class="text-warning" href="#"><span class="glyphicon glyphicon-info-sign"></span></a></td>';
-    trbody += '<td>'+valharris_original.toFixed(0)+'</td>';
-    trbody += '<td>'+valtdde.toFixed(0)+'</td>';
-    trbody += '<td><input type="checkbox" name="chk" onclick="checkedbmr();"></td>';
+    trbody += '<th  scope="row">Harris-Benedict (original) </th>';
+    titleformula = "'Fórmula Herris-Benedict Original'";
+    trbody += '<td class="align-middle text-center"><a class="text-warning" data-toggle="modal" data-target="#modal-info" onclick="chamamodalinfo('+titleformula+',msginfo.formula_harris_benedict)" ><span class="glyphicon glyphicon-info-sign"></span></a></td>';
+    trbody += '<td class="align-middle text-center">'+valharris_original.toFixed(0)+'</td>';
+    trbody += '<td class="align-middle text-center">'+valtdde.toFixed(0)+'</td>';
+    trbody += '<td class="align-middle text-center"><input type="checkbox" name="chk" onclick="checkedbmr();"></td>';
     trbody += '</tr>';
 
     //calcula  Harris-Benedict (revisada)
@@ -191,11 +192,12 @@ function btnnivelatv(valna){
     console.log('Harris-Benedict (revisada):'+valharris_revisada);
     valtdde = valharris_revisada*valna;
     trbody += '<tr>';
-    trbody += '<th scope="row">Harris-Benedict (Revisada)</th>';
-    trbody += '<td><a class="text-warning" href="#"><span class="glyphicon glyphicon-info-sign"></span></a></td>';
-    trbody += '<td>'+valharris_revisada.toFixed(0)+'</td>';
-    trbody += '<td>'+valtdde.toFixed(0)+'</td>';
-    trbody += '<td><input type="checkbox" name="chk" onclick="checkedbmr();"></td>';
+    trbody += '<th  scope="row">Harris-Benedict (Revisada)</th>';
+    titleformula = "'Fórmula Herris-Benedict Revisada'";
+    trbody += '<td class="align-middle text-center"><a class="text-warning" data-toggle="modal" data-target="#modal-info" onclick="chamamodalinfo('+titleformula+',msginfo.formula_harris_benedict_revisada)" ><span class="glyphicon glyphicon-info-sign"></span></a></td>';
+    trbody += '<td class="align-middle text-center">'+valharris_revisada.toFixed(0)+'</td>';
+    trbody += '<td class="align-middle text-center">'+valtdde.toFixed(0)+'</td>';
+    trbody += '<td class="align-middle text-center"><input type="checkbox" name="chk" onclick="checkedbmr();"></td>';
     trbody += '</tr>';
 
     //calcula  Mifflin St Jeor
@@ -203,10 +205,11 @@ function btnnivelatv(valna){
     valtdde = valmiflin*valna;
     trbody += '<tr>';
     trbody += '<th scope="row">Mifflin St Jeor</th>';
-    trbody += '<td><a class="text-warning" href="#"><span class="glyphicon glyphicon-info-sign"></span></a></td>';
-    trbody += '<td>'+valmiflin.toFixed(0)+'</td>';
-    trbody += '<td>'+valtdde.toFixed(0)+'</td>';
-    trbody += '<td><input type="checkbox" name="chk" onclick="checkedbmr();"></td>';
+    titleformula = "'Fórmula Mifflin St Jeor'";
+    trbody += '<td class="align-middle text-center"><a class="text-warning" data-toggle="modal" data-target="#modal-info" onclick="chamamodalinfo('+titleformula+',msginfo.formula_mifflin)" ><span class="glyphicon glyphicon-info-sign"></span></a></td>';
+    trbody += '<td class="align-middle text-center">'+valmiflin.toFixed(0)+'</td>';
+    trbody += '<td class="align-middle text-center">'+valtdde.toFixed(0)+'</td>';
+    trbody += '<td class="align-middle text-center"><input type="checkbox" name="chk" onclick="checkedbmr();"></td>';
     trbody += '</tr>';
 
     //calcula  Katch-McArdle
@@ -218,10 +221,11 @@ function btnnivelatv(valna){
         valtdde = valkatchmcardle*valna;
         trbody += '<tr>';
         trbody += '<th scope="row">Katch-McArdle</th>';
-        trbody += '<td><a class="text-warning" href="#"><span class="glyphicon glyphicon-info-sign"></span></a></td>';
-        trbody += '<td>'+valkatchmcardle.toFixed(0)+'</td>';
-        trbody += '<td>'+valtdde.toFixed(0)+'</td>';
-        trbody += '<td><input type="checkbox" name="chk" onclick="checkedbmr();"></td>';
+        titleformula = "'Fórmula Katch-McArdle'";
+        trbody += '<td class="align-middle text-center"><a class="text-warning" data-toggle="modal" data-target="#modal-info" onclick="chamamodalinfo('+titleformula+',msginfo.formula_katchmcardle)" ><span class="glyphicon glyphicon-info-sign"></span></a></td>';
+        trbody += '<td class="align-middle text-center">'+valkatchmcardle.toFixed(0)+'</td>';
+        trbody += '<td class="align-middle text-center">'+valtdde.toFixed(0)+'</td>';
+        trbody += '<td class="align-middle text-center" ><input type="checkbox" name="chk" onclick="checkedbmr();"></td>';
         trbody += '</tr>';
     }
 
@@ -310,8 +314,8 @@ $('#btnproximoformula').on('click', function(e) {
     edtmediatdee = document.getElementById('edtmediatdee');
     lblmymetatdee.innerHTML = 'GCD: '+ edtmediatdee.innerHTML;
 
-    //verifycamposcaloria(this.value,'Forneça as calorias dos Exercícios',"msg-validcalexec");
-    verifycamposcaloria(edtcaloriasmeta.value,'Forneça as calorias excedentes',"msg-validcalmeta");
+
+    validacamposmeta();
 
 });
 
@@ -352,7 +356,7 @@ edtcaloriasmeta.addEventListener("focus", function(){
     curRadio = document.querySelector('input[name="radiometa"]:checked').value;
     tipo = (curRadio=='ganho')? 'excedente' : 'defícit';
     tipo = 'Forneça as Calorias '+tipo;
-    verifycamposcaloria(this.value,tipo,"msg-validcalmeta");
+    validacamposmeta();
 
 });
 // verificar campo calorias excedente/deficit  se ta vazio ou zero - na saida
@@ -360,7 +364,7 @@ edtcaloriasmeta.addEventListener("blur", function(){
     curRadio = document.querySelector('input[name="radiometa"]:checked').value;
     tipo = (curRadio=='ganho')? 'excedente' : 'defícit';
     tipo = 'Forneça as Calorias '+tipo;
-    verifycamposcaloria(this.value,tipo,"msg-validcalmeta");
+    validacamposmeta();
 });
 
 // verificar campo calorias dos exercicios se ta vazio ou zero - na entrada
@@ -368,33 +372,17 @@ edtcaloriasexercises.addEventListener("focus", function(){
     if(edtcaloriasexercises.value == '0'){
         edtcaloriasexercises.value = '';
     }
-    //verifycamposcaloria(this.value,'Forneça as calorias dos Exercícios',"msg-validcalexec");
+
     validacamposmeta();
 });
 // verificar campo calorias excedente/deficit  se ta vazio ou zero - na saida
 edtcaloriasexercises.addEventListener("blur", function(){
-    //verifycamposcaloria(this.value,'Forneça as calorias dos Exercícios',"msg-validcalexec");
     validacamposmeta();
 });
 
 
-function verifycamposcaloria(valor,desccampo,labelmsg){
-
-    //if(valor == '' || valor=='0'){
-    //    document.getElementById(labelmsg).innerHTML =  desccampo;
-    //}
-    //else{
-    //    document.getElementById(labelmsg).innerHTML = '';
-    //}
-    validacamposmeta();
-}
 
 function validacamposmeta(){
-    //if (edtcaloriasmeta.value == '0' || edtcaloriasmeta.value==''){
-    //|| edtcaloriasexercises.value == '0' || edtcaloriasexercises.value==''){
-    //    document.getElementById('btn-result').disabled = true;
-    //}
-    //else{
     vlalvo = 0;
     vlcalmoreless = (edtcaloriasmeta.value=='') ? 0 : parseFloat(edtcaloriasmeta.value);
     vlcalexerc = (edtcaloriasexercises.value=='') ? 0 : parseFloat(edtcaloriasexercises.value);
@@ -427,41 +415,10 @@ document.getElementById('btn-result').addEventListener("click", function(e){
     formsimuladorfiveetap.classList.remove('d-none');
     formsimuladorfouretap.classList.add('d-none');
 
-    validacamposmeta();
-
-    //curRadio = document.querySelector('input[name="radiometa"]:checked').value;
-    if (curRadio=='ganho'){
-        document.getElementById('lbl-tipometa').innerHTML = '<strong>Ganho</strong>';
-        document.getElementById('lbl-desctipometa').innerHTML = '<strong>Excedente Calórico</strong>';
-    }
-    if (curRadio=='perda'){
-        document.getElementById('lbl-tipometa').innerHTML = '<strong>Perda</strong>';
-        document.getElementById('lbl-desctipometa').innerHTML = '<strong>Defícit Calórico</strong>';
-    }
-
-    edtmediabmr = document.getElementById('edtmediabmr');
-    edtmediatdee = document.getElementById('edtmediatdee');
-
-
-    document.getElementById('edtmetakaldia').value = vlcalmoreless;
-    document.getElementById('edtbmrdia').value = edtmediabmr.innerHTML;
-    document.getElementById('edtgcddia').value = edtmediatdee.innerHTML;
-    document.getElementById('edtKcalExecdia').value = vlcalexerc;
-    document.getElementById('edtalvokcaldia').value = vlalvo;
-
-    vlkcalkgfat = verifycampokgfatempty();
-    calcmetakg(vlcalmoreless,vlkcalkgfat);
-    calcmetakcal(vlcalmoreless);
-
-    preenchedadoskcalexec(vlcalexerc);
-
-    preenchedadadoskcalalvo(vlalvo);
-    preenchedadadoskcalbmr(edtmediabmr.innerHTML);
-    preenchedadadoskcalgcd(edtmediatdee.innerHTML);
-
-
+    calcularesultfinal();
 
 });
+
 document.getElementById('btnvoltarfouretapa').addEventListener("click", function(e){
     e.preventDefault();
     formsimuladorfouretap = document.getElementById('form-simulador-fouretap');
@@ -484,20 +441,58 @@ function verifycampokgfatempty(){
 //  calcula e preenche os campos referente a quantidade de kilograma que ira ganhar ou perder de acordo com dia, semana, mes, ano
 function calcmetakg(vlmetakaldia,vlkcalkgfat){
 
-    vlmetakgdia = vlmetakaldia/vlkcalkgfat;
+    vlmetakgdia = (vlmetakaldia/vlkcalkgfat);
     vlmetakgdia = vlmetakgdia * 0.4536;
 
     // KG por dia
-    document.getElementById('edtpesodia').value = vlmetakgdia.toFixed(2);
+    if (vlmetakgdia < 1){
+        document.getElementById('lblpesodia').innerHTML = ' gr';
+        vlmetakgdia_tp = vlmetakgdia*1000;
+        document.getElementById('edtpesodia').value = (vlmetakgdia_tp).toFixed(0);
+    }
+    else{
+        document.getElementById('lblpesodia').innerHTML = ' kg';
+        document.getElementById('edtpesodia').value = (vlmetakgdia_tp).toFixed(3);
+    }
+
+
     //KG por semana
     vlmetakgsemana = vlmetakgdia * 7;
-    document.getElementById('edtpesosemanal').value = vlmetakgsemana.toFixed(2);
+    if (vlmetakgsemana < 1){
+        document.getElementById('lblpesosemanal').innerHTML = ' gr';
+        vlmetakgsemana = vlmetakgsemana * 1000;
+        document.getElementById('edtpesosemanal').value = vlmetakgsemana.toFixed(0);
+    }
+    else{
+        document.getElementById('lblpesosemanal').innerHTML = ' kg';
+        document.getElementById('edtpesosemanal').value = vlmetakgsemana.toFixed(3);
+    }
+
+
+
     //KG por mes
     vlmetakgmensal = vlmetakgdia * 30.5;
-    document.getElementById('edtpesomensal').value = vlmetakgmensal.toFixed(2);
+    if (vlmetakgmensal < 1){
+        document.getElementById('lblpesomensal').innerHTML = ' gr';
+        vlmetakgmensal = vlmetakgmensal * 1000;
+        document.getElementById('edtpesomensal').value = vlmetakgmensal.toFixed(0);
+    }
+    else{
+        document.getElementById('lblpesomensal').innerHTML = ' kg';
+        document.getElementById('edtpesomensal').value = vlmetakgmensal.toFixed(3);
+    }
     //KG por ano
     vlmetakganual = vlmetakgdia * 365;
-    document.getElementById('edtpesoanual').value = vlmetakganual.toFixed(2);
+
+    if(vlmetakganual < 1){
+        document.getElementById('lblpesoanual').innerHTML = ' gr';
+        vlmetakganual = vlmetakganual * 1000;
+        document.getElementById('edtpesoanual').value = vlmetakganual.toFixed(0);
+    }
+    else{
+        document.getElementById('lblpesoanual').innerHTML = ' kg';
+        document.getElementById('edtpesoanual').value = vlmetakganual.toFixed(3);
+    }
 
 }
 
@@ -536,6 +531,233 @@ function preenchedadadoskcalgcd(vlkcalgcddia){
     document.getElementById('edtgcdmensal').value = (vlkcalgcddia * 30.5).toFixed(0);
     document.getElementById('edtgcdanual').value = (vlkcalgcddia * 365).toFixed(0);
 }
+// on change Campo input "Kcal excedente ou perda  tela de Resultado Final
+document.getElementById('edtmetakaldia').addEventListener("change", function(e){
+    e.preventDefault();
+    edtcaloriasmeta.value = this.value;
+    if (edtcaloriasmeta.value == ''){
+        edtcaloriasmeta.value = '0';
+        this.value = '0';
+    }
+    console.log('Calorias Meta:'+edtcaloriasmeta);
+    calcularesultfinal();
+
+});
+// CHANGE INPUT kcal meta semanal
+document.getElementById('edtmetakalsemanal').addEventListener("change", function(e){
+    e.preventDefault();
+    if (this.value < -1) {
+        this.value = 0;
+    }
+
+    result = calc_kcal_weekmonthyear((this.value=='')?'0':this.value,'S');
+    document.getElementById('edtmetakaldia').value = result;
+    edtcaloriasmeta.value = result;
+
+    calcularesultfinal();
+});
+// CHANGE INPUT kcal meta mensal
+document.getElementById('edtmetakalmensal').addEventListener("change", function(e){
+    e.preventDefault();
+    if (this.value < -1) {
+        this.value = 0;
+    }
+
+    result = calc_kcal_weekmonthyear((this.value=='')?'0':this.value,'M');
+    document.getElementById('edtmetakaldia').value = result;
+    edtcaloriasmeta.value = result;
+
+    calcularesultfinal();
+});
+// CHANGE INPUT kcal meta anual
+document.getElementById('edtmetakalanual').addEventListener("change", function(e){
+    e.preventDefault();
+    if (this.value < -1) {
+        this.value = 0;
+    }
+
+    result = calc_kcal_weekmonthyear((this.value=='')?'0':this.value,'A');
+    document.getElementById('edtmetakaldia').value = result;
+    edtcaloriasmeta.value = result;
+
+    calcularesultfinal();
+});
+
+
+// on change Campo input "Kcal dos exercicios tela de Resultado Final
+document.getElementById('edtKcalExecdia').addEventListener("change", function(e){
+    e.preventDefault();
+    edtcaloriasexercises.value = this.value;
+    if (edtcaloriasexercises.value == ''){
+        edtcaloriasexercises.value = '0';
+        this.value = '0';
+    }
+    calcularesultfinal();
+});
+
+// CHANGE INPUT kcal exercicios semanal
+document.getElementById('edtKcalExecsemanal').addEventListener("change", function(e){
+    e.preventDefault();
+    if (this.value < -1) {
+        this.value = 0;
+    }
+
+    result = calc_kcal_weekmonthyear((this.value=='')?'0':this.value,'S');
+    document.getElementById('edtKcalExecdia').value = result;
+    edtcaloriasexercises.value = result;
+
+    calcularesultfinal();
+});
+
+
+// CHANGE INPUT kcal exercicios mensal
+document.getElementById('edtKcalExecmensal').addEventListener("change", function(e){
+    e.preventDefault();
+    if (this.value < -1) {
+        this.value = 0;
+    }
+
+    result = calc_kcal_weekmonthyear((this.value=='')?'0':this.value,'M');
+    document.getElementById('edtKcalExecdia').value = result;
+    edtcaloriasexercises.value = result;
+
+    calcularesultfinal();
+});
+
+// CHANGE INPUT kcal exercicios anual
+document.getElementById('edtKcalExecanual').addEventListener("change", function(e){
+    e.preventDefault();
+    if (this.value < -1) {
+        this.value = 0;
+    }
+
+    result = calc_kcal_weekmonthyear((this.value=='')?'0':this.value,'A');
+    document.getElementById('edtKcalExecdia').value = result;
+    edtcaloriasexercises.value = result;
+
+    calcularesultfinal();
+});
+// change Ganho ou perda de Peso
+document.getElementById('edtpesodia').addEventListener("change", function(e){
+    e.preventDefault();
+    if (this.value < -1) {
+        this.value = 0;
+    }
+    result = calccalporkg(this.value/1000).toFixed(0);
+    document.getElementById('edtmetakaldia').value = result;
+    edtcaloriasmeta.value = result;
+
+    calcularesultfinal();
+
+});
+
+document.getElementById('edtpesosemanal').addEventListener("change", function(e){
+    e.preventDefault();
+    if (this.value < -1) {
+        this.value = 0;
+    }
+
+
+    result = calccalporkg((this.value/1000)/7).toFixed(0);
+    document.getElementById('edtmetakaldia').value = result;
+    edtcaloriasmeta.value = result;
+
+    calcularesultfinal();
+
+});
+
+document.getElementById('edtpesomensal').addEventListener("change", function(e){
+    e.preventDefault();
+    if (this.value < -1) {
+        this.value = 0;
+    }
+
+
+    result = calccalporkg((this.value/30.5)).toFixed(0);
+    document.getElementById('edtmetakaldia').value = result;
+    edtcaloriasmeta.value = result;
+
+    calcularesultfinal();
+
+});
+
+document.getElementById('edtpesoanual').addEventListener("change", function(e){
+    e.preventDefault();
+    if (this.value < -1) {
+        this.value = 0;
+    }
+
+
+    result = calccalporkg((this.value/365)).toFixed(0);
+    document.getElementById('edtmetakaldia').value = result;
+    edtcaloriasmeta.value = result;
+
+    calcularesultfinal();
+
+});
 
 
 
+function calccalporkg(valorkgdia){
+    return  ((valorkgdia / 0.453592) * verifycampokgfatempty());
+}
+// CALCULA RESULTADO FINAL E PREECHE VALORES
+function calcularesultfinal(){
+    validacamposmeta();
+
+    //curRadio = document.querySelector('input[name="radiometa"]:checked').value;
+    if (curRadio=='ganho'){
+        document.getElementById('lbl-tipometa').innerHTML = '<strong>Ganho</strong>';
+        document.getElementById('lbl-desctipometa').innerHTML = '<strong>Excedente Calórico</strong>';
+    }
+    if (curRadio=='perda'){
+        document.getElementById('lbl-tipometa').innerHTML = '<strong>Perda</strong>';
+        document.getElementById('lbl-desctipometa').innerHTML = '<strong>Defícit Calórico</strong>';
+    }
+
+    edtmediabmr = document.getElementById('edtmediabmr');
+    edtmediatdee = document.getElementById('edtmediatdee');
+
+
+    document.getElementById('edtmetakaldia').value = vlcalmoreless;
+    document.getElementById('edtbmrdia').value = edtmediabmr.innerHTML;
+    document.getElementById('edtgcddia').value = edtmediatdee.innerHTML;
+    document.getElementById('edtKcalExecdia').value = vlcalexerc;
+    document.getElementById('edtalvokcaldia').value = vlalvo;
+
+    vlkcalkgfat = verifycampokgfatempty();
+    calcmetakg(vlcalmoreless,vlkcalkgfat);
+    calcmetakcal(vlcalmoreless);
+
+    preenchedadoskcalexec(vlcalexerc);
+
+    preenchedadadoskcalalvo(vlalvo);
+    preenchedadadoskcalbmr(edtmediabmr.innerHTML);
+    preenchedadadoskcalgcd(edtmediatdee.innerHTML);
+
+
+}
+
+function calc_kcal_weekmonthyear(valor,tipo){
+    result = 0;
+    if (valor != '0'){
+        switch(tipo) {
+            case "S":
+                result = (valor/7).toFixed(0);
+                break;
+            case "M":
+                result = (valor/30.5).toFixed(0);
+                break;
+            case "A":
+                result = (valor/365).toFixed(0);
+                break;
+        }
+    }
+    return result;
+}
+
+function chamamodalinfo(title,msg){
+    document.getElementById('modal-infotitle').innerHTML = title;
+    document.getElementById('modal-infobody').innerHTML = msg;
+
+}

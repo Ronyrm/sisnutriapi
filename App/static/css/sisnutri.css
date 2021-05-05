@@ -183,22 +183,28 @@ text-shadow:0px 0px 5px #ffc107;
  color : white;
 }
 
-/* Custom page CSS
--------------------------------------------------- */
-/* Not required for template or sticky footer method. */
 
-body{
-  /*background-color:#c6c6c6;*/
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
 }
 
-body > .container {
-  padding: 60px 15px 0;
+/* Track */
+::-webkit-scrollbar-track {
+  border: 5px solid black;
+  border-radius: 10px;
+  background-color: black;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--amarelo); 
+  border-radius: 10px;
 }
 
-.footer > .container {
-    align:center;
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--amareloescuro); 
 }
-
-
-
 

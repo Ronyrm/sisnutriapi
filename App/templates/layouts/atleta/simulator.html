@@ -33,8 +33,8 @@
             <label for="edtpercfat">% Gordura</label>
             <input type="number" class="form-control" id="edtpercfat" name="edtpercfat" aria-describedby="pesoHelp" placeholder="%Gordura">
         </div>
-        <div class="form-group col-12 d-flex justify-content-between">
-            <small id="lbl-msgdadosgerais" class="text-danger"> Caso não souber o % de Gordura, deixar em branco</small>
+        <div class="form-group col-12 d-flex justify-content-between align-items-center">
+            <small id="lbl-msgdadosgerais" class="text-danger"> Caso não souber o % de Gordura deixar em branco</small>
             <button class="btn btn-warning  mb-2 btn-sm" type="button"  id="btnprimeiraetapa">
                 Próximo <span class="glyphicon glyphicon-menu-right"/>
             </button>
@@ -49,93 +49,40 @@
                 <label class="mx-auto text-danger"> Escolha seu nível de atividade abaixo</label>
 
         </div>
-        <div class="list-group">
-            <button onclick="btnnivelatv(1);" type="button" class="list-group-item list-group-item-action">
-                <small>
-                    Completamente paralisado, incapaz de se mover sem a ajuda de outras pessoas (1.0)
-                </small>
-            </button>
-            <button onclick="btnnivelatv(1.05);" type="button" class="list-group-item list-group-item-action">
-                <small>
-                    Imóvel, estacionário com algum movimento do braço, acamado ou parcialmente paralisado (1.05)
-                </small>
-            </button>
-            <button onclick="btnnivelatv(1.1);" type="button" class="list-group-item list-group-item-action">
-                <small>
-                    Estilo de vida restrito, movimento é limitado a um espaço confinado, quase sempre sentado ou deitado (1.1)
-                </small>
-            </button>
-            <button onclick="btnnivelatv(1.16);" type="button" class="list-group-item list-group-item-action">
-                <small>
-                    Trabalhar em casa com pouca ou nenhuma viagem, nenhum exercício, algumas caminhadas, principalmente sentado ou deitado (1.16)
-                </small>
-            </button>
-            <button onclick="btnnivelatv(1.2);" type="button" class="list-group-item list-group-item-action">
-                <small>
-                    Estilo de vida sedentário, pouco ou nenhum exercício, caminhada moderada, trabalho de escritório (longe de casa) (1.2)
-                </small>
-            </button>
-            <button onclick="btnnivelatv(1.375);" type="button" class="list-group-item list-group-item-action">
-                <small>
-                    Ligeiramente ativo, exercício ou esportes leves 1 a 3 dias por semana, corrida leve ou caminhada 3 a 4 dias por semana (1,375)
-                </small>
-            </button>
-            <button onclick="btnnivelatv(1);" type="button" class="list-group-item list-group-item-action">
-                <small>
-                    Levemente ativo, exercício ou esportes moderados 2 a 3 dias por semana, corrida leve ou caminhada 5 a 7 dias por semana (1.425)
-                </small>
-            </button>
-            <button onclick="btnnivelatv(1.55);" type="button" class="list-group-item list-group-item-action">
-                <small>
-                    Moderadamente ativo, trabalho físico, exercício ou esportes 4 a 5 dias por semana, trabalhador da construção (1,55)
-                </small>
-            </button>
-            <button onclick="btnnivelatv(1.75)" type="button" class="list-group-item list-group-item-action">
-                <small>
-                    Muito ativo, trabalho físico pesado, exercícios ou esportes de 6 a 7 dias por semana, trabalhador árduo (1,75)
-                </small>
-            </button>
-            <button onclick="btnnivelatv(1.9)" type="button" class="list-group-item list-group-item-action">
-                <small>
-                    Extremamente Ativo, Trabalho Físico Muito Pesado ou Exercício Todos os Dias, Atleta Profissional / Olímpico (1.9)
-                </small>
-            </button>
+        <!-- Lista de Grupo Nível de Atividade !-->
+        {% import 'layouts/atleta/listgroup_nivelatividade.html' as listgroup %}
+        {{ listgroup.listgroupna() }}
 
-
-
-        </div>
     </div>
     <!-- Div -> Terceira Etapa = Calculo da Fórmula !-->
     <div class="form-row d-none" id="form-simulador-threeetap">
         <div class="col-12 d-flex justify-content-center">
-            <label class="text-danger"> Selecione abaixo uma ou mais fórmula que preferir</label>
+            <label class="text-danger"> Selecione abaixo uma ou mais fórmula</label>
         </div>
-        <table class="table table-dark table-striped" id="tab-bmr">
+        <table class="table table-dark table-striped table-sm" id="tab-bmr">
             <thead class="table-dark text-padrao">
                 <tr>
                     <th scope="col">
                         Fórmula(TMB)<small>
-                        <a href="#"><span class="glyphicon glyphicon-info-sign"></span>
-                        </a>
+                        <a class="text-warning" data-toggle="modal" data-target="#modal-info" onclick="chamamodalinfo('TMB- Taxa Metabólica Basal',msginfo.bmr)" ><span class="glyphicon glyphicon-info-sign"></span></a>
+
                         </small>
                     </th>
-                    <th scope="col">
-
-                    </th>
+                    <th scope="col"></th>
                     <th scope="col">
                         TMB<small>
-                        <a href="#"><span class="glyphicon glyphicon-info-sign"></span>
+                        <a class="text-warning" data-toggle="modal" data-target="#modal-info" onclick="chamamodalinfo('TMB- Taxa Metabólica Basal',msginfo.bmr)" ><span class="glyphicon glyphicon-info-sign"></span></a>
                         </a>
                         </small>
                     </th>
                     <th scope="col">
                         GCD<small>
-                        <a href="#"><span class="glyphicon glyphicon-info-sign"></span>
+                        <a class="text-warning" data-toggle="modal" data-target="#modal-info" onclick="chamamodalinfo('GCD - Gasto Calórico Diário',msginfo.tdee)" ><span class="glyphicon glyphicon-info-sign"></span></a>
                         </a>
                         </small>
                     </th>
                     <th scope="col">
-                        Média
+                        Incluir
                     </th>
                 </tr>
             </thead>
@@ -146,8 +93,8 @@
                 <tr>
                     <th scope="row"> Média(final)</th>
                     <th></th>
-                    <th><label id="edtmediabmr" ></label></th>
-                    <th><label id="edtmediatdee"></label></th>
+                    <th class="align-middle text-center"><label id="edtmediabmr" ></label></th>
+                    <th class="align-middle text-center"><label id="edtmediatdee"></label></th>
                     <th></th>
                 </tr>
             </tfoot>
@@ -222,10 +169,14 @@
     <!-- Div -> Quinta Etapa = Resultado!-->
     <div class="form-row d-none" id="form-simulador-fiveetap">
         <div class="col-12 mb-2  d-flex justify-content-center">
-            <a class="text-warning a-info" href="#"><span class="glyphicon glyphicon-info-sign"></span></a>
-            <label class="mx-2" >Calorias por quilo de gordura corporal:
+            <div col="col-9">
+                <a class="text-warning a-info" data-toggle="modal" data-target="#modal-info" onclick="chamamodalinfo('Calorias por Kilo de Gordura Corporal',msginfo.kcalkgfat)" ><span class="glyphicon glyphicon-info-sign"></span></a>
+                <label>Calorias por quilo de gordura corporal:
                 </label>
-                <input id="edt-kcalkgfat" type="number" value="3500">
+            </div>
+            <div class="col-3 align-middle" >
+                <input  class="w-75" id="edt-kcalkgfat" type="number" value="3500">
+            </div>
        </div>
         <div class="col-12 d-flex justify-content-center">
             <table class="table table-dark table-sm" id="tab-result">
@@ -255,52 +206,17 @@
                     </tr>
                     <tr>
                         <td><small id="lbl-desctipometa"></small></td>
-                        <td class="align-middle">
-                            <small>
-                                <input class="w-75" type="number" value="0" id="edtmetakaldia">
-                            </small>
-                        </td>
-
-                        <td class="align-middle">
-                            <small>
-                                <input class="w-75" type="number" value="0" id="edtmetakalsemanal">
-                            </small>
-                        </td>
-                        <td class="align-middle">
-                            <small>
-                                <input class="w-75" type="number" value="0" id="edtmetakalmensal">
-                            </small>
-                        </td>
-                        <td class="align-middle">
-                            <small>
-                                <input class="w-75" type="number" value="0" id="edtmetakalanual">
-                            </small>
-                        </td>
+                        <td class="align-middle"><small><input class="w-75" type="number" value="0" id="edtmetakaldia"></small></td>
+                        <td class="align-middle"><input class="w-75" type="number" value="0"  id="edtmetakalsemanal"></small></td>
+                        <td class="align-middle"><small><input class="w-75" type="number" value="0" id="edtmetakalmensal"></small></td>
+                        <td class="align-middle"><small><input class="w-75" type="number" value="0" id="edtmetakalanual"></small></td>
                     </tr>
                     <tr>
-                        <td class="align-middle">
-                            <small><strong>Kcal do Exercícios</strong></small>
-                        </td>
-                        <td class="align-middle">
-                            <small>
-                                <input class="w-75" type="number" value="0" id="edtKcalExecdia">
-                            </small>
-                        </td>
-                        <td class="align-middle">
-                            <small>
-                                <input class="w-75" type="number" value="0" id="edtKcalExecsemanal">
-                            </small>
-                        </td>
-                        <td class="align-middle">
-                            <small>
-                                <input class="w-75" type="number" value="0" id="edtKcalExecmensal">
-                            </small>
-                        </td>
-                        <td class="align-middle">
-                            <small>
-                                <input class="w-75" type="number" value="0" id="edtKcalExecanual">
-                            </small>
-                        </td>
+                        <td class="align-middle"><small><strong>Kcal dos Exercícios</strong></small></td>
+                        <td class="align-middle"><small><input class="w-75" type="number" value="0" id="edtKcalExecdia"></small></td>
+                        <td class="align-middle"><small><input class="w-75" type="number" value="0" id="edtKcalExecsemanal"></small></td>
+                        <td class="align-middle"><small><input class="w-75" type="number" value="0" id="edtKcalExecmensal"></small></td>
+                        <td class="align-middle"><small><input class="w-75" type="number" value="0" id="edtKcalExecanual"></small></td>
                     </tr>
                 </tbody>
             </table>
@@ -322,10 +238,10 @@
                 <tbody class="table-dark text-warning">
                     <tr>
                         <td><small id="lbl-tipometa"></small></td>
-                        <td class="align-middle"><small><input class="w-75" type="number" value="0" id="edtpesodia"> KG</small></td>
-                        <td class="align-middle"><small><input class="w-75" type="number" value="0" id="edtpesosemanal"> KG</small></td>
-                        <td class="align-middle"><small><input class="w-75" type="number" value="0" id="edtpesomensal"> KG</small></td>
-                        <td class="align-middle"><small><input class="w-75" type="number" value="0" id="edtpesoanual"> KG</small></td>
+                        <td class="align-middle"><small><input class="w-75" type="number" value="0" id="edtpesodia"><label id="lblpesodia" >gr</label></small></td>
+                        <td class="align-middle"><small><input class="w-75" type="number" value="0" id="edtpesosemanal"><label id="lblpesosemanal" >gr</label></small></td>
+                        <td class="align-middle"><small><input class="w-75" type="number" value="0" id="edtpesomensal"><label id="lblpesomensal" >kg</label></small></td>
+                        <td class="align-middle"><small><input class="w-75" type="number" value="0" id="edtpesoanual"><label id="lblpesoanual" >kg</label></small></td>
                     </tr>
 
                     <tr>
@@ -345,5 +261,9 @@
         </div>
     </div>
 </div>
+<!-- Div ->Modal informações!-->
+
+{% import 'layouts/modalinfo.html' as modalinfosimulador %}
+{{ modalinfosimulador.modalinfo() }}
 
 {% endmacro %}
