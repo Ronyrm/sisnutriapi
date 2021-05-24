@@ -12,8 +12,9 @@ class Pessoa(db.Model):
     password = db.Column(db.String(200))
     email = db.Column(db.String(60))
 
-    #refeicao = db.relationship('Refeicao')
+    refeicao = db.relationship('Refeicao', back_populates="pessoa")
     cliente = db.relationship("Cliente", back_populates="pessoa")
+    atleta = db.relationship("Atleta", back_populates="pessoa")
     create_on = db.Column(db.DateTime, default=datetime.datetime.now())
 
 

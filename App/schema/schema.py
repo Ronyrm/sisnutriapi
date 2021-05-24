@@ -12,10 +12,8 @@ from App.model.vendedor import Vendedor
 from App.model.users import Users
 from App.model.alimentos import Alimentos
 from App.model.atleta import Atleta
-
+from App.model.metaatleta import Metaatleta
 from App.model.unalimento import Unalimento
-
-
 
 class GroupProductsSchema(ModelSchema):
     class Meta:
@@ -52,7 +50,7 @@ class UsersSchema(ModelSchema):
 class RefeicaoSchema(ModelSchema):
     class Meta:
         model = Refeicao
-    pessoa = fields.Nested(PessoaSchema)
+    #pessoa = fields.Nested(PessoaSchema)
 
 class DietaSchema(ModelSchema):
     class Meta:
@@ -108,3 +106,8 @@ class FoodsSchema(ModelSchema):
 class Atletaschema(ModelSchema):
     class Meta:
         model = Atleta
+
+class MetaAtletaschema(ModelSchema):
+    class Meta:
+        model = Metaatleta
+    atleta = fields.Nested(Atletaschema)

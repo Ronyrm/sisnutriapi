@@ -8,6 +8,7 @@ class Refeicao(db.Model):
     hora = db.Column(db.Time)
     mostrar = db.Column(db.String(1))
     idpessoa = db.Column(db.Integer, db.ForeignKey('pessoa.id'))
+    pessoa = db.relationship("Pessoa", back_populates="refeicao")
 
 
 

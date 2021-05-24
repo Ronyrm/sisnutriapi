@@ -1,58 +1,49 @@
-{% macro formregistraratleta()%}
-
-<form class="text-white" id="form-registrar">
+{% macro formregistraratleta(tela,result,mensagem,atleta) %}
+{% set dnone='d-none' %}
+{% if tela=='Registrar' %}
+{% set dnone='' %}
+{% endif %}
+<form class="text-white {{ dnone }} p-2" id="form-registrar" method="post" action="{{url_for('routesatleta.add_atleta')}}">
+    {% if result == False and tela =='Registrar' %}
+    <div class="form-group mt-1">
+        <div class="form-group">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ mensagem }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
     <div class="form-group d-flex justify-content-center p-1">
         <h5 class="text-padrao"> Registrar Usuário</h5>
     </div>
-
     <div class="form-group">
-        <label for="edtname">Nome</label>
-        <input type="text" class="form-control" id="edtname" name="edtname" aria-describedby="nameHelp" placeholder="Nome">
-    </div>
-    <div class="form-group">
-        <label for="edtemail">Email</label>
-        <input type="email" class="form-control" id="edtemail" name="edtemail" aria-describedby="emailHelp" placeholder="Email">
-    </div>
-    <!--
-    <div class="form-row">
-
-        <div class="form-group col-6">
-            <label for="selectgenero">Gênero</label>
-            <select id="selectgenero" name="selectgenero" class="form-control">
-                <option value="M">Masculino</option>
-                <option value="F">Feminino</option>
-            </select>
+        <div class="row">
+            <label for="edtname">Nome</label>
+            <input type="text" class="form-control form-control-sm" autocomplete="off" required class="form-control" value="{{atleta.edtname}}" id="edtname" name="edtname" aria-describedby="nameHelp" placeholder="Nome">
+            <input type="hidden"  class="form-control" id="edtid"  name="edtid" value="-1">
         </div>
-        <div class="form-group col-6">
-            <label for="edtdateniver">Data de Nascimento</label>
-            <input type="date" class="form-control" name="edtdateniver" id="edtdateniver">
+        <div class="row">
+            <label for="edtemail">Email</label>
+            <input type="email" class="form-control form-control-sm" required class="form-control" autocomplete="off" value="{{atleta.edtemail}}" id="edtemail" name="edtemail" aria-describedby="emailHelp" placeholder="Email">
         </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-6">
-            <label for="edtaltura">Altura</label>
-            <input type="number" class="form-control" id="edtaltura" name="edtaltura" aria-describedby="alturaHelp" placeholder="Altura">
-        </div>
-        <div class="form-group col-6">
-            <label for="edtpeso">Peso</label>
-            <input type="number" class="form-control" id="edtpeso" name="edtpeso" aria-describedby="pesoHelp" placeholder="Peso">
+        <div class="row">
+            <label for="edtusername">UserName</label>
+            <input type="text" class="form-control form-control-sm" required  autocomplete="off" class="form-control" id="edtusername" value="{{atleta.edtusername}}" name="edtusername" aria-describedby="usernameHelp" placeholder="UserName">
         </div>
 
-    </div>!-->
-
-    <div class="form-group">
-        <label for="edtusername">UserName</label>
-        <input type="text" class="form-control" id="edtusername" name="edtusername" aria-describedby="usernameHelp" placeholder="UserName">
-    </div>
-
-    <div class="form-group">
-        <label for="edtsenha">Senha</label>
-        <input type="password" class="form-control" id="edtsenha" name="edtsenha" placeholder="Senha">
-    </div>
-    <div class="form-group">
-        <label for="edtsenhaconf">Confirmar Senha</label>
-
-        <input type="password" class="form-control" id="edtsenhaconf" name="edtsenhaconf" placeholder="Confirmar Senha">
+       <div class="row">
+           <div class="form-group mr-2">
+               <label for="edtsenha">Senha</label>
+               <input type="password" class="form-control form-control-sm" required class="form-control" id="edtsenha" value="{{atleta.edtsenha}}" name="edtsenha" placeholder="Senha">
+           </div>
+           <div class="form-group">
+                <label for="edtsenhaconf">Confirmar Senha</label>
+                <input type="password" class="form-control form-control-sm" required class="form-control" id="edtsenhaconf" value="{{atleta.edtsenhaconf}}" name="edtsenhaconf" placeholder="Confirmar Senha">
+           </div>
+       </div>
     </div>
     <div class="form-group d-flex justify-content-center">
         <button type="submit" class="btn btn-warning">Registrar</button>

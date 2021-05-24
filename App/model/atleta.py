@@ -1,9 +1,8 @@
 from App import db, ma
+from flask_login import UserMixin
 import datetime
 
-
-
-class Atleta(db.Model):
+class Atleta(UserMixin,db.Model):
     __tablename__ = 'atleta'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -12,8 +11,11 @@ class Atleta(db.Model):
     name = db.Column(db.String(60), nullable=False)
     email = db.Column(db.String(60), nullable=False, unique=True)
     create_on = db.Column(db.DateTime, default=datetime.datetime.now())
-    dtnascimento = db.Column(db.DateTime, nullable=False)
+    dtnascimento = db.Column(db.DateTime, nullable=True)
     peso = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
     altura = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
-    genero = db.Column(db.String(1), nullable=False)
+    genero = db.Column(db.String(1), nullable=True)
+    idpessoa = db.Column(db.Integer, db.ForeignKey('pessoa.id'))
+    pessoa = db.relationship("Pessoa", back_populates="atleta")
 
+    percfat = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))

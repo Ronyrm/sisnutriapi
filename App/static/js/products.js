@@ -137,6 +137,7 @@ function datalist_grupoprod(){
     }).always(function(data) {
         console.log(data);
         option_brownser = "";
+
         $.each(data['data'], function(chave,valor){
             option_brownser += '<option data-value="'+valor["id"]+'" value="'+valor["descricao"]+'">';
         });

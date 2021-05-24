@@ -15,7 +15,6 @@ verifydadosgerais();
 
 document.getElementById("edtdateniver").value = retornadata(new Date(),'-');
 verificametaselect(0);
-formregistrar.classList.add('d-none');
 divsimulator.classList.add('d-none');
 
 // clica no botão de LOGIN
@@ -755,9 +754,408 @@ function calc_kcal_weekmonthyear(valor,tipo){
     }
     return result;
 }
-
+-
 function chamamodalinfo(title,msg){
     document.getElementById('modal-infotitle').innerHTML = title;
     document.getElementById('modal-infobody').innerHTML = msg;
 
+}
+
+function buscarefeicaoatleta(){
+    if (idatleta != '0' && idatleta != ''){
+        //console.log('Atleta:'+idatleta);
+        $.ajax({
+            url: '/get/refeicao/atleta',
+            type: 'GET',
+            data: 'idatleta='+idatleta,
+            dataType: 'json',
+            cache: false,
+            async: true,
+            success:function(data) {
+                        if(data.result == true){
+                            document.getElementById('span-total-ref').innerHTML = data.total;
+                            data_refeicao = data.data;
+
+                            setTimeout(function(){
+                                //console.log(data['data']);
+                            }, 3000);
+                        }
+            }
+        })
+        .always(
+        )
+        .fail(function() {
+            console.log('Erro');
+            // Caso falhe solicite outro id
+        });
+    }
+}
+async function teste(){
+    let response = await fetch('/get/refeicao/atleta?idatleta='+idatleta);
+    let data = await response.json();
+    return data;
+    console.log('Aqui --------');
+    console.log(data);
+    console.log('Aqui --------');
+}
+
+
+document.getElementById('btnmostrarefeicoes').addEventListener("click", function(e){
+    teste().then((value) => {
+        console.log("Entrei Aqui");
+        console.log(value);
+    });
+    this.classList.add('active');
+
+    divrefatleta = document.getElementById('divrefatleta');
+    divrefatleta.classList.remove('d-none');
+    document.getElementById('btndadosatleta').classList.remove('active');
+
+    divdadosatleta =document.getElementById('div-dados-atleta');
+    divdadosatleta.classList.add('d-none');
+    //buscarefeicaoatleta();
+    //$.each(data_refeicao, function(chave,valor){
+        //console.log(chave + ' - '+valor);
+    //    console.log(valor['descricao']);
+    //});
+});
+
+// Botão Voltar da tela de Refeição
+function btnvoltarref(){
+    divrefatleta = document.getElementById('divrefatleta');
+    divrefatleta.classList.add('d-none');
+    document.getElementById('btnmostrarefeicoes').classList.remove('active');
+}
+
+// Botão Editar Refeição
+function editrefeicao(refeicao){
+    console.log('Essa é a refeicao');
+    console.log(refeicao);
+    document.getElementById('lblidrefeicao').innerHTML = 'Alterando a Refeição: '+refeicao.descricao;
+    document.getElementById('edtdescricao').value = refeicao.descricao;
+    document.getElementById('edthora').value = refeicao.hora;
+    document.getElementById('edtidrefeicao').value = refeicao.id;
+    document.getElementById('edtidpessoa').value = refeicao.pessoa;
+
+    chkmostrar = document.getElementById('edtmostrar');
+    console.log(refeicao.mostrar);
+    if (refeicao.mostrar == 'S') {
+        chkmostrar.checked = true;
+    }
+    else{
+        chkmostrar.checked = false;
+
+    }
+
+}
+// Botão Inserir Refeição
+function btninsertrefeicao(idpessoa){
+    console.log('Cliquei Aqui up '+idpessoa);
+    document.getElementById('lblidrefeicao').innerHTML = 'Inserindo Refeição';
+    document.getElementById('edtdescricao').value = '';
+    document.getElementById('edthora').value = '00:00';
+    document.getElementById('edtidrefeicao').value = '-1';
+    document.getElementById('edtidpessoa').value = idpessoa;
+    chkmostrar = document.getElementById('chkativa');
+    divdadosatleta = document.getElementById('div-dados-atleta');
+    divdadosatleta.classList.add('d-none');
+
+}
+
+// Botão Gravar Modal Inserir e Editar Refeição
+document.getElementById('btngravarrefeicao').addEventListener("click", function(e){
+    e.preventDefault();
+    form = document.getElementById('formrefeicao');
+    formData = new FormData(form);
+    console.log(formData);
+    $.ajax({
+        url: '/post/refeicao',
+        type: 'POST',
+        data: formData,
+        dataType: 'json',
+        processData: false,
+        contentType: false
+
+    }).done( function(data){
+        alert_dadosrefeicao = document.getElementById('alert-dadosrefeicao');
+        if (data.result == true) {
+
+            alert_dadosrefeicao.classList.add("alert-primary");
+            alert_dadosrefeicao.innerHTML = '<strong>Sucesso</strong> <br> '+data['mensagem'];
+            alert_dadosrefeicao.classList.remove('d-none');
+
+            setTimeout(function(){
+                $('#insert-edit-modal-refeicao').modal('hide');
+                alert_dadosrefeicao.classList.remove('alert-primary');
+                alert_dadosrefeicao.classList.add('d-none');
+
+                //window.location.href = '/sisnutri';
+                tbodyrefeicoes = document.getElementById('tbody-refeicoes');
+                tab = '';
+                refeicoes = data['data'];
+                totalreg = refeicoes.length;
+                refeicoes.forEach((refeicao) => {
+
+                    tab += '<tr id="tr-refeicao'+refeicao.id+'" title="tr-reifeicao'+refeicao.id+'">';
+                    tab += '<td class="align-middle"><label class="text-warning">'+refeicao.descricao+'</label></td>';
+                    tab += '<td class="align-middle text-center"><label class="text-warning">'+refeicao.hora.substr(0, 5)+'</label></td>';
+                    tab += '<td class="align-middle text-center">';
+                    if (refeicao.mostrar == 'S'){
+                        tab += '<input type="checkbox" checked name="chkativa'+refeicao.id+'" onclick="return false;" onkeydown="return false;" >';
+                    }
+                    else{
+                        tab += '<input type="checkbox"  name="chkativa'+refeicao.id+'" onclick="return false;" onkeydown="return false;" >';
+                    }
+                    tab += '</td>';
+                    tab += '<td class="text-center">';
+                    tab += '<button class="btn btn-sm btn-warning mx-1 my-1"';
+                    tab += ' title="Editar '+refeicao.descricao+'"';
+                    tab += ' data-toggle="modal" data-target=".insert-edit-modal-refeicao"';
+
+                    descricao = '"'+refeicao.descricao+'"';
+                    hora = '"'+refeicao.hora+'"';
+                    mostrar = "'"+refeicao.mostrar+"'";
+
+                    tab += " onclick='editrefeicao("+JSON.stringify(refeicao)+");'>";
+                    //tab += ' onclick="editrefeicao('+refeicao.id+','+descricao+','+hora+','+mostrar);">';
+                    tab += ' <span class="glyphicon glyphicon-pencil"></span>';
+                    tab += '</button> ';
+                    tab += '<button class="btn btn-sm btn-danger mx-1 my-1"';
+                    tab += ' data-toggle="modal" data-target=".modal-delete-refeicao"';
+                    tab += ' title="Excluir '+refeicao.descricao+'"';
+                    tab += " onclick='deleterefeicao("+refeicao.id+","+descricao+");'>";
+                    tab += ' <span class="glyphicon glyphicon-trash"></span>';
+                    tab += '</button> ';
+                    tab += '</td></tr>';
+                });
+
+                tbodyrefeicoes.innerHTML = tab;
+                verifica_table_refeicao_empty(totalreg);
+
+            }, 2000);
+
+        }
+        else{
+            alert_dadosrefeicao.classList.add('alert-danger');
+            alert_dadosrefeicao.innerHTML = '<strong>Erro</strong> <br> '+data['mensagem'];
+            alert_dadosrefeicao.classList.remove('d-none');
+            setTimeout(function(){
+                alert_dadosrefeicao.classList.remove('alert-danger');
+                alert_dadosrefeicao.classList.add('d-none');
+
+            }, 2000);
+        }
+
+    }).fail( function(){
+
+    }).always( function(){
+        //var imgload = document.getElementById('imgcarregamento');
+        //imgload.style.display = 'none';
+    });
+});
+
+function deleterefeicao(id,descricao){
+    console.log('Id:'+id);
+    document.getElementById('edtiddelete').value = id;
+    document.getElementById('modal-msg-delete').innerHTML = 'Deseja excluir a Refeição:<strong> '+descricao+'?</strong>';
+}
+
+document.getElementById('btnconfirmaexclusao').addEventListener("click", function(e){
+    e.preventDefault();
+    id = document.getElementById('edtiddelete').value;
+    console.log('Id:'+id);
+    rowrefeicao = document.getElementById('tr-refeicao'+id);
+
+    $.ajax({
+        url: '/del/refeicao/atleta/'+id,
+        dataType: 'json',
+        processData: false,
+        contentType: false
+
+    }).done( function(data){
+        alertmsg = document.getElementById('alert-msgdelete');
+        if (data.result == true) {
+            alertmsg.classList.add("alert-primary");
+            alertmsg.innerHTML = '<strong>Sucesso</strong> <br> '+data['mensagem'];
+            alertmsg.classList.remove('d-none');
+
+            setTimeout(function(){
+                $('#modal-delete-refeicao').modal('hide');
+                alertmsg.classList.remove('alert-primary');
+                alertmsg.classList.add('d-none');
+                rowrefeicao.remove();
+                verifica_table_refeicao_empty(data.total);
+                if (data.total == 0){
+                    window.location.href = '/sisnutri';
+                }
+            }, 2000);
+
+        }
+        else{
+            alertmsg.classList.add('alert-danger');
+            alertmsg.innerHTML = '<strong>Erro</strong> <br> '+data['mensagem'];
+            alertmsg.classList.remove('d-none');
+            setTimeout(function(){
+                alertmsg.classList.remove('alert-danger');
+                alertmsg.classList.add('d-none');
+
+            }, 2000);
+        }
+
+    }).fail( function(){
+
+    }).always( function(){
+
+    });
+});
+
+function verifica_table_refeicao_empty(totalreg){
+    console.log('Entrei Aqui agora');
+    //divrefatleta = document.getElementById('divrefatleta');
+    //divrefatleta.classList.remove('d-none');
+    document.getElementById('span-total-ref').innerHTML = totalreg;
+
+
+    if (totalreg == 0){
+        document.getElementById('head-telarefeicao').innerHTML = '<p class="text-danger"><strong>'+
+        'Nenhuma Refeição Cadastrada, clique no botão inserir</strong></p>';
+    }
+    else{
+        document.getElementById('head-telarefeicao').innerHTML = '<h5  class=""><strong>Minhas Refeições</strong></h5>';
+    }
+}
+document.getElementById('btndadosatleta').addEventListener("click", function(e){
+    e.preventDefault();
+    this.classList.add('active');
+    divdadosatleta = document.getElementById('div-dados-atleta');
+    divdadosatleta.classList.remove('d-none');
+    btnvoltarref();
+});
+document.getElementById('btnsalvardados').addEventListener("click", function(e){
+    edtname = document.getElementById('edtnomeatleta');
+
+    edtusername = document.getElementById('edtusernameatleta');
+    edtemail = document.getElementById('edtemailatleta');
+    dtnasc = document.getElementById('edtdtbirthatleta');
+    selectgenero = document.getElementById('selectgeneroatleta');
+    edtaltura = document.getElementById('edtalturaatleta');
+    edtpeso = document.getElementById('edtpesoatleta');
+
+    document.getElementById('alert-nome-atleta').classList.add('d-none');
+    document.getElementById('alert-username-atleta').classList.add('d-none');
+    document.getElementById('alert-email-atleta').classList.add('d-none');
+    document.getElementById('alert-dtnasc-atleta').classList.add('d-none');
+    document.getElementById('alert-genero-atleta').classList.add('d-none');
+    document.getElementById('alert-peso-atleta').classList.add('d-none');
+    document.getElementById('alert-altura-atleta').classList.add('d-none');
+
+    gravar = true;
+    //valida campo nome
+    console.log(edtname.value.length);
+    if (edtname.value.length == 0) {
+        document.getElementById('alert-nome-atleta').classList.remove('d-none');
+    }
+    //valida campo UserName
+    if (edtusername.value.length == 0) {
+        document.getElementById('alert-username-atleta').classList.remove('d-none');
+        gravar = false;
+    }
+    //valida campo email
+    if (edtemail.value.length == 0) {
+        document.getElementById('alert-email-atleta').classList.remove('d-none');
+        gravar = false;
+    }
+
+    //valida campo datanascimento
+    if (dtnasc.value.length == 0) {
+        document.getElementById('alert-dtnasc-atleta').classList.remove('d-none');
+        gravar = false;
+    }
+    //valida campo genero
+    console.log(selectgenero.value);
+    if (selectgenero.value.length == 0) {
+        document.getElementById('alert-genero-atleta').classList.remove('d-none');
+        gravar = false;
+    }
+
+    //valida campo peso
+    if (edtpeso.value.length == 0){
+        document.getElementById('alert-peso-atleta').classList.remove('d-none');
+        gravar = false;
+    }
+    else{
+        if(parseFloat(edtpeso.value) <= 0){
+            document.getElementById('alert-peso-atleta').classList.remove('d-none');
+            gravar = false;
+        }
+    }
+    //valida campo altura
+    if (edtaltura.value.length == 0){
+        document.getElementById('alert-altura-atleta').classList.remove('d-none');
+        gravar = false;
+    }
+    else{
+        if (parseFloat(edtaltura.value) <= 0){
+            document.getElementById('alert-altura-atleta').classList.remove('d-none');
+            gravar = false;
+        }
+    }
+
+    console.log(gravar);
+
+    if(gravar){
+        form = document.getElementById('formdadosatleta');
+        formData = new FormData(form);
+        updatedadosatleta(formData,this);
+
+    }
+
+
+});
+function updatedadosatleta(formData,btn){
+    htmlbtn = btn.innerHTML;
+    msgdadosatleta = document.getElementById('msg-dados-atleta');
+    $.ajax({
+        url: '/sisnutri/update/atleta',
+        type: 'POST',
+        data: formData,
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        beforesend: function(e){
+            e.preventDefault();
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Atualizando...';
+
+        }
+    }).done( function(data){
+        if(data.result == true){
+            document.getElementById('div-dados-empty').classList.add('d-none');
+            msgdadosatleta.classList.add("alert-primary");
+            msgdadosatleta.innerHTML = '<strong>Sucesso</strong> <br> '+data.mensagem;
+            msgdadosatleta.classList.remove('d-none');
+
+            setTimeout(function(){
+                msgdadosatleta.classList.remove('alert-primary');
+                msgdadosatleta.classList.add('d-none');
+                btn.innerHTML = htmlbtn;
+            }, 2000);
+
+        }
+        else{
+            msgdadosatleta.classList.add("alert-danger");
+            msgdadosatleta.innerHTML = '<strong>Erro</strong> <br> '+data.mensagem;
+            msgdadosatleta.classList.remove('d-none');
+
+            setTimeout(function(){
+                msgdadosatleta.classList.remove('alert-primary');
+                msgdadosatleta.classList.add('d-none');
+                btn.innerHTML = htmlbtn;
+            }, 2000);
+        }
+    }).fail( function(){
+
+    }).always( function(){
+        //var imgload = document.getElementById('imgcarregamento');
+        //imgload.style.display = 'none';
+    });
 }

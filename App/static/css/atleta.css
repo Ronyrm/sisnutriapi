@@ -47,3 +47,40 @@
     border: 2px solid var(--amareloescuro);
     font-size: large;
 }
+#divrefatleta,#div-dados-atleta{
+    border-radius: 3px;
+    border: 2px solid var(--amareloescuro);
+    
+
+}
+
+#formdadosatleta input{
+    border: 1px solid var(--amarelo);
+    background-color: black;
+    color: var(--amarelo);
+    
+}
+#formdadosatleta select{
+    border: 1px solid var(--amarelo);
+    background-color: black;
+    color: var(--amarelo);
+    
+}
+
+#formdadosatleta input:placeholder-shown {
+    border: 1px solid red;
+    background-color: black;
+    color: red;
+}
+#formdadosatleta label{
+    color: black;
+}
+
+#table-refeicoes thead {
+    background-color: var(--amarelo);
+    color: black;
+}
+#table-refeicoes {
+    border: 1px solid var(--amarelo);
+    border-radius: 5px;
+}
