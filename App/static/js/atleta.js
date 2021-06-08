@@ -1,5 +1,5 @@
 var formlogin = document.getElementById("form-login");
-var formregistrar = document.getElementById("form-registrar");
+
 var imgportifolio = document.getElementById("img-portifolio");
 var divsimulator = document.getElementById("div-simulator");
 var btnmenu = document.getElementById("btn-menu");
@@ -39,6 +39,7 @@ divsimulator.classList.add('d-none');
 $('#login-form-link').on('click', function(e) {
     e.preventDefault();
     divsimulator.classList.add('d-none');
+    formregistrar = document.getElementById("form-registrar");
     formregistrar.classList.add('d-none');
     formlogin.classList.remove('d-none');
     $('#form-registrar').fadeOut();
@@ -55,6 +56,7 @@ $('#login-form-link').on('click', function(e) {
 $('#register-form-link').on('click', function(e) {
     e.preventDefault();
     divsimulator.classList.add('d-none');
+    formregistrar = document.getElementById("form-registrar");
     formregistrar.classList.remove('d-none');
     formlogin.classList.add('d-none');
 
@@ -77,6 +79,7 @@ $('#btnsimulator').on('click', function(e) {
     document.getElementById('register-form-link').classList.remove('active');
     document.getElementById('login-form-link').classList.remove('active');
     $('#img-portifolio').fadeOut();
+    formregistrar = document.getElementById("form-registrar");
     formregistrar.classList.add('d-none');
     formlogin.classList.add('d-none');
 
