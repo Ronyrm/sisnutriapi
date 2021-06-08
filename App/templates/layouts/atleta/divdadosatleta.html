@@ -24,6 +24,7 @@
                 <div class="col-12 col-lg-6">
                     <label for="edtemailatleta">Email</label>
                     <input type="email" value="{{atleta.email}}" class="form-control form-control-sm" required name="edtemailatleta" id="edtemailatleta" >
+                    <input type="hidden" id="edtidadeatleta">
                     <small class="text-danger d-none" id="alert-email-atleta">Forneça o Email</small>
                 </div>
                 <div class="col-6 col-lg-3">
@@ -82,7 +83,7 @@
             <div class="d-flex justify-content-between">
                 <small class="text-danger mr-1">"% de Gordura" caso não saiba deixar zerado</small>
                 <div class="d-flex justify-content-end align-middle">
-                    <button type="button" id="btnsalvardados" class="btn btn-warning btn-sm" >
+                    <button type="button" id="btnsalvardados" onclick="salvardadosatleta();" class="btn btn-warning btn-sm" >
                         <span class="glyphicon glyphicon-ok"></span> Atualizar dados
                     </button>
                 </div>

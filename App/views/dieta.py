@@ -1,8 +1,10 @@
 from App import db
 from App.model.dieta import Dieta
+from App.model.itemdieta import ItemDieta
 from flask import jsonify, request
 from App.model.refeicao import Refeicao
 from App.schema.schema import DietaSchema
+from App.schema.schema import ItemDietaSchema
 import datetime
 
 
@@ -50,17 +52,54 @@ def post_dieta_json(idrefeicao):
 def getdietarefeicao_id_data(idrefeicao,data):
     from sqlalchemy import and_
     try:
-        dieta = Dieta.query.filter(and_(Dieta.idrefeicao == idrefeicao, Dieta.data == data)).one()
+        dieta = Dieta.query.filter(and_(Dieta.idrefeicao == idrefeicao, Dieta.data == data)).all()
         return dieta
     except:
         return None
 
+def post_dieta():
+
+    if request.method == 'POST':
+        data = request.form
+        idrefeicao = data['edtidrefeicao']
+        idmetaatleta = data['edtidmetaatleta']
+        mesano = data['edtmesano']
+        totalcarbo = data['edttotalcarbo']
+        totalproteina = data['edttotalproteina']
+        totalgordura = data['edttotalgordura']
+        totalfibras = data['edttotalfibras']
+        totalsodio = data['edttotalsodio']
+        totalcalorias = data['edttotalcalorias']
+
+    return jsonify({'data':{}})
+
 def getdietarefeicao(idrefeicao,data):
     try:
         dieta = getdietarefeicao_id_data(idrefeicao,data)
-        dietaschema = DietaSchema()
-        result = dietaschema.dump(dieta)
-        return jsonify({'data':result})
+        totalreg = 0
+        totalitens = 0
+        if dieta:
+            totalreg = len(dieta)
+            dietaschema = DietaSchema()
+            result = dietaschema.dump(dieta, many=True)
+            dietatemp = result[0]
+            iddieta = dietatemp['id']
+            itemdieta = getitensdieta(iddieta)
+            resultitem = {}
+
+            if itemdieta:
+                totalitens = len(itemdieta)
+                itemdietaschema = ItemDietaSchema()
+                resultitem = itemdietaschema.dump(itemdieta,many=True)
+
+            return jsonify({'data': result, 'totreg': totalreg, 'dataitem': resultitem, 'totitens': totalitens})
+        else:
+            return jsonify({'data': {}, 'totreg': totalreg, 'dataitem': {}, 'totitens': totalitens})
     except:
         return None
 
+def getitensdieta(iddieta):
+    try:
+       return ItemDieta.query.filter(ItemDieta.iddieta==iddieta).all()
+    except:
+        return None

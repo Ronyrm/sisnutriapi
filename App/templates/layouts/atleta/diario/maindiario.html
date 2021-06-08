@@ -1,0 +1,77 @@
+{% extends "layouts/atleta/diario/basediario.html" %}
+{% block result %} {{ result }} {% endblock %}
+{% block mensagem %} {{ mensagem }} {% endblock %}
+{% block refeicao %} {{ refeicao }} {% endblock %}
+{% block metaatleta %} {{ metaatleta }} {% endblock %}
+{% block atletalogado %} {{ atletalogado }} {% endblock %}
+{% block dataatual %} {{ dataatual }} {% endblock %}
+{% block databr %} {{ databr }} {% endblock %}
+
+
+{% block jsatleta %}
+
+
+{% endblock %}
+
+
+{% block jsfuncs %}
+<script src="{{ url_for('static', filename='js/funcs-sisnutri.js') }}"></script>
+{% endblock %}
+
+{% block jsjquery %}{% endblock %}
+
+
+{% block content %}
+
+
+{% if not current_user.is_authenticated %}
+<div id="contentprincipal" class="container my-2">
+
+</div>
+
+{% endif %}
+
+<!-- ESPAÇO USUARIO  !-->
+{% if current_user.is_authenticated %}
+
+<div id="contentatleta" class="my-2">
+
+    <div id="accordion-refeicoes">
+
+    </div>
+    {% import 'layouts/atleta/diario/mddeletefood.html' as modal_delete_food %}
+    {{ modal_delete_food.modaldeletefood() }}
+    {% import 'layouts/atleta/diario/mdinserteditfood.html' as modal_insedit_food %}
+    {{ modal_insedit_food.modalinserteditfood() }}
+
+
+
+
+</div>
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/diario.js') }}"></script>
+
+<script>
+    $().ready(function() {
+        dt = '{{ dataatual }}';
+
+        dtnow = new Date(dt);
+        dataprev = adicionarDiasData(dtnow,0);
+        datanext = adicionarDiasData(dtnow,2);
+        dataprevBR = adicionarDiasDataBR(dtnow,0);
+        datanextBR = adicionarDiasDataBR(dtnow,2);
+        var databr = {{ databr }};
+        var totalregref  = {{ refeicao|length }};
+        {% if refeicao|length > 0 %}
+            var data_refeicao = {{refeicao|tojson}};
+        {% else %}
+            var data_refeicao = [];
+        {% endif %}
+
+       carrega_refeicoes(data_refeicao,dt);
+    });
+
+</script>
+
+{% endblock %}

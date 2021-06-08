@@ -15,5 +15,7 @@ class Dieta(db.Model):
     totalsodio = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
     totalcalorias = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
     idrefeicao = db.Column(db.Integer, db.ForeignKey('refeicao.id'))
+    idmetaatleta = db.Column(db.Integer, db.ForeignKey('metaatleta.id'))
     create_on = db.Column(db.DateTime, default=datetime.datetime.now())
     dieta_refeicao = db.relationship('Refeicao')
+    metaatleta = db.relationship('Metaatleta')

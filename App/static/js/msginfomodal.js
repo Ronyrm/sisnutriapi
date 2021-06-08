@@ -1,5 +1,5 @@
 const msginfo = {
-    kcalkgfat : "<small><p class='align-center'><strong>Perda / ganho (peso):</strong></p> "+
+    calkgfat : "<small><p class='align-center'><strong>Perda / ganho (peso):</strong></p> "+
     "<p>Você pode escolher entre calcular a perda de peso selecionando o botão 'Perda de Peso' ou o ganho de peso selecionando o botão 'Ganho de Peso'"+
     " na tela anterior.<br>Se você alterar a meta de peso para qualquer coluna (dia, semana, mês ou ano), todos os déficits calóricos (ou excedentes) e metas"+
     " de ingestão serão atualizados automaticamente. Seu déficit / superávit calórico é calculado pegando o peso correspondente (em KG)"+
@@ -63,5 +63,4 @@ const msginfo = {
     " à crença de que o músculo consome até 30 vezes mais calorias do que a gordura.</p><p>"+
     "Leia a informação sobre '% de gordura corporal' na primeira etapa para obter mais informações.</p>"+
     "<p><strong>Fórmula:</strong>370 + (21,6 * (peso * (1 - % de gordura)))</p></small>"
-
 }

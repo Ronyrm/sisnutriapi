@@ -1,9 +1,13 @@
-from App import app
 from flask import Blueprint,redirect,url_for
 from flask_login import login_user,logout_user,login_required
 from App.views import atleta
 
 routesatleta= Blueprint('routesatleta',__name__)
+
+
+@routesatleta.route('/sisnutri/diario',methods=['GET','POST'])
+def get_maindiarioatleta():
+    return atleta.get_maindiarioatleta();
 
 
 @routesatleta.route('/sisnutri',methods=['GET','POST'])

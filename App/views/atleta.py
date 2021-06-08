@@ -1,11 +1,13 @@
 from App import db,app
 from App.model.atleta import Atleta
 from App.model.pessoa import Pessoa
+from App.views.metaatleta import get_metaatleta
 from flask import jsonify, request,render_template,redirect,url_for
 from werkzeug.security import generate_password_hash,check_password_hash
-from App.schema.schema import Atletaschema,RefeicaoSchema
+from App.schema.schema import Atletaschema,RefeicaoSchema,MetaAtletaschema
 from flask_login import login_user,logout_user, LoginManager,current_user
 
+from datetime import datetime
 import json
 
 login_manager = LoginManager()
@@ -16,15 +18,62 @@ login_manager.init_app(app)
 def load_user(user_id):
     return Atleta.query.get(int(user_id))
 
+
+def get_maindiarioatleta():
+    databr = request.args.get('databr')
+    dataatual = request.args.get('dataatual')
+    if not current_user.is_authenticated:
+        return render_template('layouts/atleta/diario/maindiario.html',atletalogado=[],
+                               mensagem='',result=False,refeicao=[],
+                               metaatleta = [],
+                               dataatual = dataatual,
+                               databr = databr)
+    else:
+
+
+        schemaref = RefeicaoSchema()
+
+        metaatleta = get_metaatleta(current_user.id,'A')
+
+
+        schemameta = MetaAtletaschema()
+
+        schemaatleta = Atletaschema()
+
+        return render_template('layouts/atleta/diario/maindiario.html', atletalogado=schemaatleta.dump(current_user), mensagem='', result=False,
+                               refeicao=schemaref.dump(current_user.pessoa.refeicao,many=True),
+                               metaatleta=schemameta.dump(metaatleta,many=True),
+                               dataatual = dataatual,
+                               databr=databr)
+
+
 def get_maintelaatleta():
 
-    print(current_user)
+    datenow = datetime.now()
+    dia = datenow.day
+    mes = datenow.month
+    ano = datenow.year
+
     if not current_user.is_authenticated:
-        return render_template('layouts/atleta/maintelaatleta.html',atletalogado=[],mensagem='',result=False,refeicao=[])
+        return render_template('layouts/atleta/maintelaatleta.html',atletalogado=[],mensagem='',result=False,
+                               refeicao=[],metaatleta = [],
+                               dataatual=str(ano) + '-' + str(mes).zfill(2) + '-' + str(dia).zfill(2),
+                               databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano)
+                               )
     else:
         schemaref = RefeicaoSchema()
-        return render_template('layouts/atleta/maintelaatleta.html', atletalogado=current_user, mensagem='', result=False,
-                               refeicao=schemaref.dump(current_user.pessoa.refeicao,many=True))
+
+        metaatleta = get_metaatleta(current_user.id,'A')
+        schemameta = MetaAtletaschema()
+
+        schemaatleta = Atletaschema()
+
+        return render_template('layouts/atleta/maintelaatleta.html', atletalogado=schemaatleta.dump(current_user), mensagem='', result=False,
+                               refeicao=schemaref.dump(current_user.pessoa.refeicao,many=True),
+                               metaatleta=schemameta.dump(metaatleta,many=True),
+                               dataatual=str(ano) + '-' + str(mes).zfill(2) + '-' + str(dia).zfill(2),
+                               databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano)
+                               )
 
 
 def update_atleta():
@@ -111,6 +160,7 @@ def update_atleta():
                 return jsonify({'mensagem': 'Erro ao atualizar dados, tente novamente mais tarde!', 'data': {}, 'result': False}), 201
 
     return jsonify({'mensagem': 'Usuário Inválido', 'data': {}, 'result': False}), 201
+
 
 def add_atleta():
     if request.method == 'POST':
@@ -225,6 +275,7 @@ def add_atleta():
     except:
         return jsonify({'messagem': 'unable to create', 'data': {},'result': False}), 201
 
+
 def get_username(username):
     try:
         return Atleta.query.filter(Atleta.username == username).one()
@@ -244,8 +295,10 @@ def get_id(id):
         return None
 
 def login():
-
-    from sqlalchemy import or_
+    datenow = datetime.now()
+    dia = datenow.day
+    mes = datenow.month
+    ano = datenow.year
 
     if request.method == 'POST':
         data = request.form
@@ -260,13 +313,30 @@ def login():
             if check_password_hash(atleta.password,pwd):
                 login_user(atleta)
                 from App.views.refeicao import get_refeicao_byidpessoa
-
                 refeicao = get_refeicao_byidpessoa(atleta.idpessoa)
                 schemaref = RefeicaoSchema()
 
-                return render_template('layouts/atleta/maintelaatleta.html',atletalogado=atleta,result=True,mensagem='Usuário Logado com Sucesso!',refeicao=schemaref.dump(refeicao,many=True))
+                from App.views.metaatleta import get_metaatleta
+                metaatleta = get_metaatleta(atleta.id, 'A')
+                schemameta = MetaAtletaschema()
+                resultmeta = schemameta.dump(metaatleta, many=True)
 
-        return render_template('layouts/atleta/maintelaatleta.html',tela='Login',mensagem='Atleta ou senha informado: '+username+' inválidos!',result=False,atletalogado={},refeicao=[])
+                schematleta = Atletaschema()
+
+                return render_template('layouts/atleta/maintelaatleta.html',atletalogado=schematleta.dump(atleta),result=True,
+                                       mensagem='Usuário Logado com Sucesso!',
+                                       refeicao=schemaref.dump(refeicao,many=True),
+                                       metaatleta=resultmeta,
+                                       dataatual=str(ano) + '-' + str(mes).zfill(2) + '-' + str(dia).zfill(2),
+                                       databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano)
+                                       )
+
+        return render_template('layouts/atleta/maintelaatleta.html',tela='Login',
+                               mensagem='Atleta ou senha informado: '+username+' inválidos!',result=False,
+                               atletalogado={},refeicao=[],metaatleta=[],
+                               dataatual=str(ano) + '-' + str(mes).zfill(2) + '-' + str(dia).zfill(2),
+                               databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano)
+                               )
 
 def logout():
     logout_user()

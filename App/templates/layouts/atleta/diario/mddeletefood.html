@@ -1,5 +1,5 @@
-{% macro mddeleterefeicao() %}
-    <div class="modal fade modal-delete-refeicao" id="modal-delete-refeicao" tabindex="2" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+{% macro modaldeletefood() %}
+    <div class="modal fade modal-delete-food" id="modal-delete-food" tabindex="2" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered " role="document">
             <div class="modal-content bg-primary">
                 <div class="modal-header bg-primary">
@@ -17,7 +17,7 @@
 
                 </div>
                 <div class="modal-footer bg-primary">
-                    <button type="button" id="btnconfirmaexclusao" onclick="confirmaexclusaorefeicao();" class="btn btn-warning" >
+                    <button type="button" onclick="confirmaexclusaofood();" class="btn btn-warning" >
                         <span class="glyphicon glyphicon-ok"></span> Sim
                     </button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">

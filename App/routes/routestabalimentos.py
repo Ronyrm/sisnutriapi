@@ -15,6 +15,10 @@ def get_alimentobydesc(pageatual,totpage,orderby):
 def get_tabalimentos():
     return alimentos.get_tabalimentos()
 
+@routestabalimentos.route('/tabfoods.json',methods=['GET'])
+def get_tabalmentos():
+    return alimentos.get_alimento_bydesc_json()
+
 @routestabalimentos.route('/flipbook/',methods=['GET'])
 def pagflipbook():
     return alimentos.pagflipbook();

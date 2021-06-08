@@ -84,3 +84,13 @@
     border: 1px solid var(--amarelo);
     border-radius: 5px;
 }
+
+#lbl-resultadofinal{
+    background-color: black;
+    color: var(--amarelo);
+    border: 1px solid var(--amareloescuro);
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 5px;
+
+}

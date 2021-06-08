@@ -5,11 +5,29 @@ var divsimulator = document.getElementById("div-simulator");
 var btnmenu = document.getElementById("btn-menu");
 var edtcaloriasexercises = document.getElementById('edt-caloriasexercises');
 var edtcaloriasmeta = document.getElementById('edt-caloriasmeta');
-
+var msgfinal = '';
 var curRadio = 'ganho';
 var vlalvo = 0;
 var vlcalmoreless = 0;
 var vlcalexerc = 0;
+var vlmetakgdia_tp = 0;
+
+var vlkcalproteina = 0;
+var vlpercproteina = 0;
+var vlgramasproteina = 0;
+var vlgrporkgproteina = 0;
+
+var vlkcalcarbo = 0;
+var vlperccarbo = 0;
+var vlgramascarbo = 0;
+var vlgrporkgcarbo = 0;
+
+var vlkcalgordura = 0;
+var vlpercgordura = 0;
+var vlgramasgordura = 0;
+var vlgrporkggordura = 0;
+
+var pesoinicialmetaatleta = 0;
 
 verifydadosgerais();
 
@@ -163,40 +181,41 @@ $('#btnvoltarsegundaetapa').on('click', function(e) {
     formsimuladortwoetap.classList.add('d-none');
 });
 
-// clica no item nivel de atividade selecionado
-function btnnivelatv(valna){
+//retorna linhas tabela formulas TMB
+function retornrowsformula(valna,valgenero,valpeso,valaltura,valpercfat,idade,logado){
 
-    valdtnascimento = document.getElementById('edtdateniver').value;
-    valpeso = document.getElementById('edtpeso').value;
-    valaltura = document.getElementById('edtaltura').value;
-    valpercfat = document.getElementById('edtpercfat').value;
-    valgenero = $( "#selectgenero option:selected" ).val();
-
-    idade = retornaidade(valdtnascimento);
-
+    trbody = '';
     //calcula  Harris-Benedict (original)
     valharris_original = harris_original(valgenero,valpeso,valaltura,idade);
     valtdde = valharris_original*valna;
+
     trbody = '<tr>';
     trbody += '<th  scope="row">Harris-Benedict (original) </th>';
     titleformula = "'Fórmula Herris-Benedict Original'";
-    trbody += '<td class="align-middle text-center"><a class="text-warning" data-toggle="modal" data-target="#modal-info" onclick="chamamodalinfo('+titleformula+',msginfo.formula_harris_benedict)" ><span class="glyphicon glyphicon-info-sign"></span></a></td>';
+    trbody += '<td class="align-middle text-center"><a class="text-warning" data-toggle="modal" data-target="#modal-info" onclick="chamamodalinfo('+titleformula+',msginfo.formula_harris_benedict);" ><span class="glyphicon glyphicon-info-sign"></span></a></td>';
     trbody += '<td class="align-middle text-center">'+valharris_original.toFixed(0)+'</td>';
     trbody += '<td class="align-middle text-center">'+valtdde.toFixed(0)+'</td>';
-    trbody += '<td class="align-middle text-center"><input type="checkbox" name="chk" onclick="checkedbmr();"></td>';
+    if (!logado){
+        trbody += '<td class="align-middle text-center"><input type="checkbox" name="chk" onclick="checkedbmr();"></td>';
+    }else{
+        trbody += '<td class="align-middle text-center"><input type="checkbox" name="chk-meta" onclick="checkedbmr_meta();"></td>';
+    }
     trbody += '</tr>';
 
     //calcula  Harris-Benedict (revisada)
     valharris_revisada = harris_revisada(valgenero,valpeso,valaltura,idade);
-    console.log('Harris-Benedict (revisada):'+valharris_revisada);
     valtdde = valharris_revisada*valna;
     trbody += '<tr>';
     trbody += '<th  scope="row">Harris-Benedict (Revisada)</th>';
     titleformula = "'Fórmula Herris-Benedict Revisada'";
-    trbody += '<td class="align-middle text-center"><a class="text-warning" data-toggle="modal" data-target="#modal-info" onclick="chamamodalinfo('+titleformula+',msginfo.formula_harris_benedict_revisada)" ><span class="glyphicon glyphicon-info-sign"></span></a></td>';
+    trbody += '<td class="align-middle text-center"><a class="text-warning" data-toggle="modal" data-target="#modal-info" onclick="chamamodalinfo('+titleformula+',msginfo.formula_harris_benedict_revisada);" ><span class="glyphicon glyphicon-info-sign"></span></a></td>';
     trbody += '<td class="align-middle text-center">'+valharris_revisada.toFixed(0)+'</td>';
     trbody += '<td class="align-middle text-center">'+valtdde.toFixed(0)+'</td>';
-    trbody += '<td class="align-middle text-center"><input type="checkbox" name="chk" onclick="checkedbmr();"></td>';
+    if (!logado){
+        trbody += '<td class="align-middle text-center"><input type="checkbox" name="chk" onclick="checkedbmr();"></td>';
+    }else{
+        trbody += '<td class="align-middle text-center"><input type="checkbox" name="chk-meta" onclick="checkedbmr_meta();"></td>';
+    }
     trbody += '</tr>';
 
     //calcula  Mifflin St Jeor
@@ -205,10 +224,14 @@ function btnnivelatv(valna){
     trbody += '<tr>';
     trbody += '<th scope="row">Mifflin St Jeor</th>';
     titleformula = "'Fórmula Mifflin St Jeor'";
-    trbody += '<td class="align-middle text-center"><a class="text-warning" data-toggle="modal" data-target="#modal-info" onclick="chamamodalinfo('+titleformula+',msginfo.formula_mifflin)" ><span class="glyphicon glyphicon-info-sign"></span></a></td>';
+    trbody += '<td class="align-middle text-center"><a class="text-warning" data-toggle="modal" data-target="#modal-info" onclick="chamamodalinfo('+titleformula+',msginfo.formula_mifflin);" ><span class="glyphicon glyphicon-info-sign"></span></a></td>';
     trbody += '<td class="align-middle text-center">'+valmiflin.toFixed(0)+'</td>';
     trbody += '<td class="align-middle text-center">'+valtdde.toFixed(0)+'</td>';
-    trbody += '<td class="align-middle text-center"><input type="checkbox" name="chk" onclick="checkedbmr();"></td>';
+    if (!logado){
+        trbody += '<td class="align-middle text-center"><input type="checkbox" name="chk" onclick="checkedbmr();"></td>';
+    }else{
+        trbody += '<td class="align-middle text-center"><input type="checkbox" name="chk-meta" onclick="checkedbmr_meta();"></td>';
+    }
     trbody += '</tr>';
 
     //calcula  Katch-McArdle
@@ -221,21 +244,63 @@ function btnnivelatv(valna){
         trbody += '<tr>';
         trbody += '<th scope="row">Katch-McArdle</th>';
         titleformula = "'Fórmula Katch-McArdle'";
-        trbody += '<td class="align-middle text-center"><a class="text-warning" data-toggle="modal" data-target="#modal-info" onclick="chamamodalinfo('+titleformula+',msginfo.formula_katchmcardle)" ><span class="glyphicon glyphicon-info-sign"></span></a></td>';
+        trbody += '<td class="align-middle text-center"><a class="text-warning" data-toggle="modal" data-target="#modal-info" onclick="chamamodalinfo('+titleformula+',msginfo.formula_katchmcardle);" ><span class="glyphicon glyphicon-info-sign"></span></a></td>';
         trbody += '<td class="align-middle text-center">'+valkatchmcardle.toFixed(0)+'</td>';
         trbody += '<td class="align-middle text-center">'+valtdde.toFixed(0)+'</td>';
-        trbody += '<td class="align-middle text-center" ><input type="checkbox" name="chk" onclick="checkedbmr();"></td>';
+
+        if (!logado){
+            trbody += '<td class="align-middle text-center"><input type="checkbox" name="chk" onclick="checkedbmr();"></td>';
+        }else{
+            trbody += '<td class="align-middle text-center"><input type="checkbox" name="chk-meta" onclick="checkedbmr_meta();"></td>';
+        }
         trbody += '</tr>';
     }
 
+    return trbody;
+}
+
+// clica no item nivel de atividade selecionado
+function btnnivelatv(valna){
+
+    valdtnascimento = document.getElementById('edtdateniver').value;
+    valpeso = document.getElementById('edtpeso').value;
+    valaltura = document.getElementById('edtaltura').value;
+    valpercfat = document.getElementById('edtpercfat').value;
+    valgenero = $( "#selectgenero option:selected" ).val();
+
+    idade = retornaidade(valdtnascimento);
+
+
     bodyBMR = document.getElementById('body-BMR');
-    bodyBMR.innerHTML = trbody;
+    bodyBMR.innerHTML = retornrowsformula(valna,valgenero,valpeso,valaltura,valpercfat,idade,false);
 
     formsimuladortwoetap = document.getElementById('form-simulador-twoetap');
     formsimuladorthreeetap =document.getElementById('form-simulador-threeetap');
     formsimuladortwoetap.classList.add('d-none');
     formsimuladorthreeetap.classList.remove('d-none');
     document.getElementById('btnproximoformula').disabled = true;
+}
+
+function btnnivelatv_meta(valna){
+    document.getElementById('btnavancarformula').disabled = true;
+    edtmediabmr = document.getElementById('edtmediabmr-meta');
+    edtmediatdee = document.getElementById('edtmediatdee-meta');
+
+    edtmediatdee.innerHTML = 0;
+    edtmediabmr.innerHTML = 0;
+    document.getElementById('edtnameta').value = valna;
+    valpeso = document.getElementById('edtpesoinicialmetaatleta').value;
+    valaltura = document.getElementById('edtalturaatleta').value;
+    valpercfat = document.getElementById('edtpercfatinicialmetaatleta').value;
+    valgenero = document.getElementById('selectgeneroatleta').value;
+    valdtnascimento = document.getElementById('edtdtbirthatleta').value;
+    console.log(valdtnascimento);
+
+    idade =  retornaidade(valdtnascimento);
+
+
+    bodyBMR = document.getElementById('body-BMR-meta');
+    bodyBMR.innerHTML = retornrowsformula(valna,valgenero,valpeso,valaltura,valpercfat,idade,true);
 }
 
 
@@ -296,6 +361,70 @@ function checkedbmr(){
 
 }
 
+function checkedbmr_meta(){
+    checkboxs = document.getElementsByName('chk-meta');
+    //checkboxs = Array.from(checkboxs);
+    tabbmr = document.getElementById('tab-bmr-meta');
+
+    edtfrmharrisoriginal = document.getElementById('edtfrmharrisoriginal');
+    edtfrmharrisoriginal.value = 'N';
+    edtfrmharrisrevisada = document.getElementById('edtfrmharrisrevisada');
+    edtfrmharrisrevisada.value = 'N';
+    edtfrmmiffin = document.getElementById('edtfrmmiffin');
+    edtfrmmiffin.value = 'N';
+    edtfrmkatch = document.getElementById('edtfrmkatch');
+    edtfrmkatch.value = 'N';
+
+    valortotbmr = 0;
+    valortottdee = 0;
+    contchk = 0;
+    for (i = 1; i < tabbmr.rows.length-1; i++) {
+        objCells = tabbmr.rows.item(i).cells;
+        console.log(i+' - '+objCells.item(0).innerHTML);
+        if(checkboxs[i-1]['checked'] == true){
+            switch(i) {
+                case 1:
+                    edtfrmharrisoriginal.value = 'S';
+                    break;
+                case 2:
+                    edtfrmharrisrevisada.value = 'S';
+                    break;
+                case 3:
+                    edtfrmmiffin.value = 'S';
+                    break;
+                case 4:
+                    edtfrmkatch.value = 'S';
+                    break;
+            }
+            valortotbmr = valortotbmr + parseFloat(objCells.item(2).innerHTML);
+            valortottdee = valortottdee +  parseFloat(objCells.item(3).innerHTML);
+            contchk = contchk +1;
+        }
+
+
+        //for (var j = 0; j < objCells.length; j++) {
+        //console.log('Posição J: '+i+' - '+objCells.item(j).innerHTML);
+        //}
+    }
+    valmediabmr = 0;
+    valmediatdee = 0;
+    if (contchk != 0){
+        valmediabmr = valortotbmr / contchk;
+        valmediatdee = valortottdee / contchk;
+    }
+    edtmediabmr = document.getElementById('edtmediabmr-meta');
+    edtmediatdee = document.getElementById('edtmediatdee-meta');
+
+    edtmediabmr.innerHTML = valmediabmr.toFixed(0);
+    edtmediatdee.innerHTML = valmediatdee.toFixed(0);
+
+    document.getElementById('btnavancarformula').disabled = true;
+    if (valmediabmr > 0) {
+        document.getElementById('btnavancarformula').disabled = false;
+    }
+
+}
+
 // clica botão proxima tela = Escolha da meta
 $('#btnproximoformula').on('click', function(e) {
     e.preventDefault();
@@ -342,9 +471,18 @@ function verificametaselect(valor){
     lbltipometa.innerHTML = (valor == 0) ? 'Excedente Calórico Diário <a class="text-warning a-info" href="#"><span class="glyphicon glyphicon-info-sign"></span></a>' : 'Defícit Calórico Diário <a class="text-warning a-info" href="#"><span class="glyphicon glyphicon-info-sign"></span></a>';
 }
 
+function checkmeta_atleta(){
+    curRadio = document.querySelector('input[name="radiometaatleta"]:checked').value;
+    verificametaatletaselect((curRadio=='ganho')?0:1);
+
+}
+
+function verificametaatletaselect(valor){
+    document.getElementById('edtobjetivometa').value = (valor == 1) ? 'P' : 'G';
+    document.getElementById('lbltipometaatleta').innerHTML = (valor == 0) ? 'Excedente Calórico Diário <a class="text-warning a-info" href="#"><span class="glyphicon glyphicon-info-sign"></span></a>' : 'Defícit Calórico Diário <a class="text-warning a-info" href="#"><span class="glyphicon glyphicon-info-sign"></span></a>';
+}
 
 //#############           FUNCOES Quinta ETAPA SIMULADOR           #############
-
 
 // verificar campo calorias excedente/deficit se ta vazio ou zero - na entrada
 edtcaloriasmeta.addEventListener("focus", function(){
@@ -538,7 +676,6 @@ document.getElementById('edtmetakaldia').addEventListener("change", function(e){
         edtcaloriasmeta.value = '0';
         this.value = '0';
     }
-    console.log('Calorias Meta:'+edtcaloriasmeta);
     calcularesultfinal();
 
 });
@@ -724,6 +861,7 @@ function calcularesultfinal(){
     document.getElementById('edtKcalExecdia').value = vlcalexerc;
     document.getElementById('edtalvokcaldia').value = vlalvo;
 
+
     vlkcalkgfat = verifycampokgfatempty();
     calcmetakg(vlcalmoreless,vlkcalkgfat);
     calcmetakcal(vlcalmoreless);
@@ -754,7 +892,6 @@ function calc_kcal_weekmonthyear(valor,tipo){
     }
     return result;
 }
--
 function chamamodalinfo(title,msg){
     document.getElementById('modal-infotitle').innerHTML = title;
     document.getElementById('modal-infobody').innerHTML = msg;
@@ -798,14 +935,14 @@ async function teste(){
     console.log(data);
     console.log('Aqui --------');
 }
-
-
-document.getElementById('btnmostrarefeicoes').addEventListener("click", function(e){
+// Botão Menu Refeições.
+function mostrarrefeicoes(){
+    btnmostrarefeicoes = document.getElementById('btnmostrarefeicoes')
     teste().then((value) => {
         console.log("Entrei Aqui");
         console.log(value);
     });
-    this.classList.add('active');
+    btnmostrarefeicoes.classList.add('active');
 
     divrefatleta = document.getElementById('divrefatleta');
     divrefatleta.classList.remove('d-none');
@@ -818,7 +955,11 @@ document.getElementById('btnmostrarefeicoes').addEventListener("click", function
         //console.log(chave + ' - '+valor);
     //    console.log(valor['descricao']);
     //});
-});
+
+    document.getElementById('div-meta-atleta').classList.add('d-none');
+    document.getElementById('btnmostrarmeta').classList.remove('active');
+
+}
 
 // Botão Voltar da tela de Refeição
 function btnvoltarref(){
@@ -829,8 +970,7 @@ function btnvoltarref(){
 
 // Botão Editar Refeição
 function editrefeicao(refeicao){
-    console.log('Essa é a refeicao');
-    console.log(refeicao);
+
     document.getElementById('lblidrefeicao').innerHTML = 'Alterando a Refeição: '+refeicao.descricao;
     document.getElementById('edtdescricao').value = refeicao.descricao;
     document.getElementById('edthora').value = refeicao.hora;
@@ -838,7 +978,6 @@ function editrefeicao(refeicao){
     document.getElementById('edtidpessoa').value = refeicao.pessoa;
 
     chkmostrar = document.getElementById('edtmostrar');
-    console.log(refeicao.mostrar);
     if (refeicao.mostrar == 'S') {
         chkmostrar.checked = true;
     }
@@ -850,11 +989,11 @@ function editrefeicao(refeicao){
 }
 // Botão Inserir Refeição
 function btninsertrefeicao(idpessoa){
-    console.log('Cliquei Aqui up '+idpessoa);
     document.getElementById('lblidrefeicao').innerHTML = 'Inserindo Refeição';
     document.getElementById('edtdescricao').value = '';
     document.getElementById('edthora').value = '00:00';
     document.getElementById('edtidrefeicao').value = '-1';
+    console.log(idpessoa);
     document.getElementById('edtidpessoa').value = idpessoa;
     chkmostrar = document.getElementById('chkativa');
     divdadosatleta = document.getElementById('div-dados-atleta');
@@ -863,11 +1002,9 @@ function btninsertrefeicao(idpessoa){
 }
 
 // Botão Gravar Modal Inserir e Editar Refeição
-document.getElementById('btngravarrefeicao').addEventListener("click", function(e){
-    e.preventDefault();
+function gravarrefeicao(){
     form = document.getElementById('formrefeicao');
     formData = new FormData(form);
-    console.log(formData);
     $.ajax({
         url: '/post/refeicao',
         type: 'POST',
@@ -952,18 +1089,14 @@ document.getElementById('btngravarrefeicao').addEventListener("click", function(
         //var imgload = document.getElementById('imgcarregamento');
         //imgload.style.display = 'none';
     });
-});
+}
 
 function deleterefeicao(id,descricao){
-    console.log('Id:'+id);
     document.getElementById('edtiddelete').value = id;
     document.getElementById('modal-msg-delete').innerHTML = 'Deseja excluir a Refeição:<strong> '+descricao+'?</strong>';
 }
-
-document.getElementById('btnconfirmaexclusao').addEventListener("click", function(e){
-    e.preventDefault();
+function confirmaexclusaorefeicao(){
     id = document.getElementById('edtiddelete').value;
-    console.log('Id:'+id);
     rowrefeicao = document.getElementById('tr-refeicao'+id);
 
     $.ajax({
@@ -1007,10 +1140,9 @@ document.getElementById('btnconfirmaexclusao').addEventListener("click", functio
     }).always( function(){
 
     });
-});
+}
 
 function verifica_table_refeicao_empty(totalreg){
-    console.log('Entrei Aqui agora');
     //divrefatleta = document.getElementById('divrefatleta');
     //divrefatleta.classList.remove('d-none');
     document.getElementById('span-total-ref').innerHTML = totalreg;
@@ -1024,14 +1156,19 @@ function verifica_table_refeicao_empty(totalreg){
         document.getElementById('head-telarefeicao').innerHTML = '<h5  class=""><strong>Minhas Refeições</strong></h5>';
     }
 }
-document.getElementById('btndadosatleta').addEventListener("click", function(e){
-    e.preventDefault();
-    this.classList.add('active');
+// Botão Menu Dados Atleta
+function dadosatleta(){
+    //document.getElementById('div-dados-empty').classList.add('d-none');
+    document.getElementById('btndadosatleta').classList.add('active');
     divdadosatleta = document.getElementById('div-dados-atleta');
     divdadosatleta.classList.remove('d-none');
+    document.getElementById('div-meta-atleta').classList.add('d-none');
+    document.getElementById('btnmostrarmeta').classList.remove('active');
     btnvoltarref();
-});
-document.getElementById('btnsalvardados').addEventListener("click", function(e){
+}
+
+function salvardadosatleta(){
+
     edtname = document.getElementById('edtnomeatleta');
 
     edtusername = document.getElementById('edtusernameatleta');
@@ -1051,7 +1188,6 @@ document.getElementById('btnsalvardados').addEventListener("click", function(e){
 
     gravar = true;
     //valida campo nome
-    console.log(edtname.value.length);
     if (edtname.value.length == 0) {
         document.getElementById('alert-nome-atleta').classList.remove('d-none');
     }
@@ -1072,7 +1208,6 @@ document.getElementById('btnsalvardados').addEventListener("click", function(e){
         gravar = false;
     }
     //valida campo genero
-    console.log(selectgenero.value);
     if (selectgenero.value.length == 0) {
         document.getElementById('alert-genero-atleta').classList.remove('d-none');
         gravar = false;
@@ -1101,7 +1236,6 @@ document.getElementById('btnsalvardados').addEventListener("click", function(e){
         }
     }
 
-    console.log(gravar);
 
     if(gravar){
         form = document.getElementById('formdadosatleta');
@@ -1111,7 +1245,8 @@ document.getElementById('btnsalvardados').addEventListener("click", function(e){
     }
 
 
-});
+}
+
 function updatedadosatleta(formData,btn){
     htmlbtn = btn.innerHTML;
     msgdadosatleta = document.getElementById('msg-dados-atleta');
@@ -1129,7 +1264,12 @@ function updatedadosatleta(formData,btn){
         }
     }).done( function(data){
         if(data.result == true){
-            document.getElementById('div-dados-empty').classList.add('d-none');
+            divdadosempty = document.getElementById('div-dados-empty');
+            if (divdadosempty != null){
+                if (!divdadosempty.classList.contains('d-none')){
+                    divdadosempty.classList.add('d-none');
+                }
+            }
             msgdadosatleta.classList.add("alert-primary");
             msgdadosatleta.innerHTML = '<strong>Sucesso</strong> <br> '+data.mensagem;
             msgdadosatleta.classList.remove('d-none');
@@ -1138,6 +1278,8 @@ function updatedadosatleta(formData,btn){
                 msgdadosatleta.classList.remove('alert-primary');
                 msgdadosatleta.classList.add('d-none');
                 btn.innerHTML = htmlbtn;
+                dadoscompletoatleta = true;
+                window.location.href = '/sisnutri';
             }, 2000);
 
         }
@@ -1158,4 +1300,522 @@ function updatedadosatleta(formData,btn){
         //var imgload = document.getElementById('imgcarregamento');
         //imgload.style.display = 'none';
     });
+}
+
+function avancarmain(){
+    alertmetaatleta = document.getElementById('alertmetaatleta');
+    pesoinicial = document.getElementById('edtpesoinicialmetaatleta');
+    pesofinal = document.getElementById('edtpesofinalmetaatleta');
+
+    msgtemp = 'Forneça os seguinte campos: ';
+    passar = false;
+
+    if (pesoinicial.value != '' && pesoinicial.value !='0'){
+        passar = true;
+    }else{
+        msgtemp = msgtemp + ' <strong>"Peso Inicial"</strong>';
+
+    }
+    if (pesofinal.value != '' && pesofinal.value !='0'){
+        passar = true;
+
+    }else{
+        passar = false;
+        msgtemp = msgtemp + ' <strong>"Meta de Peso"</strong>';
+    }
+
+    if (passar){
+        $('#collapseOne').collapse('show');
+
+    }
+    else{
+        alertmetaatleta.innerHTML = msgtemp;
+    }
+
+}
+
+function exitpesofinalmetaatleta(input){
+    edtpesoinicial = document.getElementById('edtpesoinicialmetaatleta');
+
+    if(input.value < edtpesoinicial.value){
+        document.getElementById('radiometalessatleta').checked = true;
+    }
+    else{
+        document.getElementById('radiometamoreatleta').checked = true;
+    }
+    checkmeta_atleta();
+}
+
+function validacamposmetaatleta(){
+    vlalvo = 0;
+    edtcaloriasexercises = document.getElementById('edtkcalexercatleta');
+    edtcaloriasmeta = document.getElementById('edtkcalmetaatleta');
+
+    edtmediatdee = document.getElementById('edtmediatdee-meta');
+    edtmediabmr = document.getElementById('edtmediabmr-meta');
+
+    vlcalmoreless = (edtcaloriasmeta.value=='') ? 0 : parseFloat(edtcaloriasmeta.value);
+    vlcalexerc = (edtcaloriasexercises.value=='') ? 0 : parseFloat(edtcaloriasexercises.value);
+
+    curRadio = document.querySelector('input[name="radiometaatleta"]:checked').value;
+    if (curRadio == 'ganho'){
+        document.getElementById('lbl-tipometa-atleta').innerHTML = '<strong>Ganho</strong>';
+        document.getElementById('lbl-desctipometaatleta').innerHTML = '<strong>Excedente Calórico</strong>';
+        vlalvo = parseFloat(edtmediatdee.innerHTML) + vlcalmoreless + vlcalexerc;
+    }
+    else{
+        document.getElementById('lbl-tipometa-atleta').innerHTML = '<strong>Perda</strong>';
+        document.getElementById('lbl-desctipometaatleta').innerHTML = '<strong>Defícit Calórico</strong>';
+        vlalvo = parseFloat(edtmediatdee.innerHTML) + vlcalexerc;
+        vlalvo = vlalvo - vlcalmoreless;
+    }
+}
+function calcularesultfinal_metaatleta(){
+    validacamposmetaatleta();
+    // TMB
+    document.getElementById('edtbmrdiametaatleta').value = edtmediabmr.innerHTML;
+    document.getElementById('edttmb').value = document.getElementById('edtbmrdiametaatleta').value;
+
+    // GCD
+    document.getElementById('edtgcddiametaatleta').value = edtmediatdee.innerHTML;
+    document.getElementById('edtgcd').value = document.getElementById('edtgcddiametaatleta').value;
+
+    // total kcal excedentes ou deficit
+    document.getElementById('edtmetakaldiametaatleta').value  = vlcalmoreless;
+    // kcal gastas em exercicios
+    document.getElementById('edtKcalExecdiametaatleta').value = vlcalexerc;
+    // KCAL ALVO
+    document.getElementById('edtalvokcaldiametaatleta').value = vlalvo;
+    document.getElementById('edtkcalalvo').value = vlalvo;
+    vlkcalkgfat = verifycampokgfatempty_metaatleta();
+
+
+    calcmetaatleta_kg(vlcalmoreless,vlkcalkgfat);
+    preenchedadadoskcalalvo_metaatleta(vlalvo);
+    preenchedadadoskcalbmr_metaatleta();
+    preenchedadadoskcalgcd_metaatleta();
+    preechemetakcal_metaatleta();
+    preenchedadoskcalexec_metaatleta();
+
+}
+
+//  calcula e preenche os campos referente a quantidade de kilograma que ira ganhar ou perder de acordo com dia, semana, mes, ano
+function calcmetaatleta_kg(vlmetakaldia,vlkcalkgfat){
+
+    vlmetakgdia = (vlmetakaldia/vlkcalkgfat);
+    vlmetakgdia = vlmetakgdia * 0.4536;
+
+    // KG por dia
+    if (vlmetakgdia < 1){
+        document.getElementById('lblpesodiametaatleta').innerHTML = ' gr';
+        vlmetakgdia_tp = vlmetakgdia*1000;
+        document.getElementById('edtpesodiametaatleta').value = (vlmetakgdia_tp).toFixed(0);
+    }
+    else{
+        document.getElementById('lblpesodiametaatleta').innerHTML = ' kg';
+        document.getElementById('edtpesodiametaatleta').value = (vlmetakgdia_tp).toFixed(3);
+    }
+
+
+    //KG por semana
+    vlmetakgsemana = vlmetakgdia * 7;
+    if (vlmetakgsemana < 1){
+        document.getElementById('lblpesosemanalmetaatleta').innerHTML = ' gr';
+        vlmetakgsemana = vlmetakgsemana * 1000;
+        document.getElementById('edtpesosemanalmetaatleta').value = vlmetakgsemana.toFixed(0);
+    }
+    else{
+        document.getElementById('lblpesosemanalmetaatleta').innerHTML = ' kg';
+        document.getElementById('edtpesosemanalmetaatleta').value = vlmetakgsemana.toFixed(3);
+    }
+
+
+
+    //KG por mes
+    vlmetakgmensal = vlmetakgdia * 30.5;
+    if (vlmetakgmensal < 1){
+        document.getElementById('lblpesomensalmetaatleta').innerHTML = ' gr';
+        vlmetakgmensal = vlmetakgmensal * 1000;
+        document.getElementById('edtpesomensalmetaatleta').value = vlmetakgmensal.toFixed(0);
+    }
+    else{
+        document.getElementById('lblpesomensalmetaatleta').innerHTML = ' kg';
+        document.getElementById('edtpesomensalmetaatleta').value = vlmetakgmensal.toFixed(3);
+    }
+    //KG por ano
+    vlmetakganual = vlmetakgdia * 365;
+
+    if(vlmetakganual < 1){
+        document.getElementById('lblpesoanualmetaatleta').innerHTML = ' gr';
+        vlmetakganual = vlmetakganual * 1000;
+        document.getElementById('edtpesoanualmetaatleta').value = vlmetakganual.toFixed(0);
+    }
+    else{
+        document.getElementById('lblpesoanualmetaatleta').innerHTML = ' kg';
+        document.getElementById('edtpesoanualmetaatleta').value = vlmetakganual.toFixed(3);
+    }
+
+}
+
+
+// verifica se campo calorias gordura por kilo se esta vazio ou não
+function verifycampokgfatempty_metaatleta(){
+    kcalkgfat = document.getElementById('edtkcalkgfatmetaatleta').value;
+    if (kcalkgfat == '' | kcalkgfat == '0'){
+        kcalkgfat = 3500;
+        document.getElementById('edt-kcalkgfat').value = 3500;
+    }
+    return kcalkgfat;
+}
+
+function calccalporkg_metaatleta(valorkgdia){
+    result1 = (valorkgdia / 0.453592);
+    console.log('Res1:'+result1);
+    result2 = verifycampokgfatempty_metaatleta();
+    console.log('Res2:'+result2);
+
+    return  (result1 * result2);
+}
+
+// preeche campos input alvos meta atleta
+function preenchedadadoskcalalvo_metaatleta(vlkcalalvodia){
+    document.getElementById('edtalvokcalsemanalmetaatleta').value = (vlkcalalvodia * 7).toFixed(0);
+    document.getElementById('edtalvokcalmensalmetaatleta').value = (vlkcalalvodia * 30.5).toFixed(0);
+    document.getElementById('edtalvokcalanualmetaatleta').value = (vlkcalalvodia * 365).toFixed(0);
+
+    document.getElementById('lbl-resultadofinal').innerHTML = 'Sua meta de gasto calórico diário é: <strong>'+vlkcalalvodia+'</strong>';
+
+    pesoinicialmeta = document.getElementById('edtpesoinicialmetaatleta').value;
+    pesometa = document.getElementById('edtpesofinalmetaatleta').value;
+    tipometa = document.getElementById('edtobjetivometa').value;
+    tipometadesc = ((tipometa=='G')?'Ganho':'Perda');
+    tipokcalmeta = ((tipometa=='G')?'Excedente':'Defícit');
+    na = document.getElementById('edtnameta').value;
+
+    pesoganharperderdia = document.getElementById('edtpesodiametaatleta').value;
+
+
+
+    pesoinicialmeta = parseFloat(pesoinicialmeta);
+    pesometa = parseFloat(pesometa);
+
+    diferencapeso = pesoinicialmeta - pesometa;
+    console.log('Diferença de peso:'+diferencapeso);
+    if (diferencapeso < 0){
+        diferencapeso = diferencapeso * -1;
+    }
+
+    pesoganharperderdia = pesoganharperderdia / 1000;
+    resultdias = diferencapeso / pesoganharperderdia;
+
+    msgfinal  = '<p class="text-warning text-center">';
+    msgfinal += 'Com base no seu peso inicial: <strong>'+pesoinicialmeta+'</strong> e sua Meta de Peso: <strong>'+pesometa;
+    msgfinal +='</strong> e de acordo com o objetivo escolhido: <strong>"'+tipometadesc+' Peso"</strong>';
+    msgfinal +=', o nível de atividade: <strong>"'+ na +'"</strong>, o <strong>'+tipokcalmeta+'</strong> calórico de: <strong>"';
+    msgfinal +=vlcalmoreless+'"</strong> e o total de calorias gasta aproximadamente no exercício de: <strong>"'+vlcalexerc+'"</strong>, ';
+    msgfinal +=' e com a(s) fórmula(s) escolhida(s). Seu Gasto Calorico Diário é de: <strong>"'+vlalvo+'"</strong></small>';
+    msgfinal +='</p><p class="text-warning text-center">Total de dias aproximadamente para atingir a Meta de Peso é: <strong>'+Math.round(resultdias)+'</strong></p>';
+    document.getElementById('modal-body-confirmameta').innerHTML = msgfinal;
+
+    document.getElementById('edtdiasprevisto').value = Math.round(resultdias);
+}
+//  calcula e preenche os campos referente a quantidade de kcal que ira ganhar ou perder de acordo com dia, semana, mes, ano
+function preechemetakcal_metaatleta(){
+    vlmetakaldia = document.getElementById('edtmetakaldiametaatleta').value;
+    document.getElementById('edtmetakalsemanalmetaatleta').value = (vlmetakaldia * 7).toFixed(0) ;
+    document.getElementById('edtmetakalmensalmetaatleta').value =  (vlmetakaldia * 30.5).toFixed(0);
+    document.getElementById('edtmetakalanualmetaatleta').value = (vlmetakaldia * 365).toFixed(0);
+}
+//preeche campos da linha calorias dos exercicios: dia, semana, mes e ano
+function preenchedadoskcalexec_metaatleta(){
+    vlkcalexecdia = document.getElementById('edtKcalExecdiametaatleta').value;
+    document.getElementById('edtKcalExecsemanalmetaatleta').value = (vlkcalexecdia * 7).toFixed(0);
+    document.getElementById('edtKcalExecmensalmetaatleta').value = (vlkcalexecdia * 30.5).toFixed(0);
+    document.getElementById('edtKcalExecanualmetaatleta').value = (vlkcalexecdia * 365).toFixed(0);
+
+}
+//preeche campos da linha calorias TMB: dia, semana, mes e ano
+function preenchedadadoskcalgcd_metaatleta(){
+    vlkcalgcddia = document.getElementById('edtgcddiametaatleta').value;
+    document.getElementById('edtgcdsemanalmetaatleta').value = (vlkcalgcddia * 7).toFixed(0);
+    document.getElementById('edtgcdmensalmetaatleta').value = (vlkcalgcddia * 30.5).toFixed(0);
+    document.getElementById('edtgcdanualmetaatleta').value = (vlkcalgcddia * 365).toFixed(0);
+}
+//preeche campos da linha calorias TMB: dia, semana, mes e ano
+function preenchedadadoskcalbmr_metaatleta(){
+    vlkcalbmr = document.getElementById('edtbmrdiametaatleta').value;
+    document.getElementById('edtbmrsemanalmetaatleta').value = (vlkcalbmr * 7).toFixed(0);
+    document.getElementById('edtbmrmensalmetaatleta').value = (vlkcalbmr * 30.5).toFixed(0);
+    document.getElementById('edtbmranualmetaatleta').value = (vlkcalbmr * 365).toFixed(0);
+}
+
+
+function calckcalmetaatleta(input){
+    edtcaloriasmeta.value = input.value;
+    if (edtcaloriasmeta.value == ''){
+        edtcaloriasmeta.value = '0';
+        this.value = '0';
+    }
+    calcularesultfinal_metaatleta();
+}
+// onchange campo calorias gastas no exercicios
+function calckcalexercmetaatleta(input){
+    edtcaloriasexercises.value = input.value;
+    if (edtcaloriasexercises.value == ''){
+        edtcaloriasexercises.value = '0';
+        this.value = '0';
+    }
+    calcularesultfinal_metaatleta();
+}
+
+// onchange campo resultado final em kgs por dia KG/GR
+function calcpesodia_metaatleta(input) {
+    if (input.value < -1) {
+        input.value = 0;
+    }
+    console.log(input.value);
+    result = calccalporkg_metaatleta(input.value/1000).toFixed(0);
+    console.log(result);
+    document.getElementById('edtmetakaldiametaatleta').value = result;
+    edtcaloriasmeta.value = result;
+    calckcalmetaatleta(edtcaloriasmeta);
+    calcularesultfinal_metaatleta();
+
+}
+
+function avancarformula(){
+    validacamposmetaatleta();
+    calcularesultfinal_metaatleta();
+}
+// Mostrar Meta Ativa
+function mostrarmeta(btn){
+    if (dadoscompletoatleta){
+        btn.classList.add('active');
+        console.log('Meta ativa:'+ metaativa);
+        document.getElementById('msg-meta-atleta').classList.add('d-none');
+        document.getElementById('div-meta-atleta').classList.remove('d-none');
+        if (metaativa == 'N'){
+            document.getElementById('formmetaatleta').classList.remove('d-none');
+            document.getElementById('div-meta-atleta-ativa').classList.add('d-none');
+        }
+        else{
+            document.getElementById('formmetaatleta').classList.add('d-none');
+            document.getElementById('div-meta-atleta-ativa').classList.remove('d-none');
+            geragraficomacronutriente();
+        }
+
+        document.getElementById('divrefatleta').classList.add('d-none');
+        document.getElementById('div-dados-atleta').classList.add('d-none');
+    }else{
+        dadosatleta();
+    }
+
+
+}
+function geragraficomacronutriente(){
+    console.log(data_meta);
+    google.charts.load('current', {'packages':['corechart']}).then( function(){
+
+        var data = google.visualization.arrayToDataTable([
+        ['Task', 'Hours per Day'],
+        ['Protéinas: '+data_meta.valgramasproteina+'gr', data_meta.valkcalproteina],
+        ['Carboidratos: '+data_meta.valgramascarbo+'gr', data_meta.valkcalcarb],
+        ['Gorduras: '+data_meta.valgramasgordura+'gr', data_meta.valkcalfat]]);
+
+        var options = {//'title':'Informação Nutricional - Total Calorias:',
+                       'backgroundColor': 'transparent',
+                       'legend':{'position':'rigth'},
+                       'chartArea':{'left':0, 'right':10,'top':30,'width':'100%','height':'80%'},
+                       'is3D':true,
+                       'left': 0,
+                       'width':350,
+                       'height':200,
+                       //'pieHole': 0.4,
+                       };
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart.draw(data, options);
+    });
+
+}
+// clica botão avançar tela de resultado para a tela de contagem de macromutrientes
+function avancarresultado(){
+    vlpercproteina = document.getElementById('edtpercproteina');
+    vlgramasproteina = document.getElementById('edtgramasproteina');
+    vlkcalproteina = document.getElementById('edtkcalproteina');
+    vlgrporkgproteina = document.getElementById('edtgrporkgproteina');
+
+    vlperccarbo = document.getElementById('edtperccarbo');
+    vlgramascarbo = document.getElementById('edtgramascarbo');
+    vlkcalcarbo = document.getElementById('edtkcalcarbo');
+    vlgrporkgcarbo = document.getElementById('edtgrporkgcarbo');
+
+
+    vlpercgordura = document.getElementById('edtpercgordura');
+    vlgramasgordura = document.getElementById('edtgramasgordura');
+    vlkcalgordura = document.getElementById('edtkcalgordura');
+    vlgrporkggordura = document.getElementById('edtgrporkggordura');
+
+    pesoinicialmetaatleta = parseFloat(document.getElementById('edtpesoinicialmetaatleta').value);
+
+    // calcula kcal macros
+    calcpercproteina(vlpercproteina);
+    calckcalproteina(vlkcalproteina);
+    calcgramasproteina(vlgramasproteina);
+
+    calcperccarbo(vlperccarbo);
+    calckcalcarbo(vlkcalcarbo);
+    calcgramascarbo(vlgramascarbo);
+
+
+    calcvaluesgordura();
+    document.getElementById('div-titulo-macronutriente').innerHTML = '<strong>Gasto Calórico Diário: '+vlalvo+'</strong>';
+}
+function calcvaluesgordura(){
+    if (vlkcalproteina.value > 0 && vlkcalcarbo.value > 0){
+        valorkcal = vlalvo - ( parseFloat(vlkcalproteina.value) + parseFloat(vlkcalcarbo.value));
+        vlkcalgordura.value = valorkcal;
+
+        vlgramasgordura.value = (vlkcalgordura.value / 9).toFixed(0);
+        percfat = ((vlkcalgordura.value * 100) / vlalvo).toFixed(0);
+        vlpercgordura.value = percfat;
+        vlgrporkggordura.value = (vlgramasgordura.value / pesoinicialmetaatleta).toFixed(2);
+    }
+    calctotalmacronutrient();
+
+}
+function calctotalmacronutrient(){
+    totperc = parseFloat(vlpercproteina.value) + parseFloat(vlperccarbo.value) + parseFloat(vlpercgordura.value);
+    totkcal = parseFloat(vlkcalproteina.value) + parseFloat(vlkcalcarbo.value) + parseFloat(vlkcalgordura.value);
+    totgrama= parseFloat(vlgramasproteina.value) + parseFloat(vlgramascarbo.value) + parseFloat(vlkcalgordura.value);
+    console.log('Percentual:'+ totperc);
+    document.getElementById('lbl-total-perc').innerHTML = '<strong>'+totperc+' %</strong>';
+    document.getElementById('lbl-total-calorias').innerHTML = '<strong>'+totkcal+' kcal</strong>';
+    document.getElementById('lbl-total-gramas').innerHTML = '<strong>'+totgrama+' gr</strong>';
+
+}
+
+function calcgrporkgproteina(input){
+    if (input.value > 0){
+        vlkcalproteina.value = (pesoinicialmetaatleta * parseFloat(input.value)*4);
+
+    }
+    calckcalproteina(vlkcalproteina);
+    calcvaluesgordura();
+
+}
+
+// calcula total calorias de Proteina de acordo com total de calorias alvo
+function calckcalproteina(input){
+    if (input.value > 0){
+        vlpercproteina.value = ((input.value * 100) / vlalvo).toFixed(0);
+        vlgramasproteina.value = (input.value / 4).toFixed(0);
+        vlgrporkgproteina.value = (vlgramasproteina.value / pesoinicialmetaatleta).toFixed(2);
+        calcvaluesgordura();
+    }
+}
+// calcula Percentual de Proteina de acordo com total de calorias alvo
+function calcpercproteina(input){
+    if (input.value > 0){
+        vlkcalproteina.value = (vlalvo * (input.value/100)).toFixed(0);
+        vlgramasproteina.value = (vlkcalproteina.value / 4).toFixed(0);
+        vlgrporkgproteina.value = (vlgramasproteina.value / pesoinicialmetaatleta).toFixed(2);
+        calcvaluesgordura();
+    }
+}
+// calcula total gramas de Proteinas de acordo com total de calorias alvo
+function calcgramasproteina(input){
+    if (input.value > 0){
+        vlkcalproteina.value = (input.value * 4).toFixed(0);
+        vlpercproteina.value = ((vlkcalproteina.value * 100) / vlalvo).toFixed(0);
+        vlgrporkgproteina.value = (input.value / pesoinicialmetaatleta).toFixed(2);
+        calcvaluesgordura();
+    }
+}
+
+function calcgrkgporcarbo(input){
+
+    if (input.value > 0){
+        vlkcalcarbo.value = (pesoinicialmetaatleta * parseFloat(input.value)*4);
+    }
+    calckcalcarbo(vlkcalcarbo);
+    calcvaluesgordura();
+
+}
+
+// calcula total caloria de carboidratos de acordo com total de calorias alvo
+function calckcalcarbo(input){
+    if (input.value > 0){
+        vlperccarbo.value = ((input.value * 100) / vlalvo).toFixed(0);
+        vlgramascarbo.value = (input.value / 4).toFixed(0);
+        vlgrporkgcarbo.value = (vlgramascarbo.value / pesoinicialmetaatleta).toFixed(2);
+        calcvaluesgordura();
+    }
+}
+// calcula percentual de carboidratos de acordo com total de calorias alvo
+function calcperccarbo(input){
+    if (input.value > 0){
+        vlkcalcarbo.value = (vlalvo * (input.value/100)).toFixed(0);
+        vlgramascarbo.value = (vlkcalcarbo.value / 4).toFixed(0);
+        vlgrporkgcarbo.value = (vlgramascarbo.value / pesoinicialmetaatleta).toFixed(2);
+        calcvaluesgordura();
+    }
+}
+// calcula total gramas de carboidratos de acordo com total de calorias alvo
+function calcgramascarbo(input){
+    if (input.value > 0){
+        vlkcalcarbo.value = (input.value * 4).toFixed(0);
+        vlperccarbo.value = ((vlkcalcarbo.value * 100) / vlalvo).toFixed(0);
+        vlgrporkgcarbo.value = (input.value / pesoinicialmetaatleta).toFixed(2);
+        calcvaluesgordura();
+    }
+}
+
+function salvarmeta(){
+    document.getElementById('modal-body-confirmameta').innerHTML = msgfinal;
+}
+function confirmameta(){
+
+form = document.getElementById('formmetaatleta');
+    formData = new FormData(form);
+    $.ajax({
+        url: '/post/metaatleta',
+        type: 'POST',
+        data: formData,
+        dataType: 'json',
+        processData: false,
+        contentType: false
+
+    }).done( function(data){
+        alert_confirmameta = document.getElementById('alert-confirmameta');
+
+        if (data.result == true) {
+            alert_confirmameta.classList.add('alert-primary');
+            alert_confirmameta.classList.remove('d-none');
+            alert_confirmameta.innerHTML = data.mensagem;
+            setTimeout(function(){
+
+                alert_confirmameta.classList.add('d-none');
+                window.location.href = '/sisnutri';
+
+
+            }, 2000);
+
+        }
+        else{
+            alert_confirmameta.classList.add('alert-danger');
+            alert_confirmameta.classList.remove('d-none');
+            alert_confirmameta.innerHTML = data.mensagem;
+            setTimeout(function(){
+                alert_confirmameta.add('d-none');
+                window.location.href = '/sisnutri';
+            }, 2000);
+        }
+
+    }).fail( function(){
+
+    }).always( function(){
+        //var imgload = document.getElementById('imgcarregamento');
+        //imgload.style.display = 'none';
+    });
+
 }

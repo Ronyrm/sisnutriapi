@@ -3,9 +3,16 @@ from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate,MigrateCommand
 from flask_script import Manager
-from flask_login import LoginManager
+#import MySQLdb
 app = Flask(__name__)
 db = SQLAlchemy(app)
+
+#dbmysql = MySQLdb.connect(user="rony",passwd="rony",host="localhost",db="sisnutri",port=3307)
+#cursor = dbmysql.cursor()
+#cursor.execute('SELECT * FROM atleta')
+#data = cursor.fetchall()
+#print(data)
+#dbmysql.close()
 ma = Marshmallow(app)
 migrate = Migrate(app,db)
 manager = Manager(app)

@@ -264,6 +264,67 @@ def get_alimento_bydesc():
     return jsonify({'result': False,  'data': {},'datapagination':{},'mensagem':'Nenhum item encontrado com a pesquisa fornecida'})
     #https://www.tutorialspoint.com/json/json_ajax_example.htm
 
+def get_alimento_bydesc_json():
+
+    try:
+        desc = request.args.get('descricao')
+    except:
+        desc = ''
+
+    totpage = request.args.get('totpage')
+    if totpage == None or totpage == '':
+        totpage = '10'
+
+
+    try:
+        page = request.args.get('page')
+    except:
+        page = ''
+    if page == None:
+        page = '1'
+
+
+
+    if desc == None:
+        desc = ''
+
+    if totpage == '':
+        totpage = '15'
+
+    inputdesc = desc
+    desc = "%"+desc+"%"
+
+    if desc != '':
+        from sqlalchemy import and_
+        alimentopag = Alimentos.query.order_by(Alimentos.descricao.asc()). \
+                      filter(and_(Alimentos.descricao.like(desc),Alimentos.idpessoa.is_(None))). \
+                      paginate(page=int(page),per_page=int(totpage), error_out=False)
+        total = 0
+        if alimentopag:
+            total = alimentopag.total
+
+            page, per_page, offset = get_page_args()
+
+            per_page = totpage
+            from App.funcs.getpagination import get_pagination
+            pagination = get_pagination(
+                page=page,
+                per_page=per_page,
+                total=total,
+
+                record_name="alimentos",
+
+            )
+    if alimentopag:
+        foodsschema = FoodsSchema()
+        tabfods = foodsschema.dump(alimentopag.items,many=True)
+        #tabfoods = foodsschema.dump(alimentopag, many=True)
+        return jsonify({'pagul': pagination.links, 'result': True, 'tabfoods': tabfods,
+                        'inputdesc': inputdesc, 'mensagem': 'Pesquisa efetuada com sucesso!'})
+
+    return jsonify({'pagul': {}, 'result': False, 'tabfoods': {},
+                    'inputdesc': '', 'mensagem': 'Erro.'})
+
 
 def get_tabalimentos():
     return get_alimento_bydesc()

@@ -9,8 +9,13 @@ class Metaatleta(db.Model):
     create_on = db.Column(db.DateTime, default=datetime.datetime.now())
     pesoinicial = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
     pesofinal = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
+    percentual_gordura = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
     nivelatividade = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
     # 0-Harris Benedict Original 1-Harris Benedict Revisada 2-Mifflin St Jeor 3-Katch-McArdle
+    frmharrisbenedictoriginal = db.Column(db.String(1), nullable=False)
+    frmharrisbenedictrevisada = db.Column(db.String(1), nullable=False)
+    frmmifflin = db.Column(db.String(1), nullable=False)
+    frmkatch = db.Column(db.String(1), nullable=False)
     valtmb = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=0))
     valgcd = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=0))
     # P-perda de peso G-ganho de peso
@@ -18,15 +23,25 @@ class Metaatleta(db.Model):
     valtotkclmeta = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=0))
     valtotkclexercicio = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=0))
     valalvocalorico = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=0))
-    perccarb = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
+
+    # Proteina
     percproteina = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
-    percfat = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
-    valkcalcarb = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
     valkcalproteina = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
+    valgramasproteina = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
+    valgrkgproteina = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
+    # Carboidrato
+    perccarb = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
+    valkcalcarb = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
+    valgramascarbo = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
+    valgrkgcarbo = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
+    # Gordura
+    percfat = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
     valkcalfat = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
+    valgramasgordura = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
+    valgrkggordura = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
     # A-Aberto F-Fechada
     status = db.Column(db.String(1), nullable=False)
-    idatleta = db.Column(db.Integer, db.ForeignKey('atleta.id'))
-    atleta = db.relationship("Atleta",backref="metaatleta")
-
-
+    idatleta = db.Column(db.Integer, db.ForeignKey('atleta.id',ondelete='CASCADE'))
+    atleta = db.relationship("Atleta", back_populates="metaatleta")
+    totaldiasprevisto = db.Column(db.Integer)
+    dataprevisaofinal = db.Column(db.DateTime)
