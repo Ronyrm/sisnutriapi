@@ -1,5 +1,6 @@
 var dataprev = '';
 var datanext = '';
+var databr = '';
 var dt = '';
 var dieta = [];
 var foodselect = {};
@@ -7,10 +8,14 @@ var accordion_refeicoes = document.getElementById('accordion-refeicoes');
 var edtdescfood = document.getElementById('edtdescfood');
 var edtidrefeicao = document.getElementById('edtidrefeicao');
 var edtidalimento = document.getElementById('edtidalimento');
+var edtqtd = document.getElementById('edtqtd');
 var divpaginationfoods = document.getElementById('div-pagination-foods');
 var divfoods = document.getElementById('div-foods');
 var frmgroupqtd = document.getElementById('frmgroup-qtd');
 var smalldescricao = document.getElementById('smalldescricao');
+var divtabledadosnutri = document.getElementById('div-table-dadosnutri');
+var edtiditem = document.getElementById('edtiditem');
+
 function carrega_refeicoes(refeicoes,dataatual){
     card_refeicoes = '';
     refeicoes.forEach((refeicao) => {
@@ -19,13 +24,16 @@ function carrega_refeicoes(refeicoes,dataatual){
 
             card_refeicoes +='<div class="card bg-warning my-1">';
             card_refeicoes +='<div class="card-header d-flex justify-content-between" id="heading'+refeicao.id+'">';
-            card_refeicoes +='<button class="btn btn-link text-dark" data-toggle="collapse"'+
-            'data-target="#collapse'+refeicao.id+'" aria-expanded="true" aria-controls="collapse'+refeicao.id+'">'+refeicao.descricao;
+            card_refeicoes +='<button id="btnrefeicao'+refeicao.id+'" class="btn btn-dark text-warning"'+
+            ' data-toggle="collapse" data-target="#collapse'+refeicao.id+
+            '" aria-expanded="true" aria-controls="collapse'+refeicao.id+'">'
+            +refeicao.descricao+' - '+refeicao.hora.slice(0,5)+'  <span class="glyphicon glyphicon-chevron-down"> </span>';
             card_refeicoes +='</button>';
             card_refeicoes += '<div class="d-flex justify-content-end text-center">';
             card_refeicoes += '<small id="lbl-refeicao'+refeicao.id+'" class="text-dark ml-2"></small>';
             dttemp = "'"+dataatual+"'";
             descref = "'"+refeicao.descricao+"'";
+
             card_refeicoes +='<small class="mr-1"><button class="btn btn-warning btn-sm text-dark ml-2"'+
             ' data-toggle="modal" data-target=".insert-edit-modal-food" '+
             'onclick="insert_edit_food('+refeicao.id+','+descref+','+dttemp+','+JSON.stringify({})+',-1);" aria-expanded="true">';
@@ -44,9 +52,10 @@ function carrega_refeicoes(refeicoes,dataatual){
             card_refeicoes +='</div></div></div>';
         }
     });
-    accordion_refeicoes.innerHTML = card_refeicoes;
-}
 
+    accordion_refeicoes.innerHTML =  card_refeicoes;
+}
+// mostra itens lançado daquela refeição
 async function dieta_refeicao(idrefeicao,descrefeicao,dataatual){
 
     url = '/dietarefeicao/'+idrefeicao+'/'+dataatual;
@@ -63,56 +72,87 @@ async function dieta_refeicao(idrefeicao,descrefeicao,dataatual){
         descref = '"'+descrefeicao+'"';
         if (totalreg != 0){
             dieta =  json.data[0];
+            totitens = json.totitens;
             lblrefeicao.innerHTML = '<label class="text-dark"><strong>Total de Itens: '+ json.totitens+'</strong></label>';
             itensdieta = json.dataitem;
-            console.log(itensdieta);
-            table = '<table class="table table-dark table-sm">';
-            table +='<thead class="text-warning"><tr><th scope="col">Kcal</th><th scope="col">Proteína</th><th scope="col">Carboidrato</th>'+
-            '<th scope="col">Gordura</th>';
-            table +='</tr></thead>';
-            table +='<tbody class="text-warning">';
-            table += '<tr><td class="align-middle text-center">'+dieta.totalcalorias+'</td><td class="align-middle text-center">'+dieta.totalproteina+'</td>'+
-            '<td class="align-middle text-center">'+dieta.totalcarbo+'</td><td class="align-middle text-center">'+dieta.totalgordura+'</td>';
-            table +='</tr></tbody></table>';
 
 
-            tableitem = '<table class="table table-dark table-sm">';
-            tableitem +='<thead class="text-warning"><tr>'+
-            '<th  class="align-middle text-center" scope="col">Alimento</th>'+
-            '<th class="align-middle text-center" scope="col">Qtd</th>'+
-            '<th class="align-middle text-center" scope="col">Kcal</th>'+
-            '<th class="align-middle text-center" scope="col">Proteina</th>'+
-            '<th class="align-middle text-center" scope="col">Carboidrato</th>'+
-            '<th class="align-middle text-center" scope="col">Gordura</th>'+
-            '<th class="align-middle text-center" scope="col">Ações</th>';
-            tableitem +='</tr></thead>';
-            tableitem +='<tbody class="text-warning">';
-            itensdieta.forEach((item) => {
-                console.log('ITEM');
-                console.log(item);
-                tableitem +='<tr><td class="align-middle text-center">'+item.alimento.descricao+'</td>';
-                tableitem +='<td class="align-middle text-center">'+item.quantgramas+'</td>';
-                tableitem +='<td class="align-middle text-center">'+item.totalcalorias+'</td>';
-                tableitem +='<td class="align-middle text-center">'+item.totalproteina+'</td>';
-                tableitem +='<td class="align-middle text-center">'+item.totalcarbo+'</td>';
-                tableitem +='<td class="align-middle text-center">'+item.totalgordura+'</td>';
-                tableitem +='<td class="align-middle text-center">';
 
-                tableitem +="<small><button class='btn btn-warning text-dark ml-1 mb-1' "+
-                "data-toggle='modal' data-target='.insert-edit-modal-food'"+
-                "onclick='insert_edit_food("+idrefeicao+","+descref+","+dttemp+","+JSON.stringify(item)+","+item.id+");'>";
-                tableitem +='<span class="glyphicon glyphicon-pencil"></span></button></small>';
-                desc = '"'+descrefeicao+'"';
-                tableitem +="<small><button class='btn btn-warning text-dark ml-1'"+
-                "data-toggle='modal' data-target='.modal-delete-food'"+
-                "onclick='deleteitemdieta("+desc+","+JSON.stringify(item)+");' >";
-                tableitem +='<span class="glyphicon glyphicon-trash"></span></button></small></td>';
-            });
-            tableitem +='</tbody></table>';
-            divitens.innerHTML = tableitem;
+            if (totitens > 0){
+                tableitem = '<table class="table table-dark table-sm">';
+                tableitem +='<thead class="text-white"><tr>'+
+                '<th  class="align-middle text-center" scope="col">Alimento</th>'+
+                '<th class="align-middle text-center" scope="col">Qtd</th>'+
+                '<th class="align-middle text-center" scope="col">Kcal</th>'+
+                '<th class="align-middle text-center" scope="col">Proteina</th>'+
+                '<th class="align-middle text-center" scope="col">Carboidrato</th>'+
+                '<th class="align-middle text-center" scope="col">Gordura</th>'+
+                '<th class="align-middle text-center" scope="col">Ações</th>';
+                tableitem +='</tr></thead>';
+                tableitem +='<tbody class="text-warning">';
+
+                totkcal = 0;
+                totcarb = 0;
+                totproteina = 0;
+                totfat = 0;
+
+                itensdieta.forEach((item) => {
+                    totkcal += parseFloat(item.totalcalorias);
+                    totcarb += parseFloat(item.totalcarbo);
+                    totproteina += parseFloat(item.totalproteina);
+                    totfat += parseFloat(item.totalgordura);
+                    tableitem +='<tr><td class="align-middle text-center"><small>'+item.alimento.descricao+'</small></td>';
+                    tableitem +='<td class="align-middle text-center"><small>'+item.quantgramas+'</small></td>';
+                    tableitem +='<td class="align-middle text-center"><small>'+item.totalcalorias+'</small></td>';
+
+                    tableitem +='<td class="align-middle text-center"><small>'+parseFloat(item.totalproteina).toFixed(2)+' Grs<br>'
+                    +(parseFloat(item.totalproteina)*4).toFixed(2)+' kcal</small></td>';
+
+                    tableitem +='<td class="align-middle text-center"><small>'+parseFloat(item.totalcarbo).toFixed(2)+' Grs<br>'
+                    +(parseFloat(item.totalcarbo)*4).toFixed(2)+' kcal</small></td>';
+
+                    tableitem +='<td class="align-middle text-center"><small>'+parseFloat(item.totalgordura).toFixed(2)+' Grs<br>'
+                    +(parseFloat(item.totalgordura)*9).toFixed(2)+' Kcal</small></td>';
+
+
+                    tableitem +='<td class="align-middle text-center">';
+
+                    //tableitem +="<small><button class='btn btn-warning text-dark ml-1 mb-1' "+
+                    //"data-toggle='modal' data-target='.insert-edit-modal-food'"+
+                    //"onclick='insert_edit_food("+idrefeicao+","+descref+","+dttemp+","+JSON.stringify(item)+","+item.id+");'>";
+                    //tableitem +='<span class="glyphicon glyphicon-pencil"></span></button></small>';
+                    desc = '"'+descrefeicao+'"';
+                    tableitem +="<small><button class='btn btn-warning text-dark ml-1'"+
+                    "data-toggle='modal' data-target='.modal-delete-food'"+
+                    "onclick='deleteitemdieta("+desc+","+JSON.stringify(item)+");' >";
+                    tableitem +='<span class="glyphicon glyphicon-trash"></span></button></small></td>';
+                });
+                tableitem +='</tr></tbody>';
+                tableitem +='<tfoot class="text-white"><tr><th></th>'+
+                '<th class="align-middle text-right" scope="col">Total:</th>'+
+                '<th class="align-middle text-right" scope="col"><small>'+totkcal.toFixed(2)+'</small></th>'+
+                '<th class="align-middle text-center" scope="col"><small>'+totproteina.toFixed(2)+' Grs<br>'+
+                (totproteina*4).toFixed(2)+' Kcal</small></th>'+
+                '<th class="align-middle text-center" scope="col"><small>'+totcarb.toFixed(2)+' Grs<br>'+
+                (totcarb*4).toFixed(2)+' Kcal</small></th>'+
+                '<th class="align-middle text-center" scope="col"><small>'+totfat.toFixed(2)+' Grs<br>'+
+                (totfat*9).toFixed(2)+' Kcal</small></th>';
+                tableitem +='</tr></tfoot></table>';
+                divitens.innerHTML = tableitem;
+            }
+            else{
+                lblrefeicao.innerHTML = '<label class="text-danger"><strong>Nenhum Item Lançado</strong></label>';
+                divitens.innerHTML = '<div class="d-flex justify-content-center text-center">'+
+                '<small class="text-warning">Nenhum Item Lançado para a Refeição: <strong>'+descrefeicao+
+                '</strong> na data de: '+ databr + '</small></div>';
+            }
         }
         else{
+            console.log('Aqui');
             lblrefeicao.innerHTML = '<label class="text-danger"><strong>Nenhum Item Lançado</strong></label>';
+            divitens.innerHTML = '<div class="d-flex mx-auto justify-content-center">'+
+            '<small class="text-warning">Nenhum Item Lançado para a Refeição: <strong>'+descrefeicao+
+            '</strong> na data de: '+ databr + '</small></div>';
         }
 
 
@@ -144,14 +184,69 @@ function nextdatadiario(){
     window.location.href = "/sisnutri/diario?dataatual="+datanext+"&databr="+datanextBR;
 
 }
-
+// modal delete item
 function deleteitemdieta(descrefeicao,item){
     modalmsg = document.getElementById('modal-msg-delete');
+
+    foodselect['id'] = item.id
+    foodselect['descfood'] = item.alimento.descricao;
+    foodselect['descrefeicao'] = descrefeicao;
+
     modalmsg.innerHTML = 'Deseja Excluir o item: <strong>'+item.alimento.descricao+'</strong> da Refeição: '+ descrefeicao+'?';
 }
+function confirmaexclusaofood(data){
+    $.ajax({
+        url: '/delete/itemdieta?',
+        type: 'GET',
+        data:'id='+data.id+'&descfood='+data.descfood+'&descrefeicao='+data.descrefeicao,
+        dataType: 'json',
+        processData: false,
+        contentType: false
+
+    }).done( function(data){
+        result = false;
+        alertmsgdelete = document.getElementById('alert-msgdelete');
+        alertmsgdelete.classList.remove('d-none');
+
+        if (data['result'] == true){
+            result = true;
+            alertmsgdelete.classList.add('alert-primary');
+            alertmsgdelete.innerHTML = data['mensagem'];
+        }
+        else{
+            alertmsgdelete.classList.add('alert-danger');
+            alertmsgdelete.innerHTML = data['mensagem'];
+
+        }
+        setTimeout(function(){
+            if (result){
+                alertmsgdelete.classList.remove('alert-primary');
+                window.location.reload(true);
+                console.log(idrefeicao);
+                document.getElementById('btnrefeicao'+idrefeicao).click();
+            }
+            else{
+                alertmsgdelete.classList.remove('alert-danger');
+            }
+
+            alertmsgdelete.classList.add('d-none');
+        }, 2000);
+
+
+
+    }).fail( function(){
+
+    }).always( function(){
+        //var imgload = document.getElementById('imgcarregamento');
+        //imgload.style.display = 'none';
+    });
+
+}
+
+// modal insert ou edit
 function insert_edit_food(idrefeicao,descrefeicao,dataatual,item,id){
-    console.log(item);
     lblheadfoo = document.getElementById('lblheadfood')
+    edtiditem.value = id;
     if (id == -1){
         lblheadfoo.innerHTML = 'Inserindo item na refeição: '+ descrefeicao;
     }
@@ -159,20 +254,22 @@ function insert_edit_food(idrefeicao,descrefeicao,dataatual,item,id){
         lblheadfoo.innerHTML = 'Alterando o item: '+item.alimento.descricao+' na refeição: '+ descrefeicao;
     }
     edtidrefeicao.value = idrefeicao;
-    console.log('Id:'+idrefeicao);
-    console.log('Data:'+dataatual);
-    console.log(item);
+
 }
+
+// pesquisar alimentos de acordo com o campo digitado
 async function searchfood(page){
     smalldescricao.classList.add('d-none');
+    divtabledadosnutri.classList.add('d-none');
     edtidalimento.value = 0;
-    smallempty = document.getElementById('smallempty');
+    smallemptydesc = document.getElementById('small-empty-desc');
+    document.getElementById('small-UN').classList.add('d-none');
     food = document.getElementById('edtdescfood').value;
     if (food.length == 0 ){
-        smallempty.classList.remove('d-none');
+        smallemptydesc.classList.remove('d-none');
     }
     else{
-        smallempty.classList.add('d-none');
+        smallemptydesc.classList.add('d-none');
 
         url = '/tabfoods.json?descricao='+food+'&page='+page;
         let response = await fetch(url);
@@ -232,7 +329,7 @@ async function searchfood(page){
                     " class='list-group-item list-group-item-action'><strong>"+
                     food.descricao+"</strong><br>"+
                     "<small class='text-white text-center'>UN: "+food.unalimento.descricao+", Qtd: "+parseFloat(food.qtdgramasemcima).toFixed(2)+")<br>"+
-                    "Kcal: "+parseFloat(food.calorias).toFixed(0)+", Carb.: "+vlcarbo+", "+
+                    "Kcal: "+parseFloat(food.calorias).toFixed(2)+", Carb.: "+vlcarbo+", "+
                     "Proteina: "+vlproteina+", Gordura.: "+vlfat+" <br>"+
                     "Fibras: "+vlfibras+", Sódio.: "+vlsodio+
                     "</small></button>";
@@ -252,18 +349,23 @@ async function searchfood(page){
         }
     }
 }
+// Clica botão Lista alimento
 function selectfood(food){
-    vlcarbo =  parseFloat((food.carboidrato == null) ? '0' : food.carboidrato).toFixed(0);
-    vlproteina =  parseFloat((food.proteina == null) ? '0' : food.proteina).toFixed(0);
-    vlfat =  parseFloat((food.lipidios == null) ? '0' : food.lipidios).toFixed(0);
-    vlfibras =  parseFloat((food.fibras == null) ? '0' : food.fibras).toFixed(0);
-    vlsodio =  parseFloat((food.sodio == null) ? '0' : food.sodio).toFixed(0);
+    vlcarbo =  parseFloat((food.carboidrato == null) ? '0' : food.carboidrato).toFixed(2);
+    vlproteina =  parseFloat((food.proteina == null) ? '0' : food.proteina).toFixed(2);
+    vlfat =  parseFloat((food.lipidios == null) ? '0' : food.lipidios).toFixed(2);
+    vlfibras =  parseFloat((food.fibras == null) ? '0' : food.fibras).toFixed(2);
+    vlsodio =  parseFloat((food.sodio == null) ? '0' : food.sodio).toFixed(2);
 
     smallstr = "UN: "+food.unalimento.descricao+", "+
     "Qtd: "+parseFloat(food.qtdgramasemcima).toFixed(2)+"<br>"+
-    "Kcal: "+parseFloat(food.calorias).toFixed(0)+", Carb.: "+vlcarbo+", "+
+    "Kcal: "+parseFloat(food.calorias).toFixed(2)+", Carboidrato: "+vlcarbo+", "+
     "Proteina: "+vlproteina+", Gorduras: "+vlfat+", "+
     "Fibras: "+vlfibras+", Sódio.: "+vlsodio;
+
+    document.getElementById('lblqtd').innerHTML ='Digite a quantidade de '+food.unalimento.sigla;
+    document.getElementById('small-UN').innerHTML = 'Unidade Medida: '+ food.unalimento.descricao;
+    document.getElementById('small-UN').classList.remove('d-none');
 
     smalldescricao.innerHTML = smallstr;
     smalldescricao.classList.remove('d-none');
@@ -278,4 +380,157 @@ function selectfood(food){
     divpaginationfoods.innerHTML = "";
 
 }
+// calcula valores nutricionais de acordo com a quantidade de gramas ou unidade medida mencionada
+function calcula_valnutricionais(qtd,food){
+    smallemptyqtd = document.getElementById('small-empty-qtd');
+    if (qtd.length == 0){
+        smallemptyqtd.classList.remove('d-none');
+        divtabledadosnutri.classList.add('d-none');
+    }
+    else{
 
+        let returnvalnutricional = function(qtdfood,vlgrfood,qtdinfo){
+            return ((parseFloat(vlgrfood) * parseFloat(qtdinfo)) / parseFloat(qtdfood));
+        }
+
+        vlkcal = returnvalnutricional(food.qtdgramasemcima,food.calorias,qtd);
+        vlcarbo = returnvalnutricional(food.qtdgramasemcima,food.carboidrato,qtd);
+        vlproteina = returnvalnutricional(food.qtdgramasemcima,food.proteina,qtd);
+        vlfat = returnvalnutricional(food.qtdgramasemcima,food.lipidios,qtd);
+        vlfibras = returnvalnutricional(food.qtdgramasemcima,food.fibras,qtd);
+        vlsodio = returnvalnutricional(food.qtdgramasemcima,food.sodio,qtd);
+
+
+        document.getElementById('edtvalkcal').value = vlkcal;
+        document.getElementById('edtvalproteina').value = vlproteina;
+        document.getElementById('edtvalcarbo').value = vlcarbo;
+        document.getElementById('edtvalfat').value = vlfat;
+        document.getElementById('edtvalfibras').value = vlfibras;
+        document.getElementById('edtvalsodio').value = vlsodio;
+
+
+        console.log('Calorias:'+vlkcal);
+        divtabledadosnutri.classList.remove('d-none');
+        table = '<h5 class="text-center bg-warning text-white">'+
+        '<strong>Informação Nutricional</strong></h5>';
+        table += '<table class="table table-dark table-sm text-warning ">';
+        table +='<tbody>';
+        table +='<tr><th scope="row">Calorias:</th><td>'+vlkcal.toFixed(2)+' kcal</td></tr>';
+        table +='<tr><th scope="row">Carboidratos:</th><td>'+vlcarbo.toFixed(2)+' grs </td></tr>';
+        table +='<tr><th scope="row">Proteínas:</th><td>'+vlproteina.toFixed(2)+' grs</td></tr>';
+        table +='<tr><th scope="row">Gorduras:</th><td>'+vlfat.toFixed(2)+' grs</td></tr>';
+        table +='<tr><th scope="row">Fibras:</th><td>'+vlfibras.toFixed(2)+' grs </td></tr>';
+        table +='<tr><th scope="row">Sódio:</th><td>'+vlsodio.toFixed(2)+'mg</td></tr>';
+        table +='</tbody></table>';
+        divtabledadosnutri.innerHTML = table;
+
+
+    }
+}
+// grava item dentro do banco de dados na tabela de itemdieta
+
+function incluiitemfood(){
+    smallemptyqtd = document.getElementById('small-empty-qtd');
+    smallemptyqtd.classList.add('d-none');
+    smallemptydesc = document.getElementById('small-empty-qtd');
+    smallemptydesc.classList.add('d-none');
+    if(edtidalimento.value == '' || edtidalimento.value =='0'){
+        smallemptydesc.classList.remove('d-none');
+    }
+    else{
+        if (edtqtd.value.length == 0 || edtqtd.value<=0) {
+            smallemptyqtd.classList.remove('d-none');
+        }
+        else{
+            gravaritemDB();
+        }
+    }
+}
+function gravaritemDB(){
+    idrefeicao = edtidrefeicao.value;
+    form = document.getElementById('formfood');
+    formData = new FormData(form);
+    alertdadosfood = document.getElementById('alert-dadosfood');
+    alertdadosfood.classList.remove('d-none');
+    $.ajax({
+        url: '/add/itemdieta',
+        type: 'POST',
+        data: formData,
+        dataType: 'json',
+        processData: false,
+        contentType: false
+
+    }).done( function(data){
+        result = false;
+        console.log(data);
+        if (data['result'] == true){
+            result = true;
+            alertdadosfood.classList.add('alert-primary');
+            alertdadosfood.innerHTML = data['mensagem'];
+        }
+        else{
+            alertdadosfood.classList.add('alert-danger');
+            alertdadosfood.innerHTML = data['mensagem'];
+
+        }
+        setTimeout(function(){
+            if (result){
+                alertdadosfood.classList.remove('alert-primary');
+                window.location.reload(true);
+                console.log(idrefeicao);
+                document.getElementById('btnrefeicao'+idrefeicao).click();
+            }
+            else{
+                alertdadosfood.classList.remove('alert-danger');
+            }
+
+            alertdadosfood.classList.add('d-none');
+        }, 2000);
+
+
+
+    }).fail( function(){
+
+    }).always( function(){
+        //var imgload = document.getElementById('imgcarregamento');
+        //imgload.style.display = 'none';
+    });
+}
+// calcula diferença calorica da meta menos total lançada no dia nas refeições
+function calcula_preeche_valdiferenca(data_dieta, data_meta){
+    vldifkcal = parseFloat(data_meta.valalvocalorico) - parseFloat(data_dieta.totalkcal)
+
+    vldifgrproteina = parseFloat(data_meta.valgramasproteina) - parseFloat(data_dieta.totalproteina)
+    vldifkcalproteina = vldifgrproteina * 4;
+
+    vldifgrgordura = parseFloat(data_meta.valgramasgordura) - parseFloat(data_dieta.totalgordura)
+    vldifkcalgordura = vldifgrgordura * 9;
+
+    vldifgrcarbo = parseFloat(data_meta.valgramascarbo) - parseFloat(data_dieta.totalcarbo)
+    vldifkcalcarbo = vldifgrcarbo * 4;
+
+    theaddiferenca = document.getElementById('thead-diferenca');
+
+    falta = (vldifkcal <= parseFloat(data_meta.valalvocalorico))? true : false;
+    classtemp = (falta)? 'border border-primary text-primary rounded' : 'border border-danger text-danger rounded';
+    msgtemp = (falta)? "Falta" : "Ultrapassou";
+    trstr =  '<tr><th class="align-middle" scope="col">Valor Calórico:</th>'+
+    '<th class="align-middle align-center"><label class="'+classtemp+'">'+
+    msgtemp+': '+ vldifkcal.toFixed(2) +' kcal</label></th></tr> ';
+
+
+    trstr += '<tr><th scope="col">Proteina:</th><td>Kcal: '+vldifkcalproteina.toFixed(0)+
+    ' | Grs:' +vldifgrproteina.toFixed(2)+ '</td></tr> ';
+
+    trstr += '<tr><th scope="col">Carboidrato:</th><td>Kcal: '+vldifkcalcarbo.toFixed(0)+
+    ' | Grs:' +vldifgrcarbo.toFixed(2)+ '</td></tr> ';
+
+    trstr += '<tr><th scope="col">Gordura:</th><td>Kcal: '+vldifkcalgordura.toFixed(0)+
+    ' | Grs:' +vldifgrgordura.toFixed(2)+ '</td></tr> ';
+
+    theaddiferenca.innerHTML = trstr;
+
+    console.log(data_dieta);
+    console.log(data_meta);
+
+}

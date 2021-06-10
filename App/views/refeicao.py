@@ -124,7 +124,11 @@ def get_refeicao_atleta():
                 return jsonify({'data': result,'result':True,'total':len(refeicao)})
     return jsonify({'data': {},'result':False})
 
-
+def get_refeicao_id(id):
+    try:
+        return  Refeicao.query.get(id)
+    except:
+        return None
 def delete_refeicao(id):
     refeicao = Refeicao.query.get(id)
     try:

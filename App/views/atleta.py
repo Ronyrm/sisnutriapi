@@ -22,12 +22,14 @@ def load_user(user_id):
 def get_maindiarioatleta():
     databr = request.args.get('databr')
     dataatual = request.args.get('dataatual')
+
     if not current_user.is_authenticated:
         return render_template('layouts/atleta/diario/maindiario.html',atletalogado=[],
                                mensagem='',result=False,refeicao=[],
-                               metaatleta = [],
-                               dataatual = dataatual,
-                               databr = databr)
+                               metaatleta=[],
+                               dataatual=dataatual,
+                               databr=databr,
+                               sumdieta=[])
     else:
 
 
@@ -35,16 +37,23 @@ def get_maindiarioatleta():
 
         metaatleta = get_metaatleta(current_user.id,'A')
 
+        from App.views.dieta import totalkcaldieta
+        sumdieta = totalkcaldieta(current_user.metaatleta[0].id,dataatual)
+
+        from App.views.refeicao import get_refeicao_byidpessoa
+        refeicao = get_refeicao_byidpessoa(current_user.idpessoa)
 
         schemameta = MetaAtletaschema()
 
         schemaatleta = Atletaschema()
 
         return render_template('layouts/atleta/diario/maindiario.html', atletalogado=schemaatleta.dump(current_user), mensagem='', result=False,
-                               refeicao=schemaref.dump(current_user.pessoa.refeicao,many=True),
+                               #refeicao=schemaref.dump(current_user.pessoa.refeicao,many=True),
+                               refeicao=schemaref.dump(refeicao,many=True),
                                metaatleta=schemameta.dump(metaatleta,many=True),
-                               dataatual = dataatual,
-                               databr=databr)
+                               dataatual=dataatual,
+                               databr=databr,
+                               sumdieta=sumdieta)
 
 
 def get_maintelaatleta():
@@ -61,15 +70,18 @@ def get_maintelaatleta():
                                databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano)
                                )
     else:
-        schemaref = RefeicaoSchema()
 
         metaatleta = get_metaatleta(current_user.id,'A')
         schemameta = MetaAtletaschema()
 
         schemaatleta = Atletaschema()
 
+        schemaref = RefeicaoSchema()
+        from App.views.refeicao import get_refeicao_byidpessoa
+        refeicao = get_refeicao_byidpessoa(current_user.idpessoa)
+
         return render_template('layouts/atleta/maintelaatleta.html', atletalogado=schemaatleta.dump(current_user), mensagem='', result=False,
-                               refeicao=schemaref.dump(current_user.pessoa.refeicao,many=True),
+                               refeicao=schemaref.dump(refeicao,many=True),
                                metaatleta=schemameta.dump(metaatleta,many=True),
                                dataatual=str(ano) + '-' + str(mes).zfill(2) + '-' + str(dia).zfill(2),
                                databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano)

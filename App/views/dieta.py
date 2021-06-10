@@ -98,8 +98,27 @@ def getdietarefeicao(idrefeicao,data):
     except:
         return None
 
+
 def getitensdieta(iddieta):
     try:
        return ItemDieta.query.filter(ItemDieta.iddieta==iddieta).all()
+    except:
+        return None
+
+def totalkcaldieta(idmeta,data):
+    from sqlalchemy import  func, and_, not_
+    from sqlalchemy.sql.functions import sum
+    from sqlalchemy.sql.expression import func
+    try:
+        sumdieta = Dieta.query.filter(and_(Dieta.idmetaatleta==idmeta,Dieta.data==data)).\
+            with_entities(func.ifnull(sum(Dieta.totalcalorias),0).label('totalkcal'),
+                          func.ifnull(sum(Dieta.totalcarbo),0).label('totalcarbo'),
+                          func.ifnull(sum(Dieta.totalproteina),0).label('totalproteina'),
+                          func.ifnull(sum(Dieta.totalgordura),0).label('totalgordura'),
+                          func.ifnull(sum(Dieta.totalfibras),0).label('totalfibras'),
+                          func.ifnull(sum(Dieta.totalsodio),0).label('totalsodio')).first()
+
+
+        return sumdieta
     except:
         return None
