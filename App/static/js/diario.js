@@ -104,10 +104,10 @@ async function dieta_refeicao(idrefeicao,descrefeicao,dataatual){
                     totfat += parseFloat(item.totalgordura);
                     tableitem +='<tr><td class="align-middle"><div class="dropdown"><small>';
                     tableitem +="<button class='btn btn-link text-warning text-left' "+
-                    //"data-toggle='modal' data-target='.modal-info-food' "+
+                    "data-toggle='modal' data-target='.modal-info-food' "+
                     "onmouseover='mouseouverfood("+descref+","+JSON.stringify(item)+");'"+
-                    "onmouseout='mouseoutfood("+item.id+");'>"+
-                    //" onclick='infofood("+descref+","+JSON.stringify(item)+");'>"+
+                    "onmouseout='mouseoutfood("+item.id+");'"+
+                    " onclick='infofood("+descref+","+JSON.stringify(item)+");'>"+
                     item.alimento.descricao+'</button></small>';
                     tableitem +='<div class="dropdown-content" id="dropdown-content'+item.id+'" ></div></div></td>';
                     tableitem +='<td class="align-middle text-left"><small>'+item.quantgramas+' '+item.alimento.unalimento.sigla+'</small></td>';
@@ -175,15 +175,11 @@ async function dieta_refeicao(idrefeicao,descrefeicao,dataatual){
     }
 }
 function mouseouverfood(descref,item){
-    console.log('Rony');
     document.getElementById('dropdown-content'+item.id).innerHTML= retornadivtablefood(descref,item,true);
-    document.getElementById('dropdown-content'+item.id).classList.add('d-block');
+
 }
 function mouseoutfood(id){
-    document.getElementById('dropdown-content'+id).innerHTML='';
-    document.getElementById('dropdown-content'+id).classList.remove('d-block');
-    document.getElementById('dropdown-content'+id).classList.add('d-none');
-
+    
 }
 function zeroFill(n) {
     return ('0' + n).slice(-2);
