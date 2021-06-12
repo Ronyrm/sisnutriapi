@@ -52,16 +52,21 @@ class RefeicaoSchema(ModelSchema):
         model = Refeicao
     #pessoa = fields.Nested(PessoaSchema)
 
+class UnAlimentoSchema(ModelSchema):
+    class Meta:
+        model = Unalimento
 
 class AlimentoSchema(ModelSchema):
     class Meta:
         model = Alimentos
 
+    unalimento = fields.Nested(UnAlimentoSchema)
+
 class ItemDietaSchema(ModelSchema):
     class Meta:
         model = ItemDieta
     #dieta = fields.Nested('DietaSchema',only=('id','descricao','data',))
-    alimento = fields.Nested('AlimentoSchema',only=('id','descricao',))
+    alimento = fields.Nested('AlimentoSchema',only=('id','descricao','unalimento'))
 
 
 class PessoaSchema(ModelSchema):

@@ -67,9 +67,11 @@ def get_maintelaatleta():
         return render_template('layouts/atleta/maintelaatleta.html',atletalogado=[],mensagem='',result=False,
                                refeicao=[],metaatleta = [],
                                dataatual=str(ano) + '-' + str(mes).zfill(2) + '-' + str(dia).zfill(2),
-                               databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano)
+                               databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano),
+                               sumdieta=[]
                                )
     else:
+        dataatual = str(ano) + '-' + str(mes).zfill(2) + '-' + str(dia).zfill(2)
 
         metaatleta = get_metaatleta(current_user.id,'A')
         schemameta = MetaAtletaschema()
@@ -80,11 +82,15 @@ def get_maintelaatleta():
         from App.views.refeicao import get_refeicao_byidpessoa
         refeicao = get_refeicao_byidpessoa(current_user.idpessoa)
 
+        from App.views.dieta import totalkcaldieta
+        sumdieta = totalkcaldieta(current_user.metaatleta[0].id, dataatual)
+
         return render_template('layouts/atleta/maintelaatleta.html', atletalogado=schemaatleta.dump(current_user), mensagem='', result=False,
                                refeicao=schemaref.dump(refeicao,many=True),
                                metaatleta=schemameta.dump(metaatleta,many=True),
                                dataatual=str(ano) + '-' + str(mes).zfill(2) + '-' + str(dia).zfill(2),
-                               databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano)
+                               databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano),
+                               sumdieta=sumdieta
                                )
 
 
@@ -175,6 +181,11 @@ def update_atleta():
 
 
 def add_atleta():
+    datenow = datetime.now()
+    dia = datenow.day
+    mes = datenow.month
+    ano = datenow.year
+
     if request.method == 'POST':
         data = request.form
         try:
@@ -215,7 +226,12 @@ def add_atleta():
                                mensagem='Senha não confere',
                                tela='Registrar',
                                atletalogado=data,
-                               result=False)
+                               result=False,
+                               refeicao=[], metaatleta=[],
+                               dataatual=str(ano) + '-' + str(mes).zfill(2) + '-' + str(dia).zfill(2),
+                               databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano),
+                               sumdieta=[]
+                               )
 
 
 
@@ -230,7 +246,15 @@ def add_atleta():
                                    mensagem='UserName: '+username+' já cadastrado no banco de dados',
                                    tela='Registrar',
                                    atletalogado=data,
-                                   result=False)
+                                   result=False,
+                                   refeicao=[], metaatleta=[],
+                                   dataatual=str(ano) + '-' + str(mes).zfill(2) + '-' + str(dia).zfill(2),
+                                   databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano),
+                                   sumdieta=[]
+                                   )
+
+
+
 
         atleta = get_email(email)
         if atleta:
@@ -239,7 +263,12 @@ def add_atleta():
                                    mensagem='Email: ' + email + ' já cadastrado no banco de dados',
                                    tela='Registrar',
                                    atletalogado=data,
-                                   result=False)
+                                   result=False,
+                                   refeicao=[], metaatleta=[],
+                                   dataatual=str(ano) + '-' + str(mes).zfill(2) + '-' + str(dia).zfill(2),
+                                   databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano),
+                                   sumdieta=[]
+                                   )
 
         pessoa = Pessoa(username=username,nome=name,password=pass_hash,email=email,tipopessoa='AT')
         db.session.add(pessoa)
@@ -282,7 +311,12 @@ def add_atleta():
                                mensagem='Usuário'+ username +' cadastrado com Sucesso, faça o login!',
                                tela='Login',
                                atletalogado=data,
-                               result=True)
+                               result=True,
+                               refeicao=[], metaatleta=[],
+                               dataatual=str(ano) + '-' + str(mes).zfill(2) + '-' + str(dia).zfill(2),
+                               databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano),
+                               sumdieta=[]
+                               )
 
     except:
         return jsonify({'messagem': 'unable to create', 'data': {},'result': False}), 201
@@ -333,6 +367,13 @@ def login():
                 schemameta = MetaAtletaschema()
                 resultmeta = schemameta.dump(metaatleta, many=True)
 
+                dataatual = str(ano) + '-' + str(mes).zfill(2) + '-' + str(dia).zfill(2)
+                from App.views.dieta import totalkcaldieta
+                sumdieta = []
+                if metaatleta:
+                    sumdieta = totalkcaldieta(metaatleta[0].id, dataatual)
+
+
                 schematleta = Atletaschema()
 
                 return render_template('layouts/atleta/maintelaatleta.html',atletalogado=schematleta.dump(atleta),result=True,
@@ -340,14 +381,16 @@ def login():
                                        refeicao=schemaref.dump(refeicao,many=True),
                                        metaatleta=resultmeta,
                                        dataatual=str(ano) + '-' + str(mes).zfill(2) + '-' + str(dia).zfill(2),
-                                       databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano)
+                                       databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano),
+                                       sumdieta = sumdieta
                                        )
 
         return render_template('layouts/atleta/maintelaatleta.html',tela='Login',
                                mensagem='Atleta ou senha informado: '+username+' inválidos!',result=False,
                                atletalogado={},refeicao=[],metaatleta=[],
                                dataatual=str(ano) + '-' + str(mes).zfill(2) + '-' + str(dia).zfill(2),
-                               databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano)
+                               databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano),
+                               sumdieta = []
                                )
 
 def logout():

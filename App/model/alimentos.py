@@ -78,7 +78,7 @@ class TabAlimentosSchema(ma.Schema):
         fields = ('id', 'descricao', 'umidades', 'calorias', 'joule', 'proteina', 'lipidios', 'colesterol',
                   'carboidrato', 'fibras', 'cinzas', 'calcio', 'magnesio', 'manganes', 'fosforo', 'ferro',
                   'sodio', 'potasio', 'cobre', 'zinco', 'retinol', 're', 'rae', 'tiamina', 'riboflavina',
-                  'piridoxina', 'niacina', 'vitaminac', 'qtdgramasemcima','idpessoa')
+                  'piridoxina', 'niacina', 'vitaminac', 'qtdgramasemcima','idpessoa','idunalimento')
 
 tabalimentos_schema = TabAlimentosSchema()
 tabalimento_schema = TabAlimentosSchema(many=True)

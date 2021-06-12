@@ -7,10 +7,12 @@
 {% block metaatleta %} {{ metaatleta }} {% endblock %}
 {% block datatual %} {{ dataatual }} {% endblock %}
 {% block databr %} {{ databr }} {% endblock %}
+{% block sumdieta %} {{ sumdieta }} {% endblock %}
 
 
 {% block jsatleta %}
 <script src="{{ url_for('static', filename='js/atleta.js') }}"></script>
+<script src="{{ url_for('static', filename='js/diario.js') }}"></script>
 <script src="{{ url_for('static', filename='js/msginfomodal.js') }}"></script>
 
 {% endblock %}
@@ -27,6 +29,7 @@
 
 var metaativa = 'N';
 {% if metaatleta|length > 0 %}
+    {% set metaatletatemp = metaatleta %}
     {% set metaatleta = metaatleta[0] %}
     {% if metaatleta.status == 'A' %}
         metaativa = 'S';
@@ -148,11 +151,19 @@ var totalregmeta = {{ metaatleta|length }};
     {% import 'layouts/atleta/mddelete_refeicao.html' as modal_delete_refeicao %}
     {{ modal_delete_refeicao.mddeleterefeicao() }}
 
+    {% if ativa == 'S' %}
+    <div id="footer">
+        {% import 'layouts/atleta/divresultados.html' as div_resultados %}
+        {{ div_resultados.divresultados(metaatletatemp,sumdieta) }}
+    </div>
+    {%endif%}
+
 </div>
 {% endif %}
 
 <script>
     $().ready(function() {
+        console.log(data_refeicao);
         var idade = 0;
         if (dtnasc != ''){
             idade = retornaidade(dtnasc);
@@ -177,6 +188,15 @@ var totalregmeta = {{ metaatleta|length }};
                 totalreg = data_refeicao.length;
             }
             verifica_table_refeicao_empty(totalreg);
+
+            {% if metaatleta|length > 0 %}
+                var data_metaatleta = {{metaatleta|tojson}};
+            {% else %}
+                var data_metaatleta = [];
+            {% endif %}
+
+            var data_sumdieta = {{sumdieta|tojson}};
+            calcula_preeche_valdiferenca(data_sumdieta,data_metaatleta);
         }
     });
 

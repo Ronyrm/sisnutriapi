@@ -15,7 +15,7 @@ def indexmain(current_user, token):
         session['current_user'] = user
         return render_template('layouts/index.html',current_user=current_user,token=token)
 
-@main.route('/', methods=['GET'])
+@main.route('/index/', methods=['GET'])
 def index():
     user = {}
     session['current_user'] = user

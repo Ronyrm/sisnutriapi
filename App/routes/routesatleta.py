@@ -10,7 +10,7 @@ def get_maindiarioatleta():
     return atleta.get_maindiarioatleta();
 
 
-@routesatleta.route('/sisnutri',methods=['GET','POST'])
+@routesatleta.route('/',methods=['GET','POST'])
 def get_mainatleta():
     return atleta.get_maintelaatleta();
 

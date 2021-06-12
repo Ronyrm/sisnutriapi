@@ -6,6 +6,8 @@
 {% block tabfoods %} {{ tabfoods }} {% endblock %}
 {% block pagul %} {{ pagul }} {% endblock %}
 {% block inputdesc %} {{ inputdesc }} {% endblock %}
+{% block dataatual %} {{ dataatual }} {% endblock %}
+{% block databr %} {{ databr }} {% endblock %}
 
 
 {% block jsfoods %}
@@ -19,9 +21,13 @@
 const pageatual = {{pagul.page}};
 const perpage = {{pagul.per_page}};
 // ... do something with jsArrayOfItems in JavaScript ...
+
+
+
 </script>
 
 <div  id="contentalimento">
+
     <div id="divcab-foods">
         {% import 'layouts/foods/divcabecalhofoods.html' as cabfoods %}
         {{ cabfoods.div_cab_foods(pagul.page,pagul.total,pagul.per_page,orderby,inputdesc) }}
@@ -77,7 +83,7 @@ const perpage = {{pagul.per_page}};
     </div>
 
     {% import 'layouts/foods/tabfoods.html' as tbfoods %}
-    {{ tbfoods.table_foods(tabfoods,pagul.total) }}
+    {{ tbfoods.table_foods(tabfoods,pagul.total,current_user,dataatual) }}
 
     <nav class="row" id="navpagination-foods"aria-label="Page navigation example">
         <div class="col-md-4 d-flex justify-content-md-start justify-content-center">

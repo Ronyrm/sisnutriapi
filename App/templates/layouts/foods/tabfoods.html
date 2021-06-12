@@ -1,5 +1,10 @@
-{% macro table_foods(tabfoods,totalfoods) %}
+{% macro table_foods(tabfoods,totalfoods,current_user,dataatual) %}
 {% if totalfoods >= 1  %}
+    {% if current_user.is_authenticated %}
+        {% import 'layouts/foods/mdrefeicoesatleta.html' as modal_refeicoesatleta %}
+        {{ modal_refeicoesatleta.mdrefeicoesatleta(current_user.pessoa.refeicao,dataatual,current_user.metaatleta[0].id) }}
+    {% endif %}
+
 
     <table class="table table-borderless" id="table-foods">
         <tbody>
@@ -93,6 +98,13 @@
                     <button class="btn btn-warning" onclick="calcinfonutri();">
                         <span class="glyphicon glyphicon-ok"></span>
                     </button>
+                    {% if current_user.is_authenticated %}
+                        <button class="btn btn-warning ml-2"
+                        data-toggle="modal" data-target=".modal-refeicoes">
+                            Adicionar item no seu diário <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                    {% endif%}
+
                 </div>
                 <div class="row">
                     <p class="text-padrao text-rigth  mx-2">Calorias:</p>

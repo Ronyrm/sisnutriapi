@@ -3,9 +3,9 @@ from App.views import alimentos
 
 routestabalimentos = Blueprint('routestabalimentos',__name__)
 
-@routestabalimentos.route('/post/alimento.json',methods=['POST'])
+@routestabalimentos.route('/add/food',methods=['POST'])
 def post_alimento():
-    return alimentos.post_tabalimentos_json()
+    return alimentos.post_food()
 
 @routestabalimentos.route('/tabalimentos.json/<pageatual>/<totpage>/<orderby>',methods=['GET'])
 def get_alimentobydesc(pageatual,totpage,orderby):

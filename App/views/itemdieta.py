@@ -51,7 +51,7 @@ def post_itemdieta_form():
                 return jsonify({'mensagem': 'Erro ao gravar Diário da refeição:'+descrefeicao+' na data: '+dataatual,
                                 'result':False}), 201
         # GRAVA ITEM REFEICAO
-        if iditem == '-1':
+        if iditem == '-1' or iditem == '':
             try:
                 itemdieta = ItemDieta(totalcarbo=totalcarbo, totalproteina=totalproteina,
                                       totalgordura=totalgordura, totalsodio=totalsodio,

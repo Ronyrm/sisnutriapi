@@ -24,9 +24,6 @@
 .list-group-item-action:active{
     color:var(--preto);
     background-color:var(--amarelo);
-    
-    
-
 }
 .a-info{
     font-size: 20px;
@@ -94,3 +91,26 @@
     margin-top: 5px;
 
 }
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    
+  }
+  
+  .dropdown-content {
+    display: none;
+    float:right;
+    position: absolute;
+    background-color: var(--preto);
+    min-width: 250px;
+    border: 2px solid black;
+    border-radius: 20px;
+    padding: 10px 12px;
+    z-index: 1;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  

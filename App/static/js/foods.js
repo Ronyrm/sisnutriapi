@@ -1,18 +1,21 @@
 var tbfoods = [];
-
+var data_calc = [];
 var thporcao = document.getElementById('th-porcao');
 
 function calcinfonutri(){
     qtdgramasemcima = tbfoods.qtdgramasemcima;
     tbfood = [];
-    tbfood.proteina = (tbfoods.proteina*thporcao.value)/qtdgramasemcima;
+    tbfood.proteina = ((tbfoods.proteina*thporcao.value)/qtdgramasemcima)
     tbfood.carboidrato = (tbfoods.carboidrato*thporcao.value)/qtdgramasemcima;
     tbfood.lipidios = (tbfoods.lipidios*thporcao.value)/qtdgramasemcima;
     tbfood.fibras = (tbfoods.fibras*thporcao.value)/qtdgramasemcima;
     tbfood.calorias = (tbfoods.calorias*thporcao.value)/qtdgramasemcima;
     tbfood.descricao = tbfoods.descricao;
-    console.log(tbfoods);
+    tbfood.id = tbfoods.id;
+
+    data_calc = tbfood;
     calculardadosnutri(tbfood,thporcao.value);
+
 
 }
 
@@ -21,6 +24,7 @@ function mostradadosfoods(tbfood,qtdgramas){
     calculardadosnutri(tbfoods,qtdgramas);
 }
 function calculardadosnutri(tbfood,qtdgramas){
+    document.getElementById('edtidalimento').value = tbfood.id;
     google.charts.load('current', {'packages':['corechart']}).then( function(){
 
         var data = google.visualization.arrayToDataTable([
@@ -103,3 +107,100 @@ $('#orberby-foods').on('change', function(e) {
     window.location.href = '/tabalimentos?page='+pageatual+'&totpage='+perpage+'&orderby='+valorderby+'&descricao='+valinputdescricao;
 
 });
+
+function click_btnrefeicao(idrefeicao){
+    document.getElementById('edtidrefeicao').value = idrefeicao;
+    alertmsgaddrefeicao = document.getElementById('alert-msg-addrefeicao');
+    alertmsgaddrefeicao.classList.add('d-none');
+
+}
+
+function confirmarinsertrefeicao(){
+    document.getElementById('edtqtd').value = thporcao.value;
+    continuar = false;
+    try{
+        continuar = true;
+        if (document.getElementById('edtqtd').value ==''){
+            document.getElementById('edtqtd').value = '0';
+        }
+
+        if (parseFloat(document.getElementById('edtqtd').value) <= 0){
+            continuar = false;
+        }
+
+        if (document.getElementById('edtidrefeicao').value == '' ||
+            document.getElementById('edtidrefeicao').value =='0'){
+            continuar = false;
+            alertmsgaddrefeicao = document.getElementById('alert-msg-addrefeicao');
+            alertmsgaddrefeicao.classList.remove('d-none');
+            alertmsgaddrefeicao.classList.add('alert-danger');
+            alertmsgaddrefeicao.innerHTML = 'Clique em uma das refeições para continuar';
+            setTimeout(function(){
+                alertmsgaddrefeicao.classList.add('d-none');
+        }, 2000);
+
+        }
+    }
+    catch{
+        continuar = false;
+    }
+    if (continuar){
+        calcinfonutri();
+
+        document.getElementById('edtdescfood').value = data_calc.descricao;
+        document.getElementById('edtvalcarbo').value = parseFloat(data_calc.carboidrato).toFixed(2);
+        document.getElementById('edtvalproteina').value = parseFloat(data_calc.proteina).toFixed(2);
+        document.getElementById('edtvalfat').value = parseFloat(data_calc.lipidios).toFixed(2);
+        document.getElementById('edtvalsodio').value = parseFloat(data_calc.sodio).toFixed(2);
+        document.getElementById('edtvalfibras').value = parseFloat(data_calc.fibras).toFixed(2);
+        document.getElementById('edtvalkcal').value = parseFloat(data_calc.calorias).toFixed(2);
+        document.getElementById('edtidalimento').value = data_calc.id;
+        addfoodinrefeicao();
+    }
+
+}
+
+function addfoodinrefeicao(){
+    form = document.getElementById('formrefeicao');
+    formData = new FormData(form);
+    alertmsgaddrefeicao = document.getElementById('alert-msg-addrefeicao');
+    alertmsgaddrefeicao.classList.remove('d-none');
+    $.ajax({
+        url: '/add/itemdieta',
+        type: 'POST',
+        data: formData,
+        dataType: 'json',
+        processData: false,
+        contentType: false
+
+    }).done( function(data){
+        result = false;
+        console.log(data);
+        if (data['result'] == true){
+            result = true;
+            alertmsgaddrefeicao.classList.add('alert-primary');
+            alertmsgaddrefeicao.innerHTML = data['mensagem'];
+        }
+        else{
+            alertmsgaddrefeicao.classList.add('alert-danger');
+            alertmsgaddrefeicao.innerHTML = data['mensagem'];
+
+        }
+        setTimeout(function(){
+            if (result){
+                alertmsgaddrefeicao.classList.remove('alert-primary');
+                window.location.reload(true);
+            }
+            else{
+                alertmsgaddrefeicao.classList.remove('alert-danger');
+            }
+
+            alertmsgaddrefeicao.classList.add('d-none');
+        }, 2000);
+    }).fail( function(){
+
+    }).always( function(){
+        //var imgload = document.getElementById('imgcarregamento');
+        //imgload.style.display = 'none';
+    });
+}

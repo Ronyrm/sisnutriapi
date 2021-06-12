@@ -45,120 +45,18 @@
 
     </div>
 
-    <div class="row mt-4">
-        <!-- Meta Atleta !-->
-        <div class="col-12 col-lg-4 my-1">
-            <div class="col-12 bg-dark border border-warning rounded-2 div-somas" id="div-metataatleta">
-                <h6 class="text-center text-warning p-2"> Meta Atleta</h6>
-                <table class="table table-sm table-dark">
-                    <thead>
-                        <tr>
-                            <th class="align-middle" scope="col">Valor Calórico:</th>
-                            <td class="align-middle"><label class="mx-auto">{{metaatleta[0].valalvocalorico|round}} kcal</label></td>
-                        </tr>
-                        <tr>
-                            <th scope="col">Proteina:</th>
-                            <td>
-                                    Kcal: {{metaatleta[0].valkcalproteina|round}} |
-                                    Grs: {{metaatleta[0].valgramasproteina|round}} |
-                                    {{metaatleta[0].percproteina|round}}%
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="col">Carboidrato:</th>
-                            <td>
-                                    Kcal: {{metaatleta[0].valkcalcarb|round}} |
-                                    Grs: {{metaatleta[0].valgramascarbo|round}} |
-                                    {{metaatleta[0].perccarb|round}}%
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="col">Gordura:</th>
-                            <td>
-                                    Kcal: {{metaatleta[0].valkcalfat|round}} |
-                                    Grs: {{metaatleta[0].valgramasgordura|round}} |
-                                    {{metaatleta[0].percfat|round}}%
-                            </td>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
-        <!-- Total Dieta !-->
-        <div class="col-12 col-lg-4 my-1">
-            <div class="col-12 bg-dark border border-warning rounded-2 div-somas" id="div-totaldiario">
-                <h6 class="text-center text-warning p-2"> Total Diário</h6>
-                <table class="table table-sm table-dark">
-                    <thead>
-                        <tr>
-                            <th class="align-middle" scope="col">Valor Calórico:</th>
-                            {% set totalkcal = 0 %}
-                            {% if sumdieta.totalkcal != None %}
-                                {% set totalkcal = sumdieta.totalkcal %}
-                            {% endif %}
-                            <td class="align-middle"><label class="mx-auto">{{ totalkcal|round }} Kcal</label></td>
-                        </tr>
-                        <tr>
-                            <th scope="col">Proteina:</th>
-                            {% set totalproteina = 0 %}
-                            {% set kcal = 0 %}
-                            {% if sumdieta.totalproteina != None %}
-                                {% set totalproteina = sumdieta.totalproteina %}
-                                {% set kcal = sumdieta.totalproteina*4 %}
-                            {% endif %}
-
-                            <td>
-                                Kcal: {{kcal|round(2)}} |
-                                Grs: {{totalproteina|round(2)}}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="col">Carboidrato:</th>
-                            {% set totalcarbo = 0 %}
-                            {% set kcal = 0 %}
-                            {% if sumdieta.totalcarbo != None %}
-                                {% set totalcarbo = sumdieta.totalcarbo %}
-                                {% set kcal = sumdieta.totalcarbo*4 %}
-                            {% endif %}
-                            <td>
-                                Kcal: {{ kcal|round(2) }} |
-                                Grs: {{ totalcarbo|round(2) }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="col">Gordura:</th>
-                            {% set totalgordura = 0 %}
-                            {% set kcal = 0 %}
-                            {% if sumdieta.totalgordura != None %}
-                                {% set totalgordura = sumdieta.totalgordura %}
-                                {% set kcal = sumdieta.totalgordura*9 %}
-                            {% endif %}
-                            <td>
-                                Kcal: {{kcal|round(2)}} |
-                                Grs: {{ totalgordura|round(2) }}
-
-                            </td>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
-        <!-- Diferença !-->
-        <div class="col-12 col-lg-4 my-1">
-            <div class="col-12 bg-dark border border-warning rounded-2 div-somas" id="div-kcaldiferenca">
-                <h6 class="text-center text-warning p-2"> Diferença</h6>
-                <table class="table table-sm table-dark">
-                    <thead id="thead-diferenca">
-                    </thead>
-                </table>
-            </div>
-        </div>
-    </div>
+    {% import 'layouts/atleta/divresultados.html' as div_resultados %}
+    {{ div_resultados.divresultados(metaatleta,sumdieta) }}
 
     {% import 'layouts/atleta/diario/mddeletefood.html' as modal_delete_food %}
     {{ modal_delete_food.modaldeletefood() }}
     {% import 'layouts/atleta/diario/mdinserteditfood.html' as modal_insedit_food %}
-    {{ modal_insedit_food.modalinserteditfood(dataatual,metaatleta[0].id) }}
+    {{ modal_insedit_food.modalinserteditfood(dataatual,metaatleta[0].id,current_user.pessoa.id) }}
+    {% import 'layouts/atleta/diario/mdinsertnewfood.html' as modal_ins_food %}
+    {{ modal_ins_food.modalinserteditfood(current_user.pessoa.id) }}
+    {% import 'layouts/atleta/diario/mdinfofood.html' as modal_infofood %}
+    {{ modal_infofood.modalinfofood() }}
+
 
 </div>
 {% endif %}
@@ -194,6 +92,7 @@
 
         carrega_refeicoes(data_refeicao,dt);
         calcula_preeche_valdiferenca(data_sumdieta,data_metaatleta);
+        buscaunidademedida();
     });
 
 </script>
