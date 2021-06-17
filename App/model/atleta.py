@@ -18,7 +18,7 @@ class Atleta(UserMixin,db.Model):
     idpessoa = db.Column(db.Integer, db.ForeignKey('pessoa.id',ondelete='CASCADE'))
     pessoa = db.relationship("Pessoa", back_populates="atleta")
     metaatleta = db.relationship('Metaatleta',back_populates="atleta")
-
-
+    bloqueado = db.Column(db.String(1), nullable=True)
+    keyacess = db.Column(db.String(20), nullable=True)
 
     percfat = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))

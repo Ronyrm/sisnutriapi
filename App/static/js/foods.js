@@ -24,7 +24,10 @@ function mostradadosfoods(tbfood,qtdgramas){
     calculardadosnutri(tbfoods,qtdgramas);
 }
 function calculardadosnutri(tbfood,qtdgramas){
-    document.getElementById('edtidalimento').value = tbfood.id;
+    console.log(tbfood);
+    if (usuariologado){
+        document.getElementById('edtidalimento').value = tbfood.id;
+    }
     google.charts.load('current', {'packages':['corechart']}).then( function(){
 
         var data = google.visualization.arrayToDataTable([

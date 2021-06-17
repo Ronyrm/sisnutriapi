@@ -30,7 +30,7 @@
                 <div class="modal-body bg-primary">
                     <h5 class="text-white" for="listgroup"> Escolha abaixo um Refeição</h5>
 
-                    <div class="list-group p-2" id="listgroup">
+                    <div class="list-group" id="listgroup">
                     {% for refeicao in tabrefeicoes|sort(attribute='hora') %}
                         <button onclick="click_btnrefeicao({{refeicao.id}});"
                                 type="button"

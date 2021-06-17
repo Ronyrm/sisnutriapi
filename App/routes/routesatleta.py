@@ -1,13 +1,23 @@
-from flask import Blueprint,redirect,url_for
+from flask import Blueprint,redirect,url_for,render_template
 from flask_login import login_user,logout_user,login_required
 from App.views import atleta
 
 routesatleta= Blueprint('routesatleta',__name__)
 
 
+
+@routesatleta.route('/send/email/atleta', methods=['GET'])
+def sendemailatleta():
+    return atleta.sendemailatleta()
+
 @routesatleta.route('/sisnutri/diario',methods=['GET','POST'])
 def get_maindiarioatleta():
-    return atleta.get_maindiarioatleta();
+    return atleta.get_maindiarioatleta()
+
+
+@routesatleta.route('/sisnutri/atleta/validationacess',methods=['GET'])
+def validationacessatleta():
+    return atleta.validationacessatleta()
 
 
 @routesatleta.route('/',methods=['GET','POST'])

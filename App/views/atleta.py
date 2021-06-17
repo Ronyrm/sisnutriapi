@@ -2,10 +2,11 @@ from App import db,app
 from App.model.atleta import Atleta
 from App.model.pessoa import Pessoa
 from App.views.metaatleta import get_metaatleta
-from flask import jsonify, request,render_template,redirect,url_for
+from flask import jsonify, request,render_template,redirect,url_for,current_app
 from werkzeug.security import generate_password_hash,check_password_hash
 from App.schema.schema import Atletaschema,RefeicaoSchema,MetaAtletaschema
 from flask_login import login_user,logout_user, LoginManager,current_user
+
 
 from datetime import datetime
 import json
@@ -18,6 +19,73 @@ login_manager.init_app(app)
 def load_user(user_id):
     return Atleta.query.get(int(user_id))
 
+
+def validationacessatleta():
+    datenow = datetime.now()
+    dia = datenow.day
+    mes = datenow.month
+    ano = datenow.year
+
+    if request.method == 'GET':
+        keyacess = request.args.get('keyacess')
+        idatleta = request.args.get('idatleta')
+
+        from sqlalchemy import and_
+        atleta = get_id(idatleta)
+        if atleta:
+            if atleta.keyacess == keyacess:
+                atleta.bloqueado = 'N'
+                atleta.keyacess = None
+                db.session.commit()
+                return render_template('layouts/atleta/maintelaatleta.html',
+                                       mensagem='Usuário' + atleta.name + ' validado com sucesso !',
+                                       tela='Login',
+                                       atletalogado={'edtemail':atleta.email},
+                                       result=True,
+                                       refeicao=[], metaatleta=[],
+                                       dataatual=str(ano) + '-' + str(mes).zfill(2) + '-' + str(dia).zfill(2),
+                                       databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano),
+                                       sumdieta=[]
+                                       )
+
+
+def sendemailatleta():
+    from flask_mail import Mail,Message
+    if request.method == 'GET':
+        idatleta = request.args.get('idatleta')
+        if idatleta != None and idatleta != '':
+            atleta = Atleta.query.filter(Atleta.id == idatleta).first()
+            if atleta:
+                mail = Mail(app)
+                msg = Message('Hello',sender='sisnutri@rgmsolutions.com', recipients=[atleta.email])
+                msg.body = 'Estou te enviando de teste'
+                mail.send(msg)
+                return jsonify({'mensagem':'Enviado'})
+    return jsonify({'mensagem':'Não Enviado'})
+
+
+def sendEmail_verificationacess(recipients,keyacess,nomeatleta,id):
+    from App import app
+    from flask_mail import Mail, Message
+    mail = Mail(app)
+    try:
+        datenow = datetime.now()
+        dia = datenow.day
+        mes = datenow.month
+        ano = datenow.year
+
+        urlpai = request.origin
+        urlpai += '/sisnutri/atleta/validationacess?keyacess=' + keyacess + '&idatleta=' + str(id)
+        html = render_template('layouts/atleta/validationacess/main.html', keyacess=keyacess,
+                        nomeatleta=nomeatleta)
+        msg = Message('Validação Login Sisnutri - RGMSolutions', sender='sisnutri@rgmsolutions.com', recipients=recipients)
+        msg.body = 'Validação de cadastro! Clique no link para ativar: '+urlpai
+
+
+        mail.send(msg)
+        return True
+    except:
+        return False
 
 def get_maindiarioatleta():
     databr = request.args.get('databr')
@@ -83,7 +151,10 @@ def get_maintelaatleta():
         refeicao = get_refeicao_byidpessoa(current_user.idpessoa)
 
         from App.views.dieta import totalkcaldieta
-        sumdieta = totalkcaldieta(current_user.metaatleta[0].id, dataatual)
+
+        sumdieta = []
+        if len(current_user.metaatleta) != 0:
+            sumdieta = totalkcaldieta(current_user.metaatleta[0].id, dataatual)
 
         return render_template('layouts/atleta/maintelaatleta.html', atletalogado=schemaatleta.dump(current_user), mensagem='', result=False,
                                refeicao=schemaref.dump(refeicao,many=True),
@@ -254,8 +325,6 @@ def add_atleta():
                                    )
 
 
-
-
         atleta = get_email(email)
         if atleta:
             atletaschema = Atletaschema()
@@ -273,8 +342,22 @@ def add_atleta():
         pessoa = Pessoa(username=username,nome=name,password=pass_hash,email=email,tipopessoa='AT')
         db.session.add(pessoa)
         db.session.commit()
-        atleta = Atleta(username=username,name=name, password=pass_hash,email=email,idpessoa=pessoa.id)
-        db.session.add(atleta)
+
+        import string
+        import random
+        random_str = string.ascii_letters + string.digits + string.ascii_uppercase
+        keyacess = ''.join(random.choice(random_str) for i in range(20))
+
+        try:
+            atleta = Atleta(username=username,name=name, password=pass_hash,email=email,
+                            idpessoa=pessoa.id,bloqueado='S',keyacess=keyacess)
+            db.session.add(atleta)
+        except:
+            pass
+
+
+
+
     else:
         atleta = get_id(id)
         if atleta:
@@ -303,12 +386,21 @@ def add_atleta():
 
     db.session.commit()
 
+    try:
+        # url = request.origin
+        recipient = []
+        recipient.append(email)
+        envio = sendEmail_verificationacess(recipient, keyacess, atleta.name, atleta.id)
+
+    except:
+        envio = False;
+
     atletaschema = Atletaschema()
     result = atletaschema.dump(atleta)
     try:
         #return jsonify({'messagem': 'successfully fetched', 'data': result,'result': True}), 201
         return render_template('layouts/atleta/maintelaatleta.html',
-                               mensagem='Usuário'+ username +' cadastrado com Sucesso, faça o login!',
+                               mensagem='Usuário'+ username +' cadastrado com Sucesso. Verifique sua caixa de email para validar o acesso!',
                                tela='Login',
                                atletalogado=data,
                                result=True,
@@ -356,6 +448,15 @@ def login():
             atleta = get_username(username)
 
         if atleta:
+            if atleta.bloqueado == 'S':
+                return render_template('layouts/atleta/maintelaatleta.html', tela='Login',
+                                       mensagem='Usuário: '+username+ ' encontra-se bloqueado! Verifique sua caixa de email para ativar o login"', result=False,
+                                       atletalogado={}, refeicao=[], metaatleta=[],
+                                       dataatual=str(ano) + '-' + str(mes).zfill(2) + '-' + str(dia).zfill(2),
+                                       databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano),
+                                       sumdieta=[]
+                                       )
+
             if check_password_hash(atleta.password,pwd):
                 login_user(atleta)
                 from App.views.refeicao import get_refeicao_byidpessoa

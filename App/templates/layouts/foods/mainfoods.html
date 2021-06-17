@@ -20,6 +20,12 @@
 <script>
 const pageatual = {{pagul.page}};
 const perpage = {{pagul.per_page}};
+{% if current_user.is_authenticated %}
+    const usuariologado = true;
+{% else %}
+    const usuariologado = false;
+{% endif %}
+
 // ... do something with jsArrayOfItems in JavaScript ...
 
 
@@ -84,6 +90,17 @@ const perpage = {{pagul.per_page}};
 
     {% import 'layouts/foods/tabfoods.html' as tbfoods %}
     {{ tbfoods.table_foods(tabfoods,pagul.total,current_user,dataatual) }}
+
+    {% if current_user.is_authenticated %}
+        {% if current_user.metaatleta|length == 0 %}
+            {% set idmeta = '-1' %}
+        {% else  %}
+            {% set idmeta = current_user.metaatleta[0].id %}
+        {% endif %}
+        {% import 'layouts/foods/mdrefeicoesatleta.html' as modal_refeicoesatleta %}
+        {{ modal_refeicoesatleta.mdrefeicoesatleta(current_user.pessoa.refeicao,dataatual,idmeta) }}
+    {% endif %}
+
 
     <nav class="row" id="navpagination-foods"aria-label="Page navigation example">
         <div class="col-md-4 d-flex justify-content-md-start justify-content-center">

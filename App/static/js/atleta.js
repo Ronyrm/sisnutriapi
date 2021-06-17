@@ -1122,7 +1122,7 @@ function confirmaexclusaorefeicao(){
                 rowrefeicao.remove();
                 verifica_table_refeicao_empty(data.total);
                 if (data.total == 0){
-                    window.location.href = '/sisnutri';
+                    window.location.href = '/';
                 }
             }, 2000);
 
@@ -1282,7 +1282,7 @@ function updatedadosatleta(formData,btn){
                 msgdadosatleta.classList.add('d-none');
                 btn.innerHTML = htmlbtn;
                 dadoscompletoatleta = true;
-                window.location.href = '/sisnutri';
+                window.location.href = '/';
             }, 2000);
 
         }
@@ -1798,7 +1798,7 @@ form = document.getElementById('formmetaatleta');
             setTimeout(function(){
 
                 alert_confirmameta.classList.add('d-none');
-                window.location.href = '/sisnutri';
+                window.location.href = '/';
 
 
             }, 2000);
@@ -1810,7 +1810,7 @@ form = document.getElementById('formmetaatleta');
             alert_confirmameta.innerHTML = data.mensagem;
             setTimeout(function(){
                 alert_confirmameta.add('d-none');
-                window.location.href = '/sisnutri';
+                window.location.href = '/';
             }, 2000);
         }
 
