@@ -9,8 +9,7 @@
 
 </head>
 <body class="bodyfoods">
-    <main>
-        <nav class="navbar navbar-expand-md  bg-primary">
+    <nav class="navbar navbar-expand-md  bg-primary">
             <a class="navbar-brand" href="{{ url_for('routesatleta.get_mainatleta')}}">
                 <img class="img-fluid" src="{{ url_for('static', filename='img/logorgm.png') }}" alt="">
             </a>
@@ -27,12 +26,7 @@
 
         </nav>
 
-        <div id="content" class="container main-container my-2">
-
-            {% block content %} {% endblock %}
-        </div>
-    </main>
-
+    {% block content %} {% endblock %}
 
     {% block jsjquery %} {% endblock%}
     {% block jsfoods %} {% endblock %}
