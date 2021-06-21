@@ -128,3 +128,8 @@ a.bg-primary:focus,a.bg-primary:hover,button.bg-primary:focus,button.bg-primary:
     100% { left:0px; top:0px;}
   }
 
+.modal-content{
+    border: 1px solid var(--amareloescuro);
+    background-color: var(--preto);
+    
+}

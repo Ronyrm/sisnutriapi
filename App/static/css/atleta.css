@@ -52,25 +52,25 @@
 }
 
 #formdadosatleta input{
-    border: 1px solid var(--amarelo);
-    background-color: black;
-    color: var(--amarelo);
+    border: 1px solid black;
+    /*background-color: black;
+    color: var(--amarelo);*/
     
 }
 #formdadosatleta select{
-    border: 1px solid var(--amarelo);
-    background-color: black;
-    color: var(--amarelo);
+    border: 1px solid black;
+    /*background-color: black;
+    color: var(--amarelo);*/
     
 }
 
 #formdadosatleta input:placeholder-shown {
     border: 1px solid red;
-    background-color: black;
+    /*background-color: black;*/
     color: red;
 }
 #formdadosatleta label{
-    color: black;
+    color: white;
 }
 
 #table-refeicoes thead {

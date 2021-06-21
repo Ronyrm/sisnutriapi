@@ -196,7 +196,9 @@ var totalregmeta = {{ metaatleta|length }};
             {% endif %}
 
             var data_sumdieta = {{sumdieta|tojson}};
-            calcula_preeche_valdiferenca(data_sumdieta,data_metaatleta);
+            if(metaativa == 'S'){
+                calcula_preeche_valdiferenca(data_sumdieta,data_metaatleta);
+            }
         }
     });
 

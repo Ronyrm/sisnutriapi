@@ -2,8 +2,8 @@
     <form name="formrefeicao" id="formrefeicao" method="post" action="#">
     <div class="modal fade modal-refeicoes" id="modal-refeicoes" tabindex="0" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content bg-primary">
-                <div class="modal-header bg-primary text-warning">
+            <div class="modal-content">
+                <div class="modal-header  text-warning">
                     <input type="hidden" name="edtidrefeicao" id="edtidrefeicao" >
                     <input type="hidden" name="edtidmetaatleta" value="{{idmetaatleta}}" id="edtidmetaatleta" >
                     <input type="hidden" name="edtdataatual" value="{{dataatual}}" id="edtdataatual" >
@@ -27,7 +27,7 @@
                     ddddddddddddddd
                 </div>
 
-                <div class="modal-body bg-primary">
+                <div class="modal-body ">
                     <h5 class="text-white" for="listgroup"> Escolha abaixo um Refeição</h5>
 
                     <div class="list-group" id="listgroup">
@@ -42,7 +42,7 @@
                     </div>
 
                 </div>
-                <div class="modal-footer bg-primary">
+                <div class="modal-footer">
                     <button type="button" id="btnconfirmaexclusao" onclick="confirmarinsertrefeicao();" class="btn btn-warning" >
                         <span class="glyphicon glyphicon-ok"></span> Adicionar
                     </button>

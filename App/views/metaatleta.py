@@ -108,8 +108,22 @@ def count_metaatleta():
     return jsonify({'count':countmeta})
 
 
+def finalizameta():
+    if request.method == 'POST':
+        data = request.form
+        idmeta = data['edtidmetaatleta']
+        pesofinal = data['edtpesofinal']
+        meta = Metaatleta.query.get(idmeta)
+        if meta:
+            try:
 
+                meta.status = 'F'
+                meta.datafinalizada = datetime.now()
+                meta.pesofinalizado = pesofinal
+                db.session.commit()
 
+                return jsonify({'result':True,'mensagem':'Meta finalizada com sucesso!'})
+            except:
+                return jsonify({'result': False, 'mensagem':'Erro ao finalizar a meta, tente novamente!'})
 
-
-
+    return jsonify({'result': False, 'mensagem': 'Erro ao finalizar a meta, tente novamente!'})

@@ -45,3 +45,5 @@ class Metaatleta(db.Model):
     atleta = db.relationship("Atleta", back_populates="metaatleta")
     totaldiasprevisto = db.Column(db.Integer)
     dataprevisaofinal = db.Column(db.DateTime)
+    datafinalizada = db.Column(db.DateTime)
+    pesofinalizado = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))

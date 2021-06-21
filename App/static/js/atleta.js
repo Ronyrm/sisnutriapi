@@ -1822,3 +1822,53 @@ form = document.getElementById('formmetaatleta');
     });
 
 }
+
+function finalizameta(id, descricao){
+    document.getElementById('edtidmetaatleta').value=id;
+
+}
+
+async function confirmafinalizacaometa(){
+    gravar = false;
+    console.log('Id:'+document.getElementById('edtpesofinal').value);
+    if (document.getElementById('edtpesofinal').value == ''){
+        document.getElementById('edtpesofinal').value = '0';
+    }
+    if (parseFloat(document.getElementById('edtpesofinal').value)<=0){
+        document.getElementById('small-pesofinal').classList.remove('d-none');
+    }
+    else{
+        gravar = true;
+    }
+
+    if(gravar){
+
+        form = document.getElementById('form-finalizameta');
+        let formData = new FormData(form);
+        url = '/sisnutri/finaliza/meta/atleta';
+        var mybody = {method:'POST', body:formData };
+
+        let response = await fetch(url,mybody);
+        if (response.ok) {
+            alertmsgfinalizameta = document.getElementById('alert-msgfinalizameta');
+            alertmsgfinalizameta.classList.remove('d-none');
+            alertmsgfinalizameta.innerHTML = 'Aguarde...';
+            let json = await response.json();
+            if (json.result){
+                alertmsgfinalizameta.classList.add('alert-primary');
+            }
+            else{
+                alertmsgfinalizameta.classList.add('alert-danger');
+            }
+            alertmsgfinalizameta.innerHTML = json.mensagem+'<br> Aguarde, Atualizando informações!';
+
+            setTimeout(function(){
+                window.location.reload(true);
+            },2000)
+        }
+        else{
+            alert(response.status);
+        }
+    }
+
+}

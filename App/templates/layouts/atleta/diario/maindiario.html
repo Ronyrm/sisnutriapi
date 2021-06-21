@@ -35,10 +35,11 @@
 {% if current_user.is_authenticated %}
 
 <div id="contentatleta">
-    <div class="text-warning text-center">'
-        <h5 class="bg-primary p-2 border border-warning rounded">
+    <div class="bg-primary border p-2 border-warning rounded d-flex justify-content-between">'
+        <h5 class="ml-2 text-warning ">
             <strong>Meu Diário</strong>
         </h5>
+        <button type="button" class="btn btn-warning mr-2" onclick="gerarpdf();">Imprimir PDF</button>
     </div>
 
     <div id="accordion-refeicoes">
@@ -89,7 +90,8 @@
         {% endif %}
 
         var data_sumdieta = {{sumdieta|tojson}};
-
+        console.log('test');
+        console.log(data_sumdieta);
         carrega_refeicoes(data_refeicao,dt);
         calcula_preeche_valdiferenca(data_sumdieta,data_metaatleta);
         buscaunidademedida();

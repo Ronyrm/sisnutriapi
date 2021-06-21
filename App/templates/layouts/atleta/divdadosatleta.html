@@ -27,6 +27,7 @@
                     <input type="hidden" id="edtidadeatleta">
                     <small class="text-danger d-none" id="alert-email-atleta">Forneça o Email</small>
                 </div>
+
                 <div class="col-6 col-lg-3">
                     {% set dtnasc = atleta.dtnascimento|string %}
                     {% set dtnasc = dtnasc[0:4] +'-'+ dtnasc[5:7] +'-'+ dtnasc[8:10] %}

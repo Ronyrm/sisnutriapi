@@ -7,8 +7,8 @@
     {% endif %}
     <div class="alert alert-danger {{dnonemsg}} mb-2" id="msg-meta-atleta">
             {{msg}}
-        </div>
-    <div class=" text-warning container" id="div-meta-atleta">
+    </div>
+    <div class=" text-warning container mt-2" id="div-meta-atleta">
 
         <form name="formmetaatleta" id="formmetaatleta" class="d-none">
             <div class="form-group row d-flex justify-content-center">
@@ -387,6 +387,10 @@
         <div id="div-meta-atleta-ativa" class="d-none mt-2 p-1">
             <div class="bg-warning text-center text-dark p-1 border border-warning rounded">
                 <h5><strong>Meta Atual: {{metaatleta.descricao}}</strong></h5>
+                <a class="btn btn-dark ml-2" href="#" onclick="finalizameta({{metaatleta.id}},'{{metaatleta.descricao}}')"
+                   data-toggle="modal" data-target=".modal-finaliza-meta">
+                        Finalizar Meta
+                </a>
             </div>
             <div class="border border-warning text-warning p-2 text-center">
                 {% set meta = 'Ganho' %}
@@ -443,6 +447,48 @@
             </div>
 
 
+        </div>
+    </div>
+
+    <div class="modal fade modal-finaliza-meta" id="modal-finaliza-meta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-centered " role="document">
+            <div class="modal-content bg-primary">
+                <div class="modal-header bg-primary">
+
+                    <h5 class="modal-title text-warning">Finalizar Meta</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id='alert-msgfinalizameta' class="alert alert-dismissible fade show text-center d-none mx-2 my-2" role="alert">
+                    ddddddddddddddd
+                </div>
+
+                <div class="modal-body text-warning bg-primary">
+                    <form id="form-finalizameta" action="#" method="post">
+                        <input id="edtidmetaatleta" name="edtidmetaatleta" type="hidden">
+                        <div class="form-group form-row ">
+                            <label for="edtpesofinal"> Forneça o Peso Final: </label>
+                            <input id="edtpesofinal" name="edtpesofinal" type="number" class="form-control"
+                                   onfocus="document.getElementById('edtidmetaatleta').classList.add('d-none');">
+                            <small class="text-danger d-none" id="small-pesofinal"> Forneça o seu Peso Atual!</small>
+                        </div>
+                        <div class="form-group form-row text-white">
+                            <p>Ao finalizar está meta, o peso final será atualização no seus dados pessoais.</p>
+                            <p>Você so poderá fazer movimentações se cadastrar outra meta</p>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer bg-primary">
+                    <button type="button" id="btnconfirmaexclusao" onclick="confirmafinalizacaometa();" class="btn btn-warning" >
+                        <span class="glyphicon glyphicon-ok"></span> Confirmar
+                    </button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">
+                       <span class="glyphicon glyphicon-remove"></span> Cancelar
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 

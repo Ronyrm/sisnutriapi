@@ -15,7 +15,7 @@ var frmgroupqtd = document.getElementById('frmgroup-qtd');
 var smalldescricao = document.getElementById('smalldescricao');
 var divtabledadosnutri = document.getElementById('div-table-dadosnutri');
 var edtiditem = document.getElementById('edtiditem');
-
+var bodypdf = '';
 function carrega_refeicoes(refeicoes,dataatual){
     card_refeicoes = '';
     refeicoes.forEach((refeicao) => {
@@ -38,6 +38,7 @@ function carrega_refeicoes(refeicoes,dataatual){
             ' data-toggle="modal" data-target=".insert-edit-modal-food" '+
             'onclick="insert_edit_food('+refeicao.id+','+descref+','+dttemp+','+JSON.stringify({})+',-1);" aria-expanded="true">';
             card_refeicoes +='<span class="glyphicon glyphicon-plus"></span></button></small></div>';
+
 
             dieta_refeicao(refeicao.id,refeicao.descricao,dataatual);
 
@@ -63,6 +64,11 @@ async function dieta_refeicao(idrefeicao,descrefeicao,dataatual){
     let response = await fetch(url);
     if (response.ok) { // if HTTP-status is 200-299
         let json = await response.json();
+
+        bodypdf += '<div class="row">'+
+        '<div class="row"><h1 class="lbl-head"><strong>Refeicao: '+descrefeicao+ ((json.totreg==0)?"( Nenhum lançado )":"")+ '</strong></h1></div>';
+
+
         lblrefeicao = document.getElementById('lbl-refeicao'+idrefeicao);
         divitens = document.getElementById('div-itens'+idrefeicao);
         totalreg = json.totreg;
@@ -76,9 +82,19 @@ async function dieta_refeicao(idrefeicao,descrefeicao,dataatual){
             lblrefeicao.innerHTML = '<label class="text-dark"><strong>Total de Itens: '+ json.totitens+'</strong></label>';
             itensdieta = json.dataitem;
 
-
-
             if (totitens > 0){
+
+                bodypdf += '<table class="table-item"><thead class="thead-item"><tr class="tr-item">';
+                bodypdf += '<th  class="th-item">Alimento</th>'+
+                '<th class="th-item">Porção</th>'+
+                '<th class="th-item">Kcal</th>'+
+                '<th class="th-item">Proteina</th>'+
+                '<th class="th-item">Carboidrato</th>'+
+                '<th class="th-item">Gordura</th>';
+                bodypdf +='</tr></thead>';
+                bodypdf +='<tbody class="tbody-item">';
+
+
                 tableitem = '<table class="table table-dark table-sm">';
                 tableitem +='<thead class="text-white"><tr>'+
                 '<th  class="align-middle" scope="col">Alimento</th>'+
@@ -102,6 +118,21 @@ async function dieta_refeicao(idrefeicao,descrefeicao,dataatual){
                     totcarb += parseFloat(item.totalcarbo);
                     totproteina += parseFloat(item.totalproteina);
                     totfat += parseFloat(item.totalgordura);
+
+                    bodypdf += '<tr><td class="td-item">'+item.alimento.descricao+'</td>';
+                    bodypdf +='<td class="td-item">'+item.quantgramas+' '+item.alimento.unalimento.sigla+'</td>';
+                    bodypdf +='<td class="td-item">'+item.totalcalorias+'</td>';
+
+                    bodypdf +='<td class="td-item">'+parseFloat(item.totalproteina).toFixed(2)+' Grs - '
+                    +(parseFloat(item.totalproteina)*4).toFixed(2)+' kcal</td>';
+
+                    bodypdf +='<td class="td-item">'+parseFloat(item.totalcarbo).toFixed(2)+' Grs - '
+                    +(parseFloat(item.totalcarbo)*4).toFixed(2)+' kcal</td>';
+
+                    bodypdf +='<td class="td-item">'+parseFloat(item.totalgordura).toFixed(2)+' Grs - '
+                    +(parseFloat(item.totalgordura)*9).toFixed(2)+' Kcal</td>';
+
+
                     tableitem +='<tr><td class="align-middle"><div class="dropdown"><small>';
                     tableitem +="<button class='btn btn-link text-warning text-left' "+
                     "data-toggle='modal' data-target='.modal-info-food' "+
@@ -141,6 +172,21 @@ async function dieta_refeicao(idrefeicao,descrefeicao,dataatual){
 
                 });
                 tableitem +='</tr></tbody>';
+
+                bodypdf+= '</tr></tbody>';
+                bodypdf +='<tfoot class="tfoot-item"><tr><td></td>'+
+                '<th class="th-item">Total:</th>'+
+                '<th class="th-item">'+totkcal.toFixed(2)+'Kcal</th>';
+                '<th class="th-item">'+totproteina.toFixed(2)+'Grs - '+
+                (totproteina*4).toFixed(2)+'kcal</th>'+
+                '<th class="th-item">'+totcarb.toFixed(2)+'Grs - '+
+                (totcarb*4).toFixed(2)+'Kcal</th>'+
+                '<th class="th-item">'+totfat.toFixed(2)+'Grs - '+
+                (totfat*9).toFixed(2)+'Kcal</th>';
+                bodypdf +='</tr></tfoot>';
+                bodypdf +='</table>';
+
+
                 tableitem +='<tfoot class="text-white"><tr><td></td>'+
                 '<th class="align-middle text-right" scope="col">Total:</th>'+
                 '<th class="align-middle text-left" scope="col"><small>'+totkcal.toFixed(2)+' Kcal</small></th>';
@@ -152,9 +198,12 @@ async function dieta_refeicao(idrefeicao,descrefeicao,dataatual){
                 //(totfat*9).toFixed(2)+' Kcal</small></th>';
                 tableitem +='</tr></tfoot>';
                 tableitem +='</table>';
+
+                bodypdf+='</div>';
                 divitens.innerHTML = tableitem;
             }
             else{
+
                 lblrefeicao.innerHTML = '<label class="text-danger"><strong>Nenhum Item Lançado</strong></label>';
                 divitens.innerHTML = '<div class="d-flex justify-content-center text-center">'+
                 '<small class="text-warning">Nenhum Item Lançado para a Refeição: <strong>'+descrefeicao+
@@ -162,7 +211,7 @@ async function dieta_refeicao(idrefeicao,descrefeicao,dataatual){
             }
         }
         else{
-            console.log('Aqui');
+
             lblrefeicao.innerHTML = '<label class="text-danger"><strong>Nenhum Item Lançado</strong></label>';
             divitens.innerHTML = '<div class="d-flex mx-auto justify-content-center">'+
             '<small class="text-warning">Nenhum Item Lançado para a Refeição: <strong>'+descrefeicao+
@@ -691,4 +740,22 @@ function retornadivtablefood(descrefeicao,food,mostrahead){
     '<th class="align-middle text-warning" scope="col">'+food.totalsodio+' grs</th></tr>';
     tableitem +='</tbody></table>';
     return tableitem;
+}
+
+function gerarpdf(){
+    var style = "<style>title{font: 40px Calibri;} ";
+        style += "table {width: 100%;font: 20px Calibri;}";
+        style += "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+        style += "padding: 2px 3px;text-align: center;}";
+        style += "</style>";
+    var win = window.open('', '', 'height=700,width=700');
+    win.document.write('<html><head>');
+    win.document.write('<title>Diário</title>');   // <title> CABEÇALHO DO PDF.
+    win.document.write(style+'</head>');
+    win.document.write('<body>');
+    win.document.write(bodypdf);                          // O CONTEUDO DA TABELA DENTRO DA TAG BODY
+    win.document.write('</body></html>');
+    win.document.close(); 	                                         // FECHA A JANELA
+    win.print();
+
 }
