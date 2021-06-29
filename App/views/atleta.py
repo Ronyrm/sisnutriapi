@@ -19,7 +19,7 @@ login_manager.init_app(app)
 def load_user(user_id):
     return Atleta.query.get(int(user_id))
 
-
+# VALIDA SE KEYACESS ENVIADO POR PARA O EMAIL É VALIDO PARA DESBLOQUEAR
 def validationacessatleta():
     datenow = datetime.now()
     dia = datenow.day
@@ -74,8 +74,8 @@ def sendEmail_verificationacess(recipients,keyacess,nomeatleta,id):
         mes = datenow.month
         ano = datenow.year
 
-        urlpai = request.origin
-        urlpai += '/sisnutri/atleta/validationacess?keyacess=' + keyacess + '&idatleta=' + str(id)
+        urlpai = request.url_root
+        urlpai += 'sisnutri/atleta/validationacess?keyacess=' + keyacess + '&idatleta=' + str(id)
         html = render_template('layouts/atleta/validationacess/main.html', keyacess=keyacess,
                         nomeatleta=nomeatleta)
         msg = Message('Validação Login Sisnutri - RGMSolutions', sender='sisnutri@rgmsolutions.com', recipients=recipients)
@@ -208,11 +208,20 @@ def update_atleta():
         except:
             dtbirth = None
 
-
         try:
             selectgenero = data['selectgeneroatleta']
         except:
             selectgenero = None
+
+        try:
+            profilenamephone = data['edtprofilename']
+        except:
+            prolifenamephone = None
+
+        try:
+            phone = data['edtphone']
+        except:
+            phone = None
 
     if id != '' and id != None:
         atleta = get_id(id)
@@ -232,6 +241,20 @@ def update_atleta():
                         {'messagem': 'UserName: ' + username + ' já cadastrado no banco de dados', 'data': {},
                          'result': False}), 201
 
+
+            pessoa =  Pessoa.query.get(atleta.idpessoa)
+            if pessoa:
+                try:
+                    pessoa.nome = name
+                    pessoa.email = email
+                    pessoa.username = username
+                    pessoa.profilenamephone = profilenamephone
+                    pessoa.phone = phone
+                    db.session.commit()
+                except:
+                    return jsonify({'mensagem': 'Erro ao atualizar dados, tente novamente mais tarde!', 'data': {},
+                                    'result': False}), 201
+
             atleta.name = name
             atleta.email = email
             atleta.username = username
@@ -240,6 +263,8 @@ def update_atleta():
             atleta.percfat = percfat
             atleta.genero = selectgenero
             atleta.dtnascimento = dtbirth
+            atleta.profilenamephone = profilenamephone
+            atleta.phone = phone
             try:
                 db.session.commit()
                 atletaschema = Atletaschema()
@@ -292,6 +317,17 @@ def add_atleta():
         except:
             pwdconf = ''
 
+        try:
+            profilenamephone = data['edtprofilename']
+        except:
+            profilenamephone = None
+
+        try:
+            phone = data['edtphone']
+        except:
+            phone = None
+
+
     if pwd != pwdconf:
         return render_template('layouts/atleta/maintelaatleta.html',
                                mensagem='Senha não confere',
@@ -339,18 +375,16 @@ def add_atleta():
                                    sumdieta=[]
                                    )
 
-        pessoa = Pessoa(username=username,nome=name,password=pass_hash,email=email,tipopessoa='AT')
+        pessoa = Pessoa(username=username,nome=name,password=pass_hash,email=email,tipopessoa='AT',phone=phone,profilenamephone=profilenamephone)
         db.session.add(pessoa)
         db.session.commit()
 
-        import string
-        import random
-        random_str = string.ascii_letters + string.digits + string.ascii_uppercase
-        keyacess = ''.join(random.choice(random_str) for i in range(20))
+        from App.funcs.funcs import gera_keyacess
+        keyacess = gera_keyacess()
 
         try:
             atleta = Atleta(username=username,name=name, password=pass_hash,email=email,
-                            idpessoa=pessoa.id,bloqueado='S',keyacess=keyacess)
+                            idpessoa=pessoa.id,bloqueado='S',keyacess=keyacess,phone=phone,profilenamephone=profilenamephone)
             db.session.add(atleta)
         except:
             pass
@@ -423,6 +457,22 @@ def get_username(username):
 def get_email(email):
     try:
         return Atleta.query.filter(Atleta.email == email).one()
+    except:
+        return None
+
+
+def get_atleta_by_idpessoa(idpessoa):
+    try:
+        return Atleta.query.filter(Atleta.idpessoa == idpessoa).one()
+    except:
+        return None
+
+# Captura atleta pelo numero de telefone zap
+def get_atleta_by_phone(phone):
+    phone2 = phone[2:len(phone)-1]
+    try:
+        from sqlalchemy import  or_
+        return  Atleta.query.filter(or_(Atleta.phone==phone,Atleta.phone==phone2)).one()
     except:
         return None
 

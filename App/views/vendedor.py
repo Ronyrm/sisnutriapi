@@ -67,7 +67,7 @@ def add_vendedor(current_user, token,page,totporpag):
               ' para o vendedor ' + str(vendedor.id) + ' - ' + pessoa.nome + '!';
         return jsonify({'mensagem': msg,'result': False}), 201
 
-    pessoa = get_byemailpessoa(email)
+    pessoa = get_byemailpessoa(email,'VE')
     idpessoa = 0
     if pessoa:
         idpessoa = pessoa.id
@@ -171,7 +171,7 @@ def edit_vendedor(current_user, token,page,totporpag):
                 return jsonify({'mensagem': msg,'result': False}), 201
 
         if email != pessoa.email:
-            pessoatemp = get_byemailpessoa(email)
+            pessoatemp = get_byemailpessoa(email,'VE')
             if pessoatemp:
                 vendedor = Vendedor.query.filter(Vendedor.idpessoa==pessoatemp).one();
                 msg = 'Vendedor já encontra-se cadastrado na base de dados com email fornecido'+ \

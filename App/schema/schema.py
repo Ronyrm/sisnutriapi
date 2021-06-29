@@ -14,6 +14,7 @@ from App.model.alimentos import Alimentos
 from App.model.atleta import Atleta
 from App.model.metaatleta import Metaatleta
 from App.model.unalimento import Unalimento
+from App.model.mensagewhatsapp import MensageWhatsApp
 
 class GroupProductsSchema(ModelSchema):
     class Meta:
@@ -122,3 +123,10 @@ class DietaSchema(ModelSchema):
 
     dieta_refeicao = fields.Nested(RefeicaoSchema)
     metaatleta = fields.Nested(MetaAtletaschema)
+
+
+class MensageWhatsAppSchema(ModelSchema):
+    class Meta:
+        model = MensageWhatsApp
+
+    pessoa = fields.Nested(PessoaSchema)

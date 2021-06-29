@@ -3,12 +3,15 @@ from App.schema.schema import PessoaClienteRefeicoesSchema
 from flask import jsonify, request
 
 
-def get_byemailpessoa(email):
+def get_byemailpessoa(email,tipopessoa):
     try:
-        pessoa = Pessoa.query.filter(Pessoa.email == email).one()
+        from sqlalchemy import and_
+        pessoa = Pessoa.query.filter(and_(Pessoa.email == email,Pessoa.tipopessoa==tipopessoa)).all()
         return pessoa
     except:
         return None
+
+
 
 def get_byusernamepessoa(username):
     try:
@@ -23,4 +26,11 @@ def get_byid(id):
     result = pessoaschema.dump(pessoa)
     return result
 
+def get_pessoa_by_phone(phone):
+    phone2 = phone[2:len(phone)-1]
+    try:
+        from sqlalchemy import  or_
+        return  Pessoa.query.filter(or_(Pessoa.phone==phone,Pessoa.phone==phone2)).one()
+    except:
+        return None
 

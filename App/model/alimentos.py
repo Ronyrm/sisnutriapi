@@ -31,7 +31,7 @@ class Alimentos(db.Model):
     niacina = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
     vitaminac = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
     qtdgramasemcima = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    idpessoa = db.Column(db.Integer, db.ForeignKey('pessoa.id'))
+    idpessoa = db.Column(db.Integer, db.ForeignKey('pessoa.id',ondelete='CASCADE'))
     pessoa = db.relationship("Pessoa")
     idunalimento = db.Column(db.Integer, db.ForeignKey('unidademedidaalimento.id'))
     unalimento = db.relationship("Unalimento")

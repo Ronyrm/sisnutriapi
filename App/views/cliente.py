@@ -47,7 +47,7 @@ def add_cliente_json():
         result = pessoa_schema.dump(pessoa)
         return jsonify({'message': 'Cliente já encontra-se cadastrado na base de dados com o username fornecido!','data':result}), 500
 
-    pessoa = get_byemailpessoa(email)
+    pessoa = get_byemailpessoa(email,'CL')
     if pessoa:
         result = pessoa_schema.dump(pessoa)
         return jsonify({'message': 'Cliente já encontra-se cadastrado na base de dados com o email fornecido!',

@@ -84,4 +84,12 @@ app.register_blueprint(routesmagazine)
 from App.routes.routesatleta import routesatleta
 app.register_blueprint(routesatleta)
 
+from App.routes.routesmensagewhatsapp import routesmensagewhatsapp
+app.register_blueprint(routesmensagewhatsapp)
+
+
+from App.routes.routesseveral import routesseveral
+app.register_blueprint(routesseveral)
+
+
 db.create_all()

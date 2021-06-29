@@ -22,3 +22,6 @@ class Atleta(UserMixin,db.Model):
     keyacess = db.Column(db.String(20), nullable=True)
 
     percfat = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
+
+    phone = db.Column(db.String(20))
+    profilenamephone = db.Column(db.String(20))
