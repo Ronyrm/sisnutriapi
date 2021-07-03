@@ -1,5 +1,7 @@
 from marshmallow import fields
 from marshmallow_sqlalchemy import ModelSchema
+
+import App.model.packagetrack
 from App.model.pessoa import Pessoa
 from App.model.cliente import Cliente
 from App.model.refeicao import Refeicao
@@ -15,6 +17,7 @@ from App.model.atleta import Atleta
 from App.model.metaatleta import Metaatleta
 from App.model.unalimento import Unalimento
 from App.model.mensagewhatsapp import MensageWhatsApp
+from App.model.packagetrack import PackageTrack
 
 class GroupProductsSchema(ModelSchema):
     class Meta:
@@ -130,3 +133,8 @@ class MensageWhatsAppSchema(ModelSchema):
         model = MensageWhatsApp
 
     pessoa = fields.Nested(PessoaSchema)
+
+
+class PackageTrackSchema(ModelSchema):
+    class Meta:
+        model = PackageTrack

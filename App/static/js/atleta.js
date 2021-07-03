@@ -1872,3 +1872,7 @@ async function confirmafinalizacaometa(){
     }
 
 }
+function btn_click_forgoutitpwd(email){
+    window.location.href = '/sisnutri/forgoutit/pwd?email='+email;
+
+}

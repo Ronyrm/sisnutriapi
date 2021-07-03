@@ -14,13 +14,6 @@ def mensagwhatsapp(idpessoa):
     return jsonify({'data': {},'result': False})
 
 
-@routesmensagewhatsapp.route('/get/tracker/correios',methods=['POST'])
-def trackercorreios():
-    from App.views.several import search_tracker_correios
-    if request.method == 'POST':
-        data = request.form
-        return jsonify(search_tracker_correios(data['codigo']))
-
 
 @routesmensagewhatsapp.route('/get/cep',methods=['GET'])
 def get_cep():

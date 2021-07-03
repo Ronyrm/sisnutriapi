@@ -3,6 +3,7 @@ from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate,MigrateCommand
 from flask_script import Manager
+
 #import MySQLdb
 app = Flask(__name__)
 db = SQLAlchemy(app)
@@ -91,5 +92,8 @@ app.register_blueprint(routesmensagewhatsapp)
 from App.routes.routesseveral import routesseveral
 app.register_blueprint(routesseveral)
 
+
+from App.routes.routespackagetrack import routespackagetrack
+app.register_blueprint(routespackagetrack)
 
 db.create_all()

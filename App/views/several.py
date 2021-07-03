@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import asyncio
 import re
 
 
@@ -49,8 +50,7 @@ def search_latitude_longitude(strcyte):
 
 # -------------------------- RASTREIA OBJETO DOS CORREIOS VIA CODIGO = RETURN JSON --------------------------
 def search_tracker_correios(codigo):
-
-
+    from App.views.packagetrack import update_status_track
     req = requests.post('https://www2.correios.com.br/sistemas/rastreamento/ctrl/ctrlRastreamento.cfm?',
                         data={'objetos': codigo})
 
@@ -63,8 +63,9 @@ def search_tracker_correios(codigo):
         text = re.sub('\n', " ", soupinfo.text)
         text = re.sub('\r', ' ', text)
         text = re.sub('\t', ' ', text)
-        newdict = {0: text}
+        newdict = {0: text.strip()+' Ou código inválido!'}
         data.update(newdict)
+        update_status_track(codigo, 'N')
         return {'data': data,'tot':1}
 
     for soupchildren in soup.find_all(attrs={"class": "listEvent sro"}):
@@ -78,6 +79,9 @@ def search_tracker_correios(codigo):
             text = re.sub('\t', ' ', text)
 
             text = re.sub('       ',' - ',text)
+            text = re.sub('Clique aqui Minhas Importações',' ',text)
+            text = re.sub('Informar nº do documento para a fiscalização e entrega do seu objeto',
+                          '<br>Caso não informou o nº do documento <a target="_blank" href="https://www2.correios.com.br/sistemas/rastreamento/default.cfm?objetos='+codigo+'">Clique Aqui</a>',text)
             newdict[i][j] = text
             j+=1
         data.update(newdict)
@@ -86,6 +90,12 @@ def search_tracker_correios(codigo):
         i+=1
     import json
     tot = len(data)
+
+    if data[0][2].strip() == ' Objeto entregue ao destinatário  '.strip():
+        update_status_track(codigo,'E')
+    else:
+        update_status_track(codigo, 'P')
+
     return {'data':data,'tot':tot}
 
 
@@ -115,3 +125,23 @@ def busca_dados_CEP(cep):
         data = {'erro':True}
     return data
 
+async def soma(ceporg):
+    req = requests.get('https://viacep.com.br/ws/'+ceporg+'/json/')
+    if req.status_code == 200:
+        data = req.json()
+    else:
+        data = {'erro': True}
+    return data
+
+def sendsms_twilio(msgsms,phone):
+    from config import TWILIO_ACCOUNT_SID,TWILIO_AUTH_TOKEN
+    from twilio.rest import Client
+
+    account_sid = TWILIO_ACCOUNT_SID
+    auth_token = TWILIO_AUTH_TOKEN
+    client = Client(account_sid, auth_token)
+    mensagem = client.messages.create(to=phone,
+                                      from_='+5532984422783',
+                                      body=msgsms)
+    result = mensagem.sid()
+    return  result

@@ -3,11 +3,18 @@ import math
 import json
 
 # Gera chave aleatoria
-def gera_keyacess():
+def gera_keyacess(qtd=20):
     import string
     import random
     random_str = string.ascii_letters + string.digits + string.ascii_uppercase
-    return ''.join(random.choice(random_str) for i in range(20))
+    return ''.join(random.choice(random_str) for i in range(qtd))
+
+def gera_keyacess_pdw(qtd=6):
+    import string
+    import random
+    random_str = string.digits
+    restemp = ''.join(random.choice(random_str) for i in range(100))
+    return ''.join(random.choice(restemp) for i in range(qtd))
 
 
 # Funcao Retorna Idade

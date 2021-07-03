@@ -19,7 +19,7 @@ class Atleta(UserMixin,db.Model):
     pessoa = db.relationship("Pessoa", back_populates="atleta")
     metaatleta = db.relationship('Metaatleta',back_populates="atleta")
     bloqueado = db.Column(db.String(1), nullable=True)
-    keyacess = db.Column(db.String(20), nullable=True)
+    keyacess = db.Column(db.String(100), nullable=True)
 
     percfat = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=2))
 

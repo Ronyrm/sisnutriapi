@@ -24,6 +24,11 @@
                     Meu Diário
                 </a>
             </li>
+            <li class="nav-item my-1" id="li-utilidades">
+                <a class="btn btn-outline-warning btn-sm mx-1" href="{{ url_for('routespackagetrack.get_main_packagetracker',pessoa=username)}}">
+                    Rastreio Correios
+                </a>
+            </li>
             <li class="nav-item my-1">
                 <a class="btn btn-outline-warning  btn-sm mx-1" href="{{ url_for('routesatleta.logoutatleta') }}" class="btn btn-outline-warning btn-block btn-sm" id="logout">Sair</a>
             </li>

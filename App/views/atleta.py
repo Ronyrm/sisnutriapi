@@ -6,18 +6,19 @@ from flask import jsonify, request,render_template,redirect,url_for,current_app
 from werkzeug.security import generate_password_hash,check_password_hash
 from App.schema.schema import Atletaschema,RefeicaoSchema,MetaAtletaschema
 from flask_login import login_user,logout_user, LoginManager,current_user
-
-
 from datetime import datetime
 import json
+
 
 login_manager = LoginManager()
 #login_manager.login_view = 'routesatleta.get_mainatleta'
 login_manager.init_app(app)
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return Atleta.query.get(int(user_id))
+
 
 # VALIDA SE KEYACESS ENVIADO POR PARA O EMAIL É VALIDO PARA DESBLOQUEAR
 def validationacessatleta():
@@ -49,6 +50,7 @@ def validationacessatleta():
                                        )
 
 
+#Envia email atleta de teste
 def sendemailatleta():
     from flask_mail import Mail,Message
     if request.method == 'GET':
@@ -64,6 +66,7 @@ def sendemailatleta():
     return jsonify({'mensagem':'Não Enviado'})
 
 
+# Envia por email URL para liberar, desbloquear acesso
 def sendEmail_verificationacess(recipients,keyacess,nomeatleta,id):
     from App import app
     from flask_mail import Mail, Message
@@ -87,6 +90,7 @@ def sendEmail_verificationacess(recipients,keyacess,nomeatleta,id):
     except:
         return False
 
+#IR PRA TELA DIARIO
 def get_maindiarioatleta():
     databr = request.args.get('databr')
     dataatual = request.args.get('dataatual')
@@ -165,6 +169,7 @@ def get_maintelaatleta():
                                )
 
 
+# ATUALIZA DADOS ATLETA NO BANCO DE DADOS
 def update_atleta():
     if request.method == 'POST':
         data = request.form
@@ -276,6 +281,7 @@ def update_atleta():
     return jsonify({'mensagem': 'Usuário Inválido', 'data': {}, 'result': False}), 201
 
 
+# REIGISTRA ATLETA NO BANCO DE DADOS
 def add_atleta():
     datenow = datetime.now()
     dia = datenow.day
@@ -388,10 +394,6 @@ def add_atleta():
             db.session.add(atleta)
         except:
             pass
-
-
-
-
     else:
         atleta = get_id(id)
         if atleta:
@@ -408,7 +410,6 @@ def add_atleta():
                     atleschema = Atletaschema()
                     return jsonify({'messagem': 'UserName: ' + username + ' já cadastrado no banco de dados', 'data': {},
                                     'result': False}), 201
-
 
             atleta.username = username
             atleta.name = name
@@ -454,6 +455,7 @@ def get_username(username):
     except:
         return None
 
+
 def get_email(email):
     try:
         return Atleta.query.filter(Atleta.email == email).one()
@@ -467,6 +469,7 @@ def get_atleta_by_idpessoa(idpessoa):
     except:
         return None
 
+
 # Captura atleta pelo numero de telefone zap
 def get_atleta_by_phone(phone):
     phone2 = phone[2:len(phone)-1]
@@ -476,11 +479,13 @@ def get_atleta_by_phone(phone):
     except:
         return None
 
+
 def get_id(id):
     try:
         return Atleta.query.get(id)
     except:
         return None
+
 
 def login():
     datenow = datetime.now()
@@ -544,6 +549,82 @@ def login():
                                sumdieta = []
                                )
 
+
 def logout():
     logout_user()
     redirect(url_for('routesatleta.get_mainatleta'))
+
+
+# ENVIAR CODIGO DE ACESSO QUANDO ATLETA ESQUECE A SENHA PARA ALTERA LA
+def sendEmail_keyacess_forgoutit_pwd(recipients,keyacess,nomeatleta,id):
+    from App import app
+    from flask_mail import Mail, Message
+    mail = Mail(app)
+    hash_key = generate_password_hash('RGM'+keyacess+'SysNutri')
+
+    try:
+        atleta = get_id(id)
+        if atleta:
+            atleta.bloqueado = 'S'
+            atleta.keyacess = hash_key
+            db.session.commit()
+            try:
+                msg = Message('Redefinição de Senha Sisnutri - RGMSolutions',
+                              sender='sisnutri@rgmsolutions.com',
+                              recipients=[atleta.email])
+                msg.body = 'Redefinição de Senha ! Digite o este código :  '+keyacess+'  para cadastrar uma nova senha!';
+                
+                mail.send(msg)
+                return True
+            except:
+                return False
+        else:
+            return False
+    except:
+        return False
+
+
+#VERIFICA CODIGO ACESSO ENVIADO POR EMAIL DO ATLETA SE É VALIDO
+def verify_keyacess_atleta(keyacess,idatleta):
+
+    try:
+        atleta = get_id(idatleta)
+        if atleta:
+            if check_password_hash(atleta.keyacess,'RGM'+keyacess+'SysNutri'):
+                return atleta
+            else:
+                return None
+    except:
+        return None
+
+# ATUALIZA PASSWORD ATLETA
+def update_password_atleta(newpwd,idatleta):
+    atleta_ = get_id(idatleta)
+    if atleta_:
+        try:
+            atleta_.password = generate_password_hash(newpwd)
+            atleta_.bloqueado = 'N'
+            db.session.commit()
+            return jsonify({'result': True, 'mensagem': atleta_.name+', sua senha foi atualizada com Sucesso.'})
+        except:
+            return jsonify({'result': False,'mensagem':'Erro ao atualizar sennha.'})
+
+    return jsonify({'result': False, 'mensagem': 'Erro ao atualizar sennha.'})
+
+def go_tela_login_atleta(idatleta,msg):
+    atleta = get_id(idatleta)
+    datenow = datetime.now()
+    dia = datenow.day
+    mes = datenow.month
+    ano = datenow.year
+
+    return render_template('layouts/atleta/maintelaatleta.html',
+                           mensagem=msg,
+                           tela='Login',
+                           atletalogado={'edtemail': atleta.email},
+                           result=True,
+                           refeicao=[], metaatleta=[],
+                           dataatual=str(ano) + '-' + str(mes).zfill(2) + '-' + str(dia).zfill(2),
+                           databr=str(dia).zfill(2) + '/' + str(mes).zfill(2) + '/' + str(ano),
+                           sumdieta=[]
+                        )
