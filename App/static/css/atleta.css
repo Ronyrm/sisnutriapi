@@ -113,4 +113,28 @@
   .dropdown:hover .dropdown-content {
     display: block;
   }
-  
+
+  .div-info-clima{
+    border-radius: 30px;
+    background-image: url('../img/uploads/tempo.jpg');
+    background-size: cover;
+    background-color: black;
+
+  }
+.div-info-cotacoes{
+    border-radius: 30px;
+    width: auto;
+    background-image: url('../img/uploads/dolar.jpg');
+    background-size: cover;
+  }
+
+  .div-info-logo{
+
+  }
+.div-info-clima table thead tr th, .div-info-clima table thead tr td, 
+.div-info-cotacoes table thead tr th, .div-info-cotacoes table thead tr td{ 
+    border-bottom: 1px solid var(--amareloescuro);
+    border-top: 0;
+    
+}
+

@@ -96,4 +96,27 @@ app.register_blueprint(routesseveral)
 from App.routes.routespackagetrack import routespackagetrack
 app.register_blueprint(routespackagetrack)
 
+from App.routes.localidades.routesregiao import routesregiao
+app.register_blueprint(routesregiao)
+
+from App.routes.localidades.routesuf import routesuf
+app.register_blueprint(routesuf)
+
+from App.routes.localidades.routesmesoregiao import routesmesoregiao
+app.register_blueprint(routesmesoregiao)
+
+from App.routes.localidades.routesmicroregiao import routesmicroregiao
+app.register_blueprint(routesmicroregiao)
+
+from App.routes.localidades.routes_add_update_IBGE import routesIBGE
+app.register_blueprint(routesIBGE)
+
+from App.routes.localidades.routescidades import routescidades
+app.register_blueprint(routescidades)
+
+from App.routes.routesenderecos import routesenderecos
+app.register_blueprint(routesenderecos)
+
+
+
 db.create_all()

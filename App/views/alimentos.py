@@ -1,13 +1,10 @@
 from App import db,app
-from App.model.alimentos import Alimentos, tabalimento_schema, tabalimentos_schema
+from App.model.alimentos import Alimentos, tabalimentos_schema
 from App.schema.schema import FoodsSchema
 from App.model.atleta import Atleta
 from flask import jsonify, request,render_template
-from flask_login import login_user,logout_user, LoginManager,current_user
+from flask_login import LoginManager,current_user
 
-
-from App.model.pessoa import Pessoa
-from App.model.cliente import Cliente
 from flask_paginate import get_page_args
 
 login_manager = LoginManager()
@@ -290,7 +287,6 @@ def get_alimento_bydesc():
 
         #foodsschema = FoodsSchema(only=('id','descricao','carboidrato','proteina','lipidios','sodio','calorias','fibras','pessoa'))
 
-    from App.funcs.funcs import  returnPagination
     if alimentopag:
         foodsschema = FoodsSchema()
         tabfods = foodsschema.dump(alimentopag.items,many=True)

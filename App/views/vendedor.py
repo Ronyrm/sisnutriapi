@@ -1,14 +1,11 @@
 from App import db, app
-from App.model.pessoa import Pessoa
+from App.model.pessoas.pessoa import Pessoa
 from App.model.vendedor import Vendedor
-from App.model.users import Users
-from App.views.pessoas import get_byusernamepessoa, get_byemailpessoa
+from App.views.pessoas.pessoas import get_byusernamepessoa, get_byemailpessoa
 from App.views.users import get_user_by_username
 from flask import jsonify, request,render_template
 from werkzeug.security import generate_password_hash
-from App.schema.schema import VendedorSchema,UsersSchema,PessoaSchema
-
-import json
+from App.schema.schema import VendedorSchema,UsersSchema
 
 
 def add_vendedor(current_user, token,page,totporpag):

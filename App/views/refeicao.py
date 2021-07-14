@@ -1,9 +1,9 @@
-from App import db,ma
+from App import db
 from App.model.refeicao import Refeicao
-from App.model.pessoa import Pessoa
+from App.model.pessoas.pessoa import Pessoa
 from App.model.atleta import Atleta
 from App.model.cliente import Cliente
-from flask import jsonify, request,redirect,url_for
+from flask import jsonify, request
 from App.schema.schema import PessoaClienteRefeicoesSchema,RefeicaoSchema
 
 
@@ -42,7 +42,7 @@ def post_refeicao():
         else:
             refeicao = Refeicao.query.get(idrefeicao)
             if refeicao:
-                if refeicao.descricao != descricao:
+                if refeicao.descricao.upper() != descricao.upper():
                     existrefeicao = get_bydescricao(descricao, idpessoa)
                     if existrefeicao:
                         return jsonify({'mensagem': 'A Refeição ' + descricao + ' ja existe para o usuário ' + pessoa.nome,

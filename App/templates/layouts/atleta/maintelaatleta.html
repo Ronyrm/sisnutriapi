@@ -11,17 +11,15 @@
 
 
 {% block jsatleta %}
+<script src="{{ url_for('static', filename='js/funcs-sisnutri.js') }}"></script>
+<script src="{{ url_for('static', filename='js/msginfomodal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/funcoes/mask_input.js') }}"></script>
+<script src="{{ url_for('static', filename='js/funcoes/funcoes.js') }}"></script>
 <script src="{{ url_for('static', filename='js/atleta.js') }}"></script>
 <script src="{{ url_for('static', filename='js/diario.js') }}"></script>
-<script src="{{ url_for('static', filename='js/msginfomodal.js') }}"></script>
 
 {% endblock %}
 
-{% block jsfuncs %}
-<script src="{{ url_for('static', filename='js/funcs-sisnutri.js') }}"></script>
-{% endblock %}
-
-{% block jsjquery %}{% endblock %}
 
 {% block content %}
 
@@ -78,6 +76,8 @@ var totalregmeta = {{ metaatleta|length }};
     {% import 'layouts/atleta/simulator.html' as divsimulator %}
     {{ divsimulator.simulator() }}
 </div>
+
+
 {% if not current_user.is_authenticated %}
 <div id="contentprincipal" class="container my-2">
 
@@ -108,19 +108,30 @@ var totalregmeta = {{ metaatleta|length }};
 </div>
 {% endif %}
 
-<!-- ESPAÇO USUARIO  !-->
+
+<!--------------------------  ESPAÇO USUARIO  !--------------------------------------------->
 {% if current_user.is_authenticated %}
 
 <div id="contentatleta" class="my-2">
 
     {% import 'layouts/atleta/menuatleta.html' as navmenuatleta %}
-    {{ navmenuatleta.nav_menuatleta(current_user.name,refeicao,dataatual,databr) }}
+    {{ navmenuatleta.nav_menuatleta(atletalogado.pessoa,current_user.name,refeicao,dataatual,databr) }}
 
     {% import 'layouts/atleta/divfieldempty.html' as divfieldempy %}
     {{ divfieldempy.divcheckfields_empty(atletalogado) }}
 
     {% import 'layouts/atleta/divdadosatleta.html' as divdadosatleta %}
     {{ divdadosatleta.divdadosatleta(atletalogado) }}
+
+    {% import 'layouts/pessoas/enderecos/md_table_enderecos.html' as mdtableenderecos %}
+    {{ mdtableenderecos.table_enderecos() }}
+
+    {% import 'layouts/pessoas/enderecos/md_add_update_endereco.html' as mdaddupdateendereco %}
+    {{ mdaddupdateendereco.addupdate_endereco(atletalogado.pessoa) }}
+
+    {% import 'layouts/pessoas/enderecos/md_delete_endereco.html' as mddelete_endereco %}
+    {{ mddelete_endereco.mddeleteendereco(atletalogado.pessoa) }}
+
 
 
 
@@ -162,7 +173,8 @@ var totalregmeta = {{ metaatleta|length }};
 
 <script>
     $().ready(function() {
-        console.log(data_refeicao);
+        geolocation_clima();
+        dados_moeda_BR();
         var idade = 0;
         if (dtnasc != ''){
             idade = retornaidade(dtnasc);

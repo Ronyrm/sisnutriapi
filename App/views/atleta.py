@@ -1,14 +1,12 @@
 from App import db,app
 from App.model.atleta import Atleta
-from App.model.pessoa import Pessoa
+from App.model.pessoas.pessoa import Pessoa
 from App.views.metaatleta import get_metaatleta
-from flask import jsonify, request,render_template,redirect,url_for,current_app
+from flask import jsonify, request,render_template,redirect,url_for
 from werkzeug.security import generate_password_hash,check_password_hash
 from App.schema.schema import Atletaschema,RefeicaoSchema,MetaAtletaschema
 from flask_login import login_user,logout_user, LoginManager,current_user
 from datetime import datetime
-import json
-
 
 login_manager = LoginManager()
 #login_manager.login_view = 'routesatleta.get_mainatleta'
@@ -31,7 +29,6 @@ def validationacessatleta():
         keyacess = request.args.get('keyacess')
         idatleta = request.args.get('idatleta')
 
-        from sqlalchemy import and_
         atleta = get_id(idatleta)
         if atleta:
             if atleta.keyacess == keyacess:

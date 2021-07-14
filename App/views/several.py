@@ -25,6 +25,19 @@ def search_dados_temperatura_lat_lon(lat,lon,units):
     #    return None
 
 
+# -------------------------- BUSCA DADOS TEMPERATURA POR LATITUDE E LONGITUDE --------------------------
+def search_dados_temperatura_lat_log(lat,lon,units):
+    chavekey = '078e25e1759b62d7d25ad0f48217d730'
+
+    url = f'https://api.openweathermap.org/data/2.5/weather?units={units}&lat={lat}&lon={lon}&appid={chavekey}'
+    print(url)
+    req = requests.get(url)
+    try:
+        return req.json()
+    except:
+        return None
+
+
 # -------------------------- BUSCA DADOS TEMPERATURA POR CIDADE,UF --------------------------
 def search_dados_temperatura_city(city, units):
     chavekey = '078e25e1759b62d7d25ad0f48217d730'
@@ -38,12 +51,13 @@ def search_dados_temperatura_city(city, units):
         return None
 
 
-# -------------------------- BUSCA DADOS LATITUDE E LONGITUDE --------------------------
-def search_latitude_longitude(strcyte):
+# -------------------------- BUSCA DADOS LATITUDE E LONGITUDE GEOLOCATOR --------------------------
+def search_latitude_longitude_geolocator(strcyte):
     from geopy import Nominatim
     geolocator = Nominatim(user_agent="sisnutri")
     try:
-        return  geolocator.geocode(strcyte)
+        result = geolocator.geocode(strcyte)
+        return result
     except:
         return None
 
@@ -125,14 +139,8 @@ def busca_dados_CEP(cep):
         data = {'erro':True}
     return data
 
-async def soma(ceporg):
-    req = requests.get('https://viacep.com.br/ws/'+ceporg+'/json/')
-    if req.status_code == 200:
-        data = req.json()
-    else:
-        data = {'erro': True}
-    return data
 
+# ENviar SMS TWILIO -Continuação
 def sendsms_twilio(msgsms,phone):
     from config import TWILIO_ACCOUNT_SID,TWILIO_AUTH_TOKEN
     from twilio.rest import Client
@@ -145,3 +153,9 @@ def sendsms_twilio(msgsms,phone):
                                       body=msgsms)
     result = mensagem.sid()
     return  result
+
+
+# -------------------------- BUSCA DADOS LOCALIDADE DE ACORDO COM O CEP INFORMADO = RETURN JSON --------------------------
+
+
+

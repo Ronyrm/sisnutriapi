@@ -1,12 +1,12 @@
 from App import db
-from App.model.pessoa import  Pessoa, pessoa_schema, pessoas_schema
+from App.model.pessoas.pessoa import  Pessoa, pessoa_schema
 from App.model.cliente import Cliente
-from App.model.users import Users
-from App.views.pessoas import get_byemailpessoa,get_byusernamepessoa
+from App.views.pessoas.pessoas import get_byemailpessoa,get_byusernamepessoa
 from flask import jsonify, request
 from werkzeug.security import generate_password_hash
 from App.schema.schema import ClienteSchema
-import json
+
+
 def add_cliente_json():
     try:
         rg = request.json['rg']

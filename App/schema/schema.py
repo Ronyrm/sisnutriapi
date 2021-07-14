@@ -1,13 +1,11 @@
 from marshmallow import fields
 from marshmallow_sqlalchemy import ModelSchema
 
-import App.model.packagetrack
-from App.model.pessoa import Pessoa
+from App.model.pessoas.pessoa import Pessoa
 from App.model.cliente import Cliente
 from App.model.refeicao import Refeicao
 from App.model.dieta import Dieta
 from App.model.itemdieta import ItemDieta
-from App.model.alimentos import Alimentos
 from App.model.products import Product
 from App.model.groupproducts import GroupProducts
 from App.model.vendedor import Vendedor

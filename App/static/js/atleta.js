@@ -978,7 +978,7 @@ function editrefeicao(refeicao){
     document.getElementById('edtdescricao').value = refeicao.descricao;
     document.getElementById('edthora').value = refeicao.hora;
     document.getElementById('edtidrefeicao').value = refeicao.id;
-    document.getElementById('edtidpessoa').value = refeicao.pessoa;
+    document.getElementById('edtidpessoa-refeicao').value = refeicao.pessoa;
 
     chkmostrar = document.getElementById('edtmostrar');
     if (refeicao.mostrar == 'S') {
@@ -990,14 +990,16 @@ function editrefeicao(refeicao){
     }
 
 }
+
 // Botão Inserir Refeição
 function btninsertrefeicao(idpessoa){
+    console.log('Pessoa:'+idpessoa);
     document.getElementById('lblidrefeicao').innerHTML = 'Inserindo Refeição';
     document.getElementById('edtdescricao').value = '';
     document.getElementById('edthora').value = '00:00';
     document.getElementById('edtidrefeicao').value = '-1';
     console.log(idpessoa);
-    document.getElementById('edtidpessoa').value = idpessoa;
+    document.getElementById('edtidpessoa-refeicao').value = idpessoa;
     chkmostrar = document.getElementById('chkativa');
     divdadosatleta = document.getElementById('div-dados-atleta');
     divdadosatleta.classList.add('d-none');
@@ -1006,6 +1008,7 @@ function btninsertrefeicao(idpessoa){
 
 // Botão Gravar Modal Inserir e Editar Refeição
 function gravarrefeicao(){
+
     form = document.getElementById('formrefeicao');
     formData = new FormData(form);
     $.ajax({
@@ -1094,10 +1097,12 @@ function gravarrefeicao(){
     });
 }
 
+//Excluir Refeicao
 function deleterefeicao(id,descricao){
     document.getElementById('edtiddelete').value = id;
     document.getElementById('modal-msg-delete').innerHTML = 'Deseja excluir a Refeição:<strong> '+descricao+'?</strong>';
 }
+//Confirma Exclusão
 function confirmaexclusaorefeicao(){
     id = document.getElementById('edtiddelete').value;
     rowrefeicao = document.getElementById('tr-refeicao'+id);
@@ -1145,6 +1150,7 @@ function confirmaexclusaorefeicao(){
     });
 }
 
+// Verifica Se tabela refeicao esta vazia
 function verifica_table_refeicao_empty(totalreg){
     //divrefatleta = document.getElementById('divrefatleta');
     //divrefatleta.classList.remove('d-none');
@@ -1159,6 +1165,7 @@ function verifica_table_refeicao_empty(totalreg){
         document.getElementById('head-telarefeicao').innerHTML = '<h5  class=""><strong>Minhas Refeições</strong></h5>';
     }
 }
+
 // Botão Menu Dados Atleta
 function dadosatleta(){
     //document.getElementById('div-dados-empty').classList.add('d-none');
@@ -1169,7 +1176,7 @@ function dadosatleta(){
     document.getElementById('btnmostrarmeta').classList.remove('active');
     btnvoltarref();
 }
-
+//Salva dados atleta
 function salvardadosatleta(){
 
     edtname = document.getElementById('edtnomeatleta');
@@ -1872,7 +1879,135 @@ async function confirmafinalizacaometa(){
     }
 
 }
+
 function btn_click_forgoutitpwd(email){
     window.location.href = '/sisnutri/forgoutit/pwd?email='+email;
 
+}
+
+// CAPTURA DADOS DO CLIMA de acordo com a função geolocaltion_clima, abaixo()
+async function dados_clima(position){
+    div_clima = document.querySelector('#div-clima');
+    div_clima.classList.remove('d-none');
+    div_clima.innerHTML = str_div_loading+" Aguarde, buscando informações...<br>";
+    lat = position.coords.latitude.toString().substring(0, 8);
+    lon = position.coords.longitude.toString().substring(0, 8);
+
+    response = await fetch('/get/clima/latlon/'+lat+'/'+lon);
+
+    result_json = await response.json();
+
+    // função transale_text : static/js/funcoes/js
+    strtempnow = await translate_text(result_json["weather"][0]["description"]);
+
+    temp_now = result_json["main"]["temp"].toString().substring(0,2)+' ºC';;
+    temp_max = result_json["main"]["temp_max"].toString().substring(0,2)+' ºC';
+    temp_min = result_json["main"]["temp_min"].toString().substring(0,2)+' ºC';
+
+    // valor pressão atmosfetica em paschol e polegas por mercurio
+    vl_pressure_hPa = result_json['main']["pressure"];
+    vl_pressure_polHg = ((vl_pressure_hPa * 29.92126)/1013.25).toFixed(2);
+
+    sessionstemper ='<div class="text-warning text-center"><h5 class="text-warning">Informações Climáticas</h5></div>'+
+    '<div class="d-flex justify-content-center my-1">'+
+        '<div class="div-info-clima p-3">'+
+            '<small><p><strong>Tempo Agora: </strong>'+strtempnow+'</p>'+
+            '<p> Temperatura </p>'+
+            '<p>Atual: '+temp_now+'</p>'+
+            '<p>Máxima: '+temp_max+
+            ', mínima: '+temp_min+'</p></small>'+
+        '</div>'+
+    '</div>'+
+    '<div class="d-flex justify-content-center my-1">'+
+        '<div class="div-info-clima p-3"><small>'+
+            '<p>Latitude: '+lat+
+            ', longitude: '+lon+'</p>'+
+            '<p>Atm hPa: '+vl_pressure_hPa+
+            ', Atm polHg: '+vl_pressure_polHg+'</p>'+
+            '</small>'+
+        '</div>'+
+    '</div>';
+    //'</div>';
+
+    div_clima.innerHTML = sessionstemper;
+}
+
+// BUSCA DADOS CLIMATICOS, DE ACORDO COM A LOCALIZAÇÃO DO DISPOSITIVO, QUE RETORNA LATITUDE E LONGITUDE
+// E BUSCA OS VALORES. REFERENTE A FUNÇÃO ACIMA: dados_clina
+function geolocation_clima(){
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(dados_clima);
+    } else {
+        console.loh( "Geolocation is not supported by this browser.");
+    }
+}
+
+// CAPTURA COTAÇÃO
+async function dados_moeda_BR(){
+    div_moedaBR = document.querySelector('#div-moedaBR');
+    div_moedaBR.classList.remove('d-none');
+    div_moedaBR.innerHTML = str_div_loading+" Aguarde, buscando informações...<br>";
+    result_json = await search_moeda_conversion_BRL();
+
+    USDBRL_json = await result_json["USDBRL"]; // DOLAR->REAL
+    EURBRL_json = await result_json["EURBRL"]; //EURO->REAL
+    BTCBRL_json = await result_json["BTCBRL"]; //BITCOION->REAL
+
+
+    dataUSD = retornadataBR(new Date(USDBRL_json["create_date"]));
+    horaUSD = retornahoraBR(new Date(USDBRL_json["create_date"]));
+    dataEUR = retornadataBR(new Date(EURBRL_json["create_date"]));
+    horaEUR = retornahoraBR(new Date(EURBRL_json["create_date"]));
+    dataBTC = retornadataBR(new Date(BTCBRL_json["create_date"]));
+    horaBTC = retornahoraBR(new Date(BTCBRL_json["create_date"]));
+    div_moedaBR.innerHTML ='<div class="text-warning text-center"><h5>Cotação Moeda</h5></div>';
+    div_moedaBR.innerHTML +='<div id="demo" class="carousel slide" data-ride="carousel">'+
+    '<div class="carousel-inner">'+
+    // DOLAR > BRL
+    ' <div class="carousel-item active">'+
+    '<div class="row text-white d-flex justify-content-center">'+
+    '<div class="div-info-cotacoes p-4">'+
+    '<div class="row text-warning d-flex mx-2 justify-content-center"><label>Cotação Dólar para Real </label></div> '+
+    '<small><table class="table  text-white  table-sm">'+
+    '<thead><tr><th>Compra</th><td>'+parseFloat(USDBRL_json["bid"]).toFixed(2)+' R$</td></tr></thead>'+
+    '<thead><tr><th>Venda</th><th>'+parseFloat(USDBRL_json["ask"]).toFixed(2)+' R$</th></tr></thead>'+
+    '</table>'+
+    '<p> Variação: '+parseFloat(USDBRL_json["varBid"]).toFixed(2)+'</p>'+
+    '<p> Maior: '+parseFloat(USDBRL_json["high"]).toFixed(2)+
+    ', Menor:'+parseFloat(USDBRL_json["low"]).toFixed(2)+'</p>'+
+    '<p> Data: '+dataUSD+', '+horaUSD+' </p></small></div>'+
+
+    '</div></div>'+
+  // EURO > BRL
+  '<div class="carousel-item">'+
+    '<div class="row text-white d-flex justify-content-center">'+
+    '<div class="div-info-cotacoes p-4">'+
+    '<div class="row text-warning d-flex mx-2 justify-content-center"><label>Cotação Euro para Real </label></div> '+
+    '<small><table class="table  text-white  table-sm">'+
+    '<thead><tr><th>Compra</th><td>'+parseFloat(EURBRL_json["bid"]).toFixed(2)+' R$</td></tr></thead>'+
+    '<thead><tr><th>Venda</th><th>'+parseFloat(EURBRL_json["ask"]).toFixed(2)+' R$</th></tr></thead>'+
+    '</table>'+
+    '<p> Variação: '+parseFloat(EURBRL_json["varBid"]).toFixed(2)+'</p>'+
+    '<p> Maior: '+parseFloat(EURBRL_json["high"]).toFixed(2)+
+    ', Menor:'+parseFloat(EURBRL_json["low"]).toFixed(2)+'</p>'+
+    '<p> Data: '+dataEUR+', '+horaEUR+' </p></small></div></div></div>'+
+  // BITCOIN > BRL
+  '<div class="carousel-item">'+
+    '<div class="row text-white d-flex justify-content-center">'+
+    '<div class="div-info-cotacoes p-4">'+
+    '<div class="row text-warning d-flex mx-2 justify-content-center"><label> Bitcoin para Real </label></div> '+
+    '<small><table class="table text-white  table-sm">'+
+    '<thead><tr><th>Compra</th><td>'+parseFloat(BTCBRL_json["bid"]).toFixed(2)+' R$</td></tr></thead>'+
+    '<thead><tr><th>Venda</th><th>'+parseFloat(BTCBRL_json["ask"]).toFixed(2)+' R$</th></tr></thead>'+
+    '</table>'+
+    '<p> Variação: '+parseFloat(BTCBRL_json["varBid"]).toFixed(2)+'</p>'+
+    '<p> Maior: '+parseFloat(BTCBRL_json["high"]).toFixed(2)+
+    ', Menor:'+parseFloat(BTCBRL_json["low"]).toFixed(2)+'</p>'+
+    '<p> Data: '+dataBTC+', '+horaBTC+' </p></small></div></div></div>'+
+  '</div>'+
+  '<a class="carousel-control-prev" href="#demo" data-slide="prev">'+
+  '  <span class="carousel-control-prev-icon"></span>'+
+  '</a>'+
+  '<a class="carousel-control-next" href="#demo" data-slide="next">'+
+  '  <span class="carousel-control-next-icon"></span></a></div>';
 }

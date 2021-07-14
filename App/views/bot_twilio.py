@@ -1,5 +1,5 @@
 from App import  db
-from flask import request,jsonify
+from flask import request
 from twilio.twiml.messaging_response import MessagingResponse
 from App.views import pessoas,mensagewhatsapp
 from App.model.mensagewhatsapp import MensageWhatsApp
@@ -312,7 +312,7 @@ def bottwilio():
 
                                 #BUSCA LATITUDE E LONGITUDE
                                 strcyte +=', BR'
-                                location = several.search_latitude_longitude(strcyte)
+                                location = several.search_latitude_longitude_geolocator(strcyte)
                                 lat = ''
                                 lon = ''
                                 if location != None:
@@ -482,7 +482,7 @@ def bottwilio():
                 if msgtemp == 0:
                     # DIGITOU 1, ACEITOU A CADASTRAR NO BD
                     if incoming_msg == '1':
-                        from App.model.pessoa import Pessoa
+                        from App.model.pessoas.pessoa import Pessoa
                         if namephone == '':
                             namephone = None
                         pessoa = Pessoa(profilenamephone=namephone,tipopessoa='AT',phone=phone,username=namephone)

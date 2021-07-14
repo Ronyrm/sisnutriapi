@@ -67,3 +67,27 @@ function retornadata(data,separator){
     return ano+separator+mes+separator+dia;
 }
 
+function retornadataBR(data){
+    dia = data.getDate();
+    mes = data.getMonth();
+    mes += 1;
+    if (dia<=9){
+        dia = '0'+dia;
+    }
+    if (mes<=9){
+        mes = '0'+mes;
+    }
+    ano = data.getFullYear();
+
+    return dia+'/'+mes+'/'+ano;
+}
+
+function retornahoraBR(data){
+    hora = data.getHours();
+    min = data.getMinutes();
+    seg = data.getSeconds();
+
+
+    return hora+':'+min+':'+seg;
+
+}
