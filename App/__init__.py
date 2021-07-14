@@ -2,7 +2,7 @@ from flask import Flask
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate,MigrateCommand
-from flask_script import Manager
+#from flask_script import Manager
 
 #import MySQLdb
 app = Flask(__name__)
@@ -16,8 +16,9 @@ db = SQLAlchemy(app)
 #dbmysql.close()
 ma = Marshmallow(app)
 migrate = Migrate(app,db)
-manager = Manager(app)
-manager.add_command('db',MigrateCommand)
+
+#manager = Manager(app)
+#manager.add_command('db',MigrateCommand)
 
 app.config.from_object('config')
 print('Banco de dados:'+app.config['SQLALCHEMY_DATABASE_URI'])
