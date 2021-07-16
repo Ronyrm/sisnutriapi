@@ -7,7 +7,7 @@ from App.model.localidades.mesoregiao import MesoRegiao
 routesIBGE = Blueprint('routesIBGE',__name__)
 
 
-
+#Adiciona Região 1 passo
 @routesIBGE.route('/search/ibge/add/regiao')
 def addregiao_ibge():
     from App.views.localidades import regiao
@@ -25,6 +25,7 @@ def addregiao_ibge():
 
     return jsonify(regioes_json)
 
+#Adiciona UF 2 passo
 @routesIBGE.route('/search/ibge/add/uf')
 def adduf_ibge():
     from App.views.localidades import uf

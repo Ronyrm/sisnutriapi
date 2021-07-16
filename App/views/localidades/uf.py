@@ -4,6 +4,7 @@ from App.model.localidades.uf import UF
 from App.schema.localidades.localidades import UfSchema
 from sqlalchemy import or_
 def get_uf(id):
+    id = str(id)
     if id == '' or id == '0':
         ufs = UF.query.filter(UF.id != id).all()
         if ufs:
