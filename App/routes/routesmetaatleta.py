@@ -1,4 +1,4 @@
-from flask import Blueprint,redirect,url_for,request
+from flask import Blueprint,redirect,url_for,request,jsonify
 from App.views import metaatleta
 from App.schema.schema import MetaAtletaschema
 routesmetaatleta= Blueprint('routesmetaatleta',__name__)
@@ -42,3 +42,12 @@ def count_metaatleta():
 @routesmetaatleta.route('/sisnutri/finaliza/meta/atleta',methods=['POST'])
 def finalizameta():
     return  metaatleta.finalizameta()
+
+
+@routesmetaatleta.route('/gemeta/<idatleta>')
+def getmeta(idatleta):
+    meta = metaatleta.get_metaatleta(idatleta,'A')
+
+    result = MetaAtletaschema()
+    result = result.dump(meta, many=True)
+    return jsonify({'data':result})

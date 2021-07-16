@@ -343,14 +343,17 @@ async function searchfood(page){
         smallemptydesc.classList.add('d-none');
 
         url = '/tabfoods.json?descricao='+food+'&page='+page+'&idpessoa='+idpessoa;
+        console.log(url);
         let response = await fetch(url);
+        console.log(response.ok);
         if (response.ok) { // if HTTP-status is 200-299
 
             let json = await response.json();
+            console.log(json);
             if (json.result == true){
                 divfoods.classList.remove('d-none');
                 frmgroupqtd.classList.add('d-none');
-
+                console.log(json.pagul);
                 if (json.pagul != ''){
                     divpaginationfoods.classList.remove('d-none');
 
@@ -390,7 +393,9 @@ async function searchfood(page){
                 }
                 btnfoods = '';
                 // PRENCHE ALIMENTOS ENCONTRADOS
+
                 json.tabfoods.forEach((food) => {
+                    console.log(food);
                     vlcarbo =  parseFloat((food.carboidrato == null) ? '0' : food.carboidrato).toFixed(0);
                     vlproteina =  parseFloat((food.proteina == null) ? '0' : food.proteina).toFixed(0);
                     vlfat =  parseFloat((food.lipidios == null) ? '0' : food.lipidios).toFixed(0);
@@ -568,6 +573,12 @@ function gravaritemDB(){
 }
 // calcula diferença calorica da meta menos total lançada no dia nas refeições
 function calcula_preeche_valdiferenca(data_dieta, data_meta){
+    console.log('-------------- data dieta -------------------');
+    console.log(data_dieta);
+    console.log('-------------- data meta -------------------');
+    console.log(data_meta);
+
+
     vldifkcal = parseFloat(data_meta.valalvocalorico) - parseFloat(data_dieta.totalkcal)
 
     vldifgrproteina = parseFloat(data_meta.valgramasproteina) - parseFloat(data_dieta.totalproteina)

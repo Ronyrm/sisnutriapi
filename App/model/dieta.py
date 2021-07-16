@@ -1,4 +1,4 @@
-from App import db
+from App import db,ma
 import datetime
 
 
@@ -8,12 +8,12 @@ class Dieta(db.Model):
     descricao = db.Column(db.String(50), nullable=False, unique=True)
     data = db.Column(db.Date, nullable=False, default=datetime.datetime.now())
     mesano = db.Column(db.String(8), nullable=False)
-    totalcarbo = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    totalproteina = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    totalgordura = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    totalfibras = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    totalsodio = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    totalcalorias = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
+    totalcarbo = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    totalproteina = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    totalgordura = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    totalfibras = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    totalsodio = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    totalcalorias = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
     idrefeicao = db.Column(db.Integer, db.ForeignKey('refeicao.id'))
     idmetaatleta = db.Column(db.Integer, db.ForeignKey('metaatleta.id'))
     create_on = db.Column(db.DateTime, default=datetime.datetime.now())

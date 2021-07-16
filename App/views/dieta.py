@@ -1,3 +1,5 @@
+import sqlalchemy
+
 from App import db
 from App.model.dieta import Dieta
 from App.model.itemdieta import ItemDieta
@@ -106,19 +108,25 @@ def getitensdieta(iddieta):
         return None
 
 def totalkcaldieta(idmeta,data):
-    from sqlalchemy import  func, and_, not_
-    from sqlalchemy.sql.functions import sum
-    from sqlalchemy.sql.expression import func
+    from sqlalchemy import and_
+    from sqlalchemy.sql.expression import func, cast
+
     try:
         sumdieta = Dieta.query.filter(and_(Dieta.idmetaatleta==idmeta,Dieta.data==data)).\
-            with_entities(func.ifnull(sum(Dieta.totalcalorias),0).label('totalkcal'),
-                          func.ifnull(sum(Dieta.totalcarbo),0).label('totalcarbo'),
-                          func.ifnull(sum(Dieta.totalproteina),0).label('totalproteina'),
-                          func.ifnull(sum(Dieta.totalgordura),0).label('totalgordura'),
-                          func.ifnull(sum(Dieta.totalfibras),0).label('totalfibras'),
-                          func.ifnull(sum(Dieta.totalsodio),0).label('totalsodio')).first()
+            with_entities(cast(func.round(func.ifnull(func.sum(Dieta.totalcalorias),0)), sqlalchemy.Float).label('totalkcal'),
+                          cast(func.round(func.ifnull(func.sum(Dieta.totalcarbo),0)), sqlalchemy.Float).label('totalcarbo'),
+                          cast(func.round(func.ifnull(func.sum(Dieta.totalproteina),0)), sqlalchemy.Float).label('totalproteina'),
+                          cast(func.round(func.ifnull(func.sum(Dieta.totalgordura),0)), sqlalchemy.Float).label('totalgordura'),
+                          cast(func.round(func.ifnull(func.sum(Dieta.totalfibras),0)),sqlalchemy.Float).label('totalfibras'),
+                          cast(func.round(func.ifnull(func.sum(Dieta.totalsodio),0)), sqlalchemy.Float).label('totalsodio')).first()
 
 
-        return sumdieta
+        resultjson = {'totalkcal':sumdieta[0],
+                    'totalcarbo':sumdieta[1],
+                    'totalproteina':sumdieta[2],
+                    'totalgordura':sumdieta[3],
+                    'totalfibras':sumdieta[4],
+                    'totalsodio':sumdieta[5]}
+        return resultjson
     except:
         return None

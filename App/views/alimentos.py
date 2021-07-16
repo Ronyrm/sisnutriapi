@@ -1,9 +1,11 @@
 from App import db,app
-from App.model.alimentos import Alimentos, tabalimentos_schema
+from App.model.alimentos import Alimentos
 from App.schema.schema import FoodsSchema
 from App.model.atleta import Atleta
 from flask import jsonify, request,render_template
 from flask_login import LoginManager,current_user
+
+import json
 
 from flask_paginate import get_page_args
 
@@ -365,8 +367,8 @@ def get_alimento_bydesc_json():
             )
     if alimentopag:
         foodsschema = FoodsSchema()
-        tabfods = foodsschema.dump(alimentopag.items,many=True)
-        #tabfoods = foodsschema.dump(alimentopag, many=True)
+        tabfods = foodsschema.dump(alimentopag.items, many=True)
+        # tabfoods = foodsschema.dump(alimentopag, many=True)
         return jsonify({'pagul': pagination.links, 'result': True, 'tabfoods': tabfods,
                         'inputdesc': inputdesc, 'mensagem': 'Pesquisa efetuada com sucesso!'})
 

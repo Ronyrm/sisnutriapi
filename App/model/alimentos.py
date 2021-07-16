@@ -1,41 +1,40 @@
-from App import db, ma
+from App import db
 
 
 class Alimentos(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     descricao = db.Column(db.String(100), nullable=False)
-    umidades = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    calorias = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    joule = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    proteina = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    lipidios = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    colesterol = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    carboidrato = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    fibras = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    cinzas = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    calcio = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    magnesio = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    manganes = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    fosforo = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    ferro = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    sodio = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    potasio = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    cobre = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    zinco = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    retinol = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    re = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    rae = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    tiamina = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    riboflavina = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    piridoxina = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    niacina = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    vitaminac = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
-    qtdgramasemcima = db.Column(db.NUMERIC(precision=8, asdecimal=True, scale=3))
+    umidades = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    calorias = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    joule = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    proteina = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    lipidios = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    colesterol = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    carboidrato = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    fibras = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    cinzas = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    calcio = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    magnesio = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    manganes = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    fosforo = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    ferro = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    sodio = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    potasio = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    cobre = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    zinco = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    retinol = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    re = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    rae = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    tiamina = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    riboflavina = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    piridoxina = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    niacina = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    vitaminac = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
+    qtdgramasemcima = db.Column(db.NUMERIC(precision=8, asdecimal=False, scale=3))
     idpessoa = db.Column(db.Integer, db.ForeignKey('pessoa.id',ondelete='CASCADE'))
     pessoa = db.relationship("Pessoa")
     idunalimento = db.Column(db.Integer, db.ForeignKey('unidademedidaalimento.id'))
     unalimento = db.relationship("Unalimento")
-
 
 
     def __init__(self, descricao, umidades, calorias, joule, proteina, lipidios, colesterol, carboidrato, fibras,
@@ -72,17 +71,3 @@ class Alimentos(db.Model):
         self.qtdgramasemcima = qtdgramasemcima
         self.idpessoa = idpessoa
         self.idunalimento=idunalimento
-
-class TabAlimentosSchema(ma.Schema):
-    class Meta:
-        fields = ('id', 'descricao', 'umidades', 'calorias', 'joule', 'proteina', 'lipidios', 'colesterol',
-                  'carboidrato', 'fibras', 'cinzas', 'calcio', 'magnesio', 'manganes', 'fosforo', 'ferro',
-                  'sodio', 'potasio', 'cobre', 'zinco', 'retinol', 're', 'rae', 'tiamina', 'riboflavina',
-                  'piridoxina', 'niacina', 'vitaminac', 'qtdgramasemcima','idpessoa','idunalimento')
-
-tabalimentos_schema = TabAlimentosSchema()
-tabalimento_schema = TabAlimentosSchema(many=True)
-
-
-
-

@@ -113,7 +113,6 @@ var totalregmeta = {{ metaatleta|length }};
 {% if current_user.is_authenticated %}
 
 <div id="contentatleta" class="my-2">
-
     {% import 'layouts/atleta/menuatleta.html' as navmenuatleta %}
     {{ navmenuatleta.nav_menuatleta(atletalogado.pessoa,current_user.name,refeicao,dataatual,databr) }}
 
@@ -208,6 +207,7 @@ var totalregmeta = {{ metaatleta|length }};
 
             var data_sumdieta = {{sumdieta|tojson}};
             if(metaativa == 'S'){
+
                 calcula_preeche_valdiferenca(data_sumdieta,data_metaatleta);
             }
         }
