@@ -7,6 +7,7 @@ from sqlalchemy import or_,and_,asc
 
 
 def get_cidade(id):
+    id = str(id)
     if id == '' or id == '0':
         cidades = Cidades.query.all()
         if cidades:
@@ -21,6 +22,7 @@ def get_cidade(id):
 
 
 def get_cidade_by_uf(iduf,nomecity):
+    iduf = str(iduf)
     try:
         city = Cidades.query.\
             join(UF,Cidades.iduf == UF.id).\

@@ -43,7 +43,7 @@ def adduf_ibge():
 
     return jsonify(ufs_json)
 
-
+#Adiciona MesoRegioes 3 passo
 @routesIBGE.route('/search/ibge/add/mesoregioes')
 def addmesoregiao_ibge():
     from App.views.localidades import mesoregiao
@@ -62,7 +62,7 @@ def addmesoregiao_ibge():
     return jsonify(mesoregioes_json)
 
 
-
+#Adiona MicroRegião passo 4
 @routesIBGE.route('/search/ibge/add/microregiao')
 def addmicroregiao_ibge():
     from App.views.localidades import microregiao
@@ -81,7 +81,7 @@ def addmicroregiao_ibge():
 
     return jsonify(microregioes_json)
 
-
+#Aciona Cidade passo 5
 @routesIBGE.route('/search/ibge/add/cidades')
 def addcidades_ibge():
     from App.views.localidades import cidades

@@ -1,7 +1,7 @@
 from App.model.localidades.microregiao import MicroRegiao
 
 def get_microregiao(id):
-
+    id = str(id)
     if id == '' or id == '0':
         microregioes = MicroRegiao.query.all()
         if microregioes:
@@ -14,6 +14,7 @@ def get_microregiao(id):
     return None
 
 def get_by_uf_microregiao(iduf):
+    iduf = str(iduf)
     from sqlalchemy import or_
     from App.model.localidades.uf import UF
     from App.model.localidades.mesoregiao import MesoRegiao
@@ -29,6 +30,7 @@ def get_by_uf_microregiao(iduf):
 
 
 def get_by_regiao_microregiao(idregiao):
+    idregiao = str(idregiao)
     from sqlalchemy import or_
     from App.model.localidades.mesoregiao import MesoRegiao
     from App.model.localidades.uf import UF

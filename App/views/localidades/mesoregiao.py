@@ -3,6 +3,7 @@ from flask import request, jsonify
 from App.model.localidades.mesoregiao import MesoRegiao
 
 def get_mesoregiao(id):
+    id = str(id)
     if id == '' or id == '0':
         mesoregioes = MesoRegiao.query.all()
         if mesoregioes:
@@ -16,6 +17,7 @@ def get_mesoregiao(id):
     return None
 
 def get_by_uf_mesoregiao(iduf):
+    iduf=str(iduf)
     from App.model.localidades.uf import UF
     from sqlalchemy import or_
 
@@ -27,6 +29,7 @@ def get_by_uf_mesoregiao(iduf):
     return None
 
 def get_by_regiao_mesoregiao(iduf):
+    iduf=str(iduf)
     from App.model.localidades.uf import UF
     from App.model.localidades.regiao import Regiao
     from sqlalchemy import or_
