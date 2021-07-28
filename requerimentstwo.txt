@@ -1,0 +1,89 @@
+alembic==1.5.7
+altgraph==0.17
+asgiref==3.3.1
+beautifulsoup4==4.9.3
+blinker==1.4
+brotlipy==0.7.0
+bs4==0.0.1
+certifi==2021.5.30
+cffi @ file:///C:/ci/cffi_1600699246375/work
+chardet==3.0.4
+click @ file:///tmp/build/80754af9/click_1621604852318/work
+colorama==0.4.4
+configparser==5.0.1
+crayons==0.4.0
+cryptography==2.9.2
+dominate==2.6.0
+flack==1.3.7
+Flask==2.0.1
+Flask-Bootstrap4==4.0.2
+Flask-Login==0.5.0
+Flask-Mail==0.9.1
+flask-marshmallow==0.14.0
+Flask-Migrate==3.0.1
+flask-paginate==0.8.1
+Flask-Script==2.0.6
+Flask-SQLAlchemy==2.5.1
+future==0.18.2
+geographiclib==1.52
+geojson==2.5.0
+geopy==2.1.0
+googletrans==3.1.0a0
+greenlet @ file:///C:/ci/greenlet_1620913825737/work
+h11==0.9.0
+h2==3.2.0
+hpack==3.0.0
+hstspreload==2020.12.22
+httpcore==0.9.1
+httpx==0.13.3
+hyperframe==5.2.0
+idna @ file:///tmp/build/80754af9/idna_1593446292537/work
+importlib-metadata @ file:///C:/ci/importlib-metadata_1617877484576/work
+itsdangerous @ file:///tmp/build/80754af9/itsdangerous_1621432558163/work
+Jinja2 @ file:///tmp/build/80754af9/jinja2_1624781299557/work
+macholib @ file:///tmp/build/80754af9/macholib_1597435072973/work
+Mako==1.1.4
+MarkupSafe @ file:///C:/ci/markupsafe_1621528314575/work
+marshmallow @ file:///tmp/build/80754af9/marshmallow_1625816688314/work
+marshmallow-sqlalchemy==0.24.2
+mysql-connector-python==8.0.22
+mysqlclient==2.0.2
+pdf2image==1.14.0
+pefile==2019.4.18
+Pillow==8.2.0
+protobuf==3.13.0
+pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
+pycryptodome @ file:///C:/ci/pycryptodome_1599232733211/work
+PyInstaller==3.6
+PyJWT==1.7.1
+pyOpenSSL @ file:///tmp/build/80754af9/pyopenssl_1594392929924/work
+PyQt5==5.15.1
+PyQt5-sip==12.8.1
+pyqt5-tools==5.15.1.1.7.5
+PySide2==5.15.1
+PySimpleGUI==4.30.0
+PySocks==1.7.1
+python-dateutil==2.8.1
+python-dotenv==0.14.0
+python-editor==1.0.4
+pytz==2020.4
+pywin32==227
+pywin32-ctypes==0.2.0
+requests==2.24.0
+rfc3986==1.5.0
+selenium==3.141.0
+shiboken2==5.15.1
+simplejson==3.17.2
+six==1.15.0
+sniffio==1.2.0
+soupsieve==2.2.1
+SQLAlchemy @ file:///C:/ci/sqlalchemy_1612467807278/work
+sqlparse==0.4.1
+twilio==6.49.0
+urllib3 @ file:///tmp/build/80754af9/urllib3_1597086586889/work
+visitor==0.1.3
+webdriver-manager==3.2.2
+Werkzeug==2.0.1
+win-inet-pton==1.1.0
+wincertstore==0.2
+zipp @ file:///tmp/build/80754af9/zipp_1625570634446/work

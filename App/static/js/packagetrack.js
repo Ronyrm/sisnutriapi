@@ -126,6 +126,7 @@ async function capture_pack(pack,card_body){
                 // Não localizada ou código inválido
             }
             else{
+                strcard +='<dl>';
                 for(let i=0; i<=tot-1; i++){
                     json = data[i];
                     date_tr = json[1].slice(0,10);
@@ -133,21 +134,26 @@ async function capture_pack(pack,card_body){
                     city_tr = json[1].slice(22,json[1].length-1);
                     rowtwo = json[2].replace('     ',' ');
 
-                    strcard +='<dl><dt><label class="text-warning">' +
+                    strcard +='<dt><label class="text-warning">' +
                     date_tr + ' - ' +
                     time_tr + ' - ' +
                     city_tr + '</label>';
 
                     strcard += '</dt><dd><label class="text-white">'+rowtwo+'</label>';
-                    strcard +='</dt></dl>';
+                    strcard +='</dd>';
+
+                    strcard +='<hr class="solid">';
 
                 }
+                strcard +='</dl>';
             }
         });
         card_body.innerHTML = strcard;
 
     }
 }
+
+
 function validabuttonactive(btns,btnclicked,nameclass){
      btns.forEach((btn) => {
         console.log(btn)
@@ -156,6 +162,8 @@ function validabuttonactive(btns,btnclicked,nameclass){
      btnclicked.classList.add(nameclass);
 
 }
+
+
 function search_track(btn,status){
     accordion.innerHTML = '';
     validabuttonactive(['btn-track-pendentes','btn-track-entregues','btn-track-nao-encontrado'],btn,'active');
@@ -164,12 +172,14 @@ function search_track(btn,status){
     search_track_pessoa(idpessoa,'W',status);
 }
 
+
 function alterartrack(pack){
     edtcodigo.value = pack.codigo;
     edtdescricao.value = pack.descricao;
     document.getElementById('edtidpacktracker').value = pack.codigo;
 }
- async function gravartrack(){
+
+async function gravartrack(){
 
     small_descricao = document.getElementById('small-descricao');
     small_codigo = document.getElementById('small-codigo');
@@ -213,4 +223,12 @@ function alterartrack(pack){
 
     }
 
+}
+
+
+// BOTÃO PESQUISA RASTREIO NO SITE DOS CORREIOS, PAGINA: layout/search_track_correios
+function btn_tracker_correios(codigo){
+    pack = {'codigo': codigo}
+    div_tracker = document.getElementById('div-tracker-correios');
+    capture_pack(pack,div_tracker);
 }

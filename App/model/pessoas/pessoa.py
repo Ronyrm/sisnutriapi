@@ -1,4 +1,4 @@
-from App import db, ma
+from App import db
 import datetime
 
 
@@ -21,11 +21,11 @@ class Pessoa(db.Model):
     profilenamephone = db.Column(db.String(20))
 
 
-class PessoasSchema(ma.Schema):
-    class Meta:
-        fields = ('id', 'username', 'nome', 'razaosocial', 'tipopessoa','email','datacadastro')
+#class PessoasSchema(ma.Schema):
+#    class Meta:
+#        fields = ('id', 'username', 'nome', 'razaosocial', 'tipopessoa','email','datacadastro')
 
 
-pessoa_schema = PessoasSchema()
-pessoas_schema = PessoasSchema(many=True)
+#pessoa_schema = PessoasSchema()
+#pessoas_schema = PessoasSchema(many=True)
 

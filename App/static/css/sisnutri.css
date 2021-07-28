@@ -208,3 +208,8 @@ text-shadow:0px 0px 5px #ffc107;
   background: var(--amareloescuro); 
 }
 
+
+hr.solid {
+  border-top: 2px solid #bbb;
+  border-radius: 5px;
+}

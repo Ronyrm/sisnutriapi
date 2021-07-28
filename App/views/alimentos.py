@@ -174,7 +174,8 @@ def post_food():
         try:
             db.session.add(alimento)
             db.session.commit()
-            result = tabalimentos_schema.dump(alimento)
+            foodschema = FoodsSchema()
+            result = foodschema.dump(alimento,many=True)
             return jsonify({'mensagem': 'Alimento registrado com sucesso', 'data': result,'result':True}), 201
         except:
             return jsonify({'message': 'Erro ao cadastrar alimento!', 'data': {},'result': False}), 500

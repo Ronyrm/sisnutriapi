@@ -1,4 +1,3 @@
-from App import ma
 from marshmallow import fields
 from marshmallow_sqlalchemy import ModelSchema
 

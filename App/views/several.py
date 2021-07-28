@@ -115,7 +115,7 @@ def search_tracker_correios(codigo):
 
 # -------------------------- TRADUZ DETERMINADO TEXTO EM INGLES OU VICE-VERSA EM PORTUGUES = RETURN JSON --------------------------
 def translate(txttranslate):
-    from googletrans import Translator, constants
+    from googletrans import Translator
 
     translator = Translator()
     detect = translator.detect(txttranslate)

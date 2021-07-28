@@ -1,5 +1,5 @@
 from App import db
-from App.model.pessoas.pessoa import  Pessoa, pessoa_schema
+from App.model.pessoas.pessoa import  Pessoa
 from App.model.cliente import Cliente
 from App.views.pessoas.pessoas import get_byemailpessoa,get_byusernamepessoa
 from flask import jsonify, request

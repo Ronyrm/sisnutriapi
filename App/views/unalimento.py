@@ -1,4 +1,4 @@
-from App import db,ma
+from App import db
 from App.model.unalimento import Unalimento
 from flask import jsonify, request
 from App.schema.schema import UnFoodsSchema

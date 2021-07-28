@@ -1,5 +1,4 @@
 from flask import Flask
-from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 #from flask_script import Manager
@@ -14,14 +13,14 @@ db = SQLAlchemy(app)
 #data = cursor.fetchall()
 #print(data)
 #dbmysql.close()
-ma = Marshmallow(app)
+
 migrate = Migrate(app,db)
 
 #manager = Manager(app)
 #manager.add_command('db',MigrateCommand)
 
 app.config.from_object('config')
-print('Banco de dados:'+app.config['SQLALCHEMY_DATABASE_URI'])
+
 db.init_app(app)
 
 

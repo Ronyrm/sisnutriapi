@@ -1,4 +1,4 @@
-from App import db,ma
+from App import db
 from App.model.groupproducts import GroupProducts
 from flask import jsonify, request
 from App.schema.schema import GroupProductsSchema

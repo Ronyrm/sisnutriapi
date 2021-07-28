@@ -1,4 +1,4 @@
-from App import db, ma
+from App import db
 import datetime
 
 class Metaatleta(db.Model):

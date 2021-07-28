@@ -1,6 +1,5 @@
 from App import db
 
-
 class Enderecos(db.Model):
     __tablename__ = 'enderecos'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -17,3 +16,4 @@ class Enderecos(db.Model):
 
     idcidade = db.Column(db.Integer, db.ForeignKey('cidades.id'))
     cidade = db.relationship("Cidades")
+

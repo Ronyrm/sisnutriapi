@@ -1,4 +1,4 @@
-from App import db, ma
+from App import db
 import datetime
 
 
@@ -19,8 +19,8 @@ class Users(db.Model):
 
 
 
-class UsersSchema(ma.Schema):
-    class Meta:
-        fields = ('id', 'username', 'password', 'name', 'email', 'create_on')
+#class UsersSchema(ma.Schema):
+#    class Meta:
+#        fields = ('id', 'username', 'password', 'name', 'email', 'create_on')
 
 

@@ -65,7 +65,7 @@ def add_update_enderecos_by_pessoa():
             if idendereco == '-1':
                 endereco = Enderecos(cep=cep, logradouro=logradouro, complemento=complemento,
                                      bairro=bairro,numero=numero,idpessoa=idpessoa,idcidade=idcidade,
-                                     tipo=tipo, padrao=padrao)
+                                     tipo=tipo, padrao=padrao,localidade=localidade,uf=uf)
                 db.session.add(endereco)
             else:
                 endereco = get_endereco_by_id(idendereco)
@@ -89,13 +89,14 @@ def add_update_enderecos_by_pessoa():
                     endereco.localidade = localidade
                     endereco.uf = uf
 
-                    db.session.commit();
-                    if endereco.padrao=='S':
-                        update_endereco_main(endereco.id, endereco.idpessoa)
-                        db.session.commit();
-                    return {'result': True,
-                            'idpessoa': idpessoa,
-                            'mensagem': 'Endereço cadastrado com Sucesso'}
+            db.session.commit()
+            if endereco.padrao=='S':
+                update_endereco_main(endereco.id, endereco.idpessoa)
+                db.session.commit();
+
+            return {'result': True,
+                    'idpessoa': idpessoa,
+                    'mensagem': 'Endereço cadastrado com Sucesso'}
         except:
             return {'result': False,
                     'idpessoa': idpessoa,
