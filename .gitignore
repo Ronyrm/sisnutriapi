@@ -1,8 +1,9 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 
-.config.py
+static/img/uploads/
 migrations/
+*.csv
 *.py[cod]
 *$py.class
 
